@@ -22,6 +22,14 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
+    public Page<ProductDTO> getAll(Pageable pageable) {
+        return productRepository.findAll(pageable).map(p -> productMapper.toDTO(p));
+    }
+
+    public ProductDTO getOne(Long id) {
+        return productMapper.toDTO(productRepository.findById(id).orElse(null));
+    }
+
     public ProductDTO save(ProductDTO productDTO) {
         if (productDTO.getId() != null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
@@ -45,13 +53,5 @@ public class ProductService {
 
     public void delete(Long id) {
         productRepository.deleteById(id);
-    }
-
-    public Page<ProductDTO> getAll(Pageable pageable) {
-        return productRepository.findAll(pageable).map(p -> productMapper.toDTO(p));
-    }
-
-    public ProductDTO getOne(Long id) {
-        return productMapper.toDTO(productRepository.findById(id).orElse(null));
     }
 }

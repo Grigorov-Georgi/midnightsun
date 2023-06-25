@@ -18,7 +18,7 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     @ReadOnlyProperty
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Instant createdDate = Instant.now();
+    private Instant createdDate;
 
     @ReadOnlyProperty
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -26,5 +26,5 @@ public abstract class AbstractAuditingDTO implements Serializable {
 
     @ReadOnlyProperty
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Instant lastModifiedDate = Instant.now();
+    private Instant lastModifiedDate;
 }
