@@ -1,29 +1,32 @@
 package com.midnightsun.productservice.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
 import java.time.Instant;
 
-@Data
-public abstract class AbstractAuditingEntity implements Serializable{
-        private static final long serialVersionUID = 1L;
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+public abstract class AbstractAuditingEntity {
+        @CreatedBy
+        @Column( nullable = false, updatable = false)
+        private String createdBy = "system";
 
-        @ReadOnlyProperty
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        private String createdBy;
-
-        @ReadOnlyProperty
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @CreatedDate
+        @Column(updatable = false)
         private Instant createdDate = Instant.now();
 
-        @ReadOnlyProperty
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-        private String lastModifiedBy;
+        @LastModifiedBy
+        @Column
+        private String lastModifiedBy  = "system";
 
-        @ReadOnlyProperty
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @LastModifiedDate
+        @Column
         private Instant lastModifiedDate = Instant.now();
 }
