@@ -1,3 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/eOrderServiceDB
+    username: root
+    password: toor
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: public
+
+server:
+  port: 8081
+
 info:
   application:
     name: Order Service
