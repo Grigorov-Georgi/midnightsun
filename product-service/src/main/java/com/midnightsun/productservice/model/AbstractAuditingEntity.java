@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public abstract class AbstractAuditingBase implements Serializable{
+public abstract class AbstractAuditingEntity implements Serializable{
         private static final long serialVersionUID = 1L;
 
         @ReadOnlyProperty
