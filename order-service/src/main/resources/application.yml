@@ -11,6 +11,14 @@ spring:
     properties:
       hibernate:
         default_schema: public
+  logging:
+    level:
+      org:
+        springframework: INFO
+    output:
+      ansi:
+        enabled: ALWAYS
+
 
 server:
   port: 8081
