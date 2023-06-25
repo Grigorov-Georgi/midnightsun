@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.midnightsun</groupId>
 	<artifactId>product-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>product-service</name>
-	<description>Product service </description>
+	<description>Service managing products in eCart Application</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

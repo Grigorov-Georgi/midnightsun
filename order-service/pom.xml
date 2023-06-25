@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.midnightsun</groupId>
 	<artifactId>order-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>order-service</name>
-	<description>Order service </description>
+	<description>Service managing orders in eCart Application</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
