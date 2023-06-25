@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+
+  e-order-service:
+    image: postgres:14.1
+    container_name: e-order-service
+    restart: always
+    volumes:
+      - e-order-service:/data/lib
+    environment:
+      - POSTGRES_DB=eOrderServiceDB
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=toor
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '5433:5432'
+
+volumes:
+  e-order-service:

@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+
+  e-product-service:
+    image: postgres:14.1
+    container_name: e-product-service
+    restart: always
+    volumes:
+      - e-product-service:/data/lib
+    environment:
+      - POSTGRES_DB=eProductServiceDB
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=toor
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '5434:5432'
+
+volumes:
+  e-product-service:
