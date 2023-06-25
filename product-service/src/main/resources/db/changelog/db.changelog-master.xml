@@ -13,6 +13,6 @@
     <property name="datetimeType" value="datetime(6)" dbms="mysql, mariadb"/>
     <property name="datetimeType" value="datetime" dbms="oracle, mssql, postgresql, h2"/>
 
-<!--    <include file="db/changelog/v1.0.0/main.xml"/>-->
+    <include file="db/changelog/v0.0.1/main.xml"/>
 
 </databaseChangeLog>
