@@ -33,4 +33,7 @@ public class Product extends AbstractAuditingEntity {
     private Long width;
 
     private Long height;
+
+    @ManyToOne
+    private Category category;
 }

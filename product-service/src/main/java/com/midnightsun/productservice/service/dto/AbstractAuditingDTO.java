@@ -7,6 +7,7 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 import java.io.Serializable;
 import java.time.Instant;
 
+//TODO: Fix that thing!
 @Data
 public abstract class AbstractAuditingDTO implements Serializable {
 
