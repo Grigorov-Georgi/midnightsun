@@ -24,14 +24,17 @@ public class CategoryService {
 
 
     public Page<CategoryDTO> getAll(Pageable pageable) {
+        log.debug("Request to get all CATEGORIES");
         return categoryRepository.findAll(pageable).map(p -> categoryMapper.toDTO(p));
     }
 
     public CategoryDTO getOne(Long id) {
+        log.debug("Request to get CATEGORY by ID: {}", id);
         return categoryMapper.toDTO(categoryRepository.findById(id).orElse(null));
     }
 
     public CategoryDTO save(CategoryDTO categoryDTO) {
+        log.debug("Request to save CATEGORY: {}", categoryDTO);
         if (categoryDTO.getId() != null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         }
@@ -40,6 +43,7 @@ public class CategoryService {
     }
 
     public CategoryDTO update(CategoryDTO categoryDTO) {
+        log.debug("Request to update CATEGORY: {}", categoryDTO);
         if (categoryDTO.getId() == null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         }
@@ -53,6 +57,7 @@ public class CategoryService {
     }
 
     public void delete(Long id) {
+        log.debug("Request to delete CATEGORY with ID: {}", id);
         categoryRepository.deleteById(id);
     }
 }

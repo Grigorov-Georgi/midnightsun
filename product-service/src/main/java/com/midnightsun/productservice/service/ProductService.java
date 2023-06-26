@@ -23,14 +23,17 @@ public class ProductService {
     }
 
     public Page<ProductDTO> getAll(Pageable pageable) {
+        log.debug("Request to get all PRODUCTS");
         return productRepository.findAll(pageable).map(p -> productMapper.toDTO(p));
     }
 
     public ProductDTO getOne(Long id) {
+        log.debug("Request to get PRODUCT by ID: {}", id);
         return productMapper.toDTO(productRepository.findById(id).orElse(null));
     }
 
     public ProductDTO save(ProductDTO productDTO) {
+        log.debug("Request to save PRODUCT: {}", productDTO);
         if (productDTO.getId() != null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         }
@@ -39,6 +42,7 @@ public class ProductService {
     }
 
     public ProductDTO update(ProductDTO productDTO) {
+        log.debug("Request to update PRODUCT: {}", productDTO);
         if (productDTO.getId() == null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         }
@@ -52,6 +56,7 @@ public class ProductService {
     }
 
     public void delete(Long id) {
+        log.debug("Request to delete PRODUCT with ID: {}", id);
         productRepository.deleteById(id);
     }
 }

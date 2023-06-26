@@ -40,7 +40,7 @@ public class LogFilter extends OncePerRequestFilter {
                 .append("] "));
 
         if (shouldLog(request)) {
-            log.info("Processing {} '{}' request {}", request.getMethod(), request.getRequestURI(), sb.length() > 19 ? sb.toString().trim() : "");
+            log.debug("Processing {} '{}' request {}", request.getMethod(), request.getRequestURI(), sb.length() > 19 ? sb.toString().trim() : "");
         }
 
         try {
@@ -49,7 +49,7 @@ public class LogFilter extends OncePerRequestFilter {
             long end = System.currentTimeMillis();
 
             if (shouldLog(request)) {
-                log.info("Processing {} '{}' response - status: [{}], content-type: [{}], process time: ({}ms)", request.getMethod(),
+                log.debug("Processing {} '{}' response - status: [{}], content-type: [{}], process time: ({}ms)", request.getMethod(),
                         request.getRequestURI(),
                         response.getStatus(),
                         response.getContentType(),
