@@ -11,17 +11,21 @@ spring:
     properties:
       hibernate:
         default_schema: public
-  logging:
-    level:
-      org:
-        springframework: INFO
-    output:
-      ansi:
-        enabled: ALWAYS
+  output:
+    ansi:
+      enabled: ALWAYS
 
+logging:
+  level:
+    ROOT: INFO
+    com.midnightsun: DEBUG
 
 server:
   port: 8081
+
+global:
+  exception-handling:
+    debug-message: TRUE
 
 info:
   application:

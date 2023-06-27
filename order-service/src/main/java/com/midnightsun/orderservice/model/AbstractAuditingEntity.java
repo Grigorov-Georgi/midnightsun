@@ -1,4 +1,4 @@
-package com.midnightsun.productservice.model;
+package com.midnightsun.orderservice.model;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedBy;

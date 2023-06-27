@@ -1,0 +1,257 @@
+id;name
+1;Sofia
+2;Plovdiv
+3;Varna
+4;Burgas
+5;Ruse
+6;Stara Zagora
+7;Pleven
+8;Sliven
+9;Pazardzhik
+10;Pernik
+11;Dobrich
+12;Shumen
+13;Veliko Tarnovo
+14;Haskovo
+15;Blagoevgrad
+16;Yambol
+17;Kazanlak
+18;Asenovgrad
+19;Vratsa
+20;Kyustendil
+21;Gabrovo
+22;Targovishte
+23;Kardzhali
+24;Vidin
+25;Razgrad
+26;Svishtov
+27;Silistra
+28;Lovech
+29;Montana
+30;Dimitrovgrad
+31;Dupnitsa
+32;Smolyan
+33;Gorna Oryahovitsa
+34;Petrich
+35;Gotse Delchev
+36;Aytos
+37;Omurtag
+38;Velingrad
+39;Isperih
+40;Karlovo
+41;Lom
+42;Panagyurishte
+43;Botevgrad
+44;Peshtera
+45;Rakovski
+46;Veliki Preslav
+47;Pomorie
+48;Lyaskovets
+49;Novi Pazar
+50;Provadia
+51;Razlog
+52;Zlatograd
+53;Kozloduy
+54;Kostinbrod
+55;Bankya
+56;Stamboliyski
+57;Etropole
+58;Devnya
+59;Rakitovo
+60;Sopot
+61;Septemvri
+62;Krichim
+63;Byala
+64;Aksakovo
+65;Beloslav
+66;Slivnitsa
+67;Elin Pelin
+68;Madan
+69;Aydemir
+70;Devin
+71;Lozen
+72;Varshets
+73;Saedinenie
+74;Bistritsa
+75;Bozhurishte
+76;Suvorovo
+77;Perushtitsa
+78;Dolna Banya
+79;Vetovo
+80;Kazichene
+81;Ignatievo
+82;Kostandovo
+83;Bukovlak
+84;Koynare
+85;Slavyanovo
+86;Kalipetrovo
+87;Trud
+88;Sveti Vlas
+89;Sapareva Banya
+90;Malo Konare
+91;Varbitsa
+92;Marten
+93;Debelets
+94;Vladaya
+95;Parvenets
+96;Sarnitsa
+97;Rudozem
+98;Topolchane
+99;Brestovitsa
+100;Gulyantsi
+101;Nikolaevo
+102;Rogosh
+103;Kran
+104;Banya
+105;Topoli
+106;Pancharevo
+107;Kamenar
+108;Gurkovo
+109;Ivaylo
+110;Sotirya
+111;Kableshkovo
+112;Ruen
+113;Vetren
+114;Dolna Oryahovitsa
+115;Buhovo
+116;Kalofer
+117;Voluyak
+118;Kalekovets
+119;German
+120;Nikolovo
+121;Ravda
+122;Glozhene
+123;Novo Selo
+124;Kurtovo Konare
+125;Ablanitsa
+126;Skutare
+127;Sadovo
+128;Chepintsi
+129;Parvomaytsi
+130;Draganovo
+131;Kilifarevo
+132;Ognyanovo
+133;Valkosel
+134;Rakovski
+135;Glavinitsa
+136;Bregovo
+137;Svetovrachane
+138;Aheloy
+139;Krushare
+140;Startsevo
+141;Gradina
+142;Obzor
+143;Batanovtsi
+144;Tsaratsovo
+145;Borovo
+146;Voyvodinovo
+147;Chernogorovo
+148;Balgarovo
+149;Petarch
+150;Kokalyane
+151;Dragichevo
+152;Yahinovo
+153;Ostrovo
+154;Mokrishte
+155;Kraynitsi
+156;Kostievo
+157;Resen
+158;Aleksandrovo
+159;Sinitovo
+160;Ezerovo
+161;Graf Ignatievo
+162;Seliminovo
+163;Uzundzhovo
+164;Busmantsi
+165;Polikrayshte
+166;Lesnovo
+167;Merichleri
+168;Lyuben Karavelovo
+169;Divotino
+170;Byal Izvor
+171;Kermen
+172;Ravnets
+173;Kukorevo
+174;Samoranovo
+175;Stozher
+176;Dzhulyunitsa
+177;Zheleznitsa
+178;Slokoshtitsa
+179;Orizare
+180;Negovan
+181;Trivoditsi
+182;Krepost
+183;Grivitsa
+184;Studena
+185;Bistritsa
+186;Stratsin
+187;Mirovyane
+188;Saraya
+189;Planinitsa
+190;Krivina
+191;Karageorgievo
+192;Prosenik
+193;Vinogradets
+194;Tsarev Brod
+195;Tankovo
+196;Maglen
+197;Tranak
+198;Razhitsa
+199;Dzherman
+200;Shipka
+201;Basarbovo
+202;Karabunar
+203;Benkovski
+204;Kosharitsa
+205;Konstantinovo
+206;Yabalchevo
+207;Galabets
+208;Chervena Voda
+209;Veselinovo
+210;Bata
+211;Rudartsi
+212;Dolni Bogrov
+213;Aldomirovtsi
+214;Belogradets
+215;Karapelit
+216;Novo Selo
+217;Sandrovo
+218;Yabalkovo
+219;Gabrovnitsa
+220;Vaglen
+221;Vardun
+222;Marchaevo
+223;Banitsa
+224;Gorni Bogrov
+225;Semerdzhievo
+226;Zaychar
+227;Voyvodovo
+228;Malevo
+229;Opalchensko
+230;Zvezditsa
+231;Marinka
+232;Boboshevo
+233;Gyulyovtsa
+234;Gluhar
+235;Hadzhievo
+236;Pisarevo
+237;Vaklinovo
+238;Varbitsa
+239;Kladnitsa
+240;Patalenitsa
+241;Dolen
+242;Dobromir
+243;Dobri Dyal
+244;Gorski Izvor
+245;Stefanovo
+246;Borovo
+247;Cherven Breg
+248;Snyagovo
+249;Krastava
+250;Kadievo
+251;Voysil
+252;Vresovo
+253;Vinitsa
+254;Mortagonovo
+255;Izvorsko
+256;Dobroslavtsi

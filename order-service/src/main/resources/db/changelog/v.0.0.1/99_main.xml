@@ -6,8 +6,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
 
-    <include file="/db/changelog/v0.0.1/01_create_table_product.xml"/>
-    <include file="/db/changelog/v0.0.1/02_create_table_category.xml"/>
-    <include file="/db/changelog/v0.0.1/03_load_data_to_category_table.xml"/>
+    <include file="/db/changelog/v.0.0.1/02_create_table_city.xml"/>
+    <include file="/db/changelog/v.0.0.1/02_create_table_order.xml"/>
 
 </databaseChangeLog>

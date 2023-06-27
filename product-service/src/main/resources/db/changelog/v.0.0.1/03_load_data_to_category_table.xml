@@ -29,5 +29,6 @@
             UPDATE category SET last_modified_date = current_timestamp WHERE last_modified_date IS NULL;
         </sql>
     </changeSet>
+
 </databaseChangeLog>
 
