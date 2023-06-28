@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/cities")
 public class CityController {
 
-    private CityService cityService;
+    private final CityService cityService;
 
     public CityController( CityService cityService) {
         this.cityService = cityService;

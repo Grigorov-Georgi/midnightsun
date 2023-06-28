@@ -14,18 +14,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class CategoryService {
 
-    private CategoryRepository categoryRepository;
-    private CategoryMapper categoryMapper;
+    private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }
 
-
     public Page<CategoryDTO> getAll(Pageable pageable) {
         log.debug("Request to get all CATEGORIES");
-        return categoryRepository.findAll(pageable).map(p -> categoryMapper.toDTO(p));
+        return categoryRepository.findAll(pageable).map(categoryMapper::toDTO);
     }
 
     public CategoryDTO getOne(Long id) {

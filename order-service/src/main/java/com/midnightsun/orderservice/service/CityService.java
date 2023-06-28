@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class CityService {
-    private CityRepository cityRepository;
-    private CityMapper cityMapper;
+
+    private final CityRepository cityRepository;
+    private final CityMapper cityMapper;
 
     public CityService(CityRepository cityRepository, CityMapper cityMapper) {
         this.cityRepository = cityRepository;
@@ -23,7 +24,7 @@ public class CityService {
 
     public Page<CityDTO> getAll(Pageable pageable) {
         log.debug("Request to get all CITIES");
-        return cityRepository.findAll(pageable).map(c -> cityMapper.toDTO(c));
+        return cityRepository.findAll(pageable).map(cityMapper::toDTO);
     }
 
     public CityDTO getOne(Long id) {

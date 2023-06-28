@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
-    private ProductMapper productMapper;
+    private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
@@ -24,7 +24,7 @@ public class ProductService {
 
     public Page<ProductDTO> getAll(Pageable pageable) {
         log.debug("Request to get all PRODUCTS");
-        return productRepository.findAll(pageable).map(p -> productMapper.toDTO(p));
+        return productRepository.findAll(pageable).map(productMapper::toDTO);
     }
 
     public ProductDTO getOne(Long id) {
