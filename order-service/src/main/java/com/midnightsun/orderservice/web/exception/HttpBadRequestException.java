@@ -1,6 +1,7 @@
 package com.midnightsun.orderservice.web.exception;
 
-import com.midnightsun.productservice.web.exception.enums.ErrorCode;
+
+import com.midnightsun.orderservice.web.exception.enums.ErrorCode;
 
 public class HttpBadRequestException extends DebuggableException{
     public static String ID_NON_NULL = "Provided entity already has an id";

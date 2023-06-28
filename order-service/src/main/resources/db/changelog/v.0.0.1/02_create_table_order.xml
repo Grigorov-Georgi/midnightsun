@@ -5,15 +5,14 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet id="create_table_product" author="ggrigorov">
-        <createTable tableName="product">
-            <column name="id" type="uuid">
+    <changeSet id="create_table_order" author="ggrigorov">
+        <createTable tableName="order">
+            <column name="id" type="varchar(36)">
                 <constraints primaryKey="true"/>
             </column>
             <column name="customer_email" type="varchar(255)"/>
             <column name="status" type="varchar(255)"/>
             <column name="type" type="varchar(255)"/>
-            <column name="product_id" type="bigint"/>
             <column name="city_id" type="bigint"/>
             <column name="street" type="varchar(255)"/>
             <column name="postal_code" type="bigint"/>
@@ -34,9 +33,9 @@
                                  referencedColumnNames="id"/>
     </changeSet>
 
-    <changeSet id="product_sequence_generator" author="ggrigorov">
-        <createSequence sequenceName="product_sequence_generator"
-                        startValue="1000"
-                        incrementBy="1"/>
-    </changeSet>
+<!--    <changeSet id="order_sequence_generator" author="ggrigorov">-->
+<!--        <createSequence sequenceName="order_sequence_generator"-->
+<!--                        startValue="1000"-->
+<!--                        incrementBy="1"/>-->
+<!--    </changeSet>-->
 </databaseChangeLog>

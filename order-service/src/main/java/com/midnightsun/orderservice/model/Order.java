@@ -2,12 +2,12 @@ package com.midnightsun.orderservice.model;
 
 import com.midnightsun.orderservice.model.enums.OrderStatus;
 import com.midnightsun.orderservice.model.enums.OrderType;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.annotations.Type;
 
 import java.util.Set;
 import java.util.UUID;
@@ -21,7 +21,8 @@ import java.util.UUID;
 public class Order extends AbstractAuditingEntity {
 
     @Id
-    @UuidGenerator(style = UuidGenerator.Style.TIME)
+    @GeneratedValue(generator = "uuid2")
+    @Type(type = "uuid-char")
     private UUID id;
 
     private String customerEmail;

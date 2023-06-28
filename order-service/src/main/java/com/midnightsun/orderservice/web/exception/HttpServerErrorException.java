@@ -1,6 +1,6 @@
 package com.midnightsun.orderservice.web.exception;
 
-import com.midnightsun.productservice.web.exception.enums.ErrorCode;
+import com.midnightsun.orderservice.web.exception.enums.ErrorCode;
 
 public class HttpServerErrorException extends DebuggableException{
     public HttpServerErrorException(String debugMessage) {

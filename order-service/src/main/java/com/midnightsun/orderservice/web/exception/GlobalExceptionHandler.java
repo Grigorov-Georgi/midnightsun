@@ -1,7 +1,7 @@
 package com.midnightsun.orderservice.web.exception;
 
-import com.midnightsun.productservice.web.exception.enums.ErrorCode;
-import com.midnightsun.productservice.web.exception.utils.GlobalExceptionHandlerUtil;
+import com.midnightsun.orderservice.web.exception.enums.ErrorCode;
+import com.midnightsun.orderservice.web.exception.utils.GlobalExceptionHandlerUtil;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

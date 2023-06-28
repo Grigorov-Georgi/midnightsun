@@ -12,7 +12,7 @@
             </column>
             <column name="product_id" type="bigint"/>
             <column name="quantity" type="bigint"/>
-            <column name="order_id" type="bigint"/>
+            <column name="order_id" type="varchar(36)"/>
 
             <!-- mandatory audit columns -->
             <column name="created_by" type="varchar(255)"/>

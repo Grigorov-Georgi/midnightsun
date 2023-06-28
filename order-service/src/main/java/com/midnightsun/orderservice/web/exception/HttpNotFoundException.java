@@ -1,6 +1,7 @@
 package com.midnightsun.orderservice.web.exception;
 
-import com.midnightsun.productservice.web.exception.enums.ErrorCode;
+
+import com.midnightsun.orderservice.web.exception.enums.ErrorCode;
 
 public class HttpNotFoundException extends DebuggableException {
     public HttpNotFoundException(String debugMessage) {

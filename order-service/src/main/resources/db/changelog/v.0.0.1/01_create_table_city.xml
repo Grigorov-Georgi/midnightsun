@@ -27,7 +27,7 @@
     </changeSet>
 
     <changeSet id="load_data_to_city_table" author="ggrigorov">
-        <loadData file="db/changelog/data/01_add_predefined_city.csv"
+        <loadData file="db/changelog/data/01_add_predefined_cities.csv"
                   separator=";"
                   tableName="city">
             <column name="id" type="bigint" />

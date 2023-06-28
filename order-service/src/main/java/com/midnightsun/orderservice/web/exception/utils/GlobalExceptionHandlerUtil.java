@@ -1,7 +1,8 @@
 package com.midnightsun.orderservice.web.exception.utils;
 
-import com.midnightsun.productservice.web.exception.dto.ErrorDTO;
-import com.midnightsun.productservice.web.exception.enums.ErrorCode;
+
+import com.midnightsun.orderservice.web.exception.dto.ErrorDTO;
+import com.midnightsun.orderservice.web.exception.enums.ErrorCode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
@@ -9,7 +10,7 @@ import org.slf4j.MDC;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import static com.midnightsun.productservice.config.LogFilter.TRACKING_ID;
+import static com.midnightsun.orderservice.config.LogFilter.TRACKING_ID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GlobalExceptionHandlerUtil {
