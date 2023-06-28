@@ -37,6 +37,6 @@ public class Order extends AbstractAuditingEntity {
     @ManyToOne
     private City city;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;
 }

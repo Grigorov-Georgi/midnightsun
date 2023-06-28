@@ -18,11 +18,10 @@ public class OrderItem extends AbstractAuditingEntity {
     @SequenceGenerator(name = "order_item_sequence_generator", initialValue = 1000, allocationSize = 1)
     private Long id;
 
-//    TODO: Is bidirectional needed?
-//    @ManyToOne
-//    private Order order;
-
     private Long productId;
 
     private Long quantity;
+
+    @ManyToOne
+    private Order order;
 }
