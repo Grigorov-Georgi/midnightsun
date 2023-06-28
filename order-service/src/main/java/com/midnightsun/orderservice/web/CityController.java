@@ -22,7 +22,7 @@ public class CityController {
 
     @GetMapping
     public ResponseEntity<Page<CityDTO>> getAll(Pageable pageable) {
-        log.debug("REST request to get all cities sorted by {}, page number: {} and page size: {}",
+        log.debug("REST request to get all CITIES sorted by {}, page number: {} and page size: {}",
                 pageable.getSort(), pageable.getPageNumber(), pageable.getPageSize());
 
         final var cities = cityService.getAll(pageable);
@@ -31,28 +31,28 @@ public class CityController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CityDTO> getOne(@PathVariable Long id) {
-        log.debug("REST request to get city by ID: {}", id);
+        log.debug("REST request to get CITY by ID: {}", id);
         final var city = cityService.getOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(city);
     }
 
     @PostMapping
     public ResponseEntity<CityDTO> save(@RequestBody CityDTO cityDTO) {
-        log.debug("REST request to save city with content: {}", cityDTO);
+        log.debug("REST request to save CITY with content: {}", cityDTO);
         final var savedCity = cityService.save(cityDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCity);
     }
 
     @PutMapping
     public ResponseEntity<CityDTO> update(@RequestBody CityDTO cityDTO) {
-        log.debug("REST request to updated city with ID: {} with content {}", cityDTO.getId(), cityDTO);
+        log.debug("REST request to updated CITY with ID: {} with content {}", cityDTO.getId(), cityDTO);
         final var updatedCity = cityService.update(cityDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCity);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.debug("REST request to delete city with ID: {}", id);
+        log.debug("REST request to delete CITY with ID: {}", id);
         cityService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -25,11 +25,13 @@ public class Order extends AbstractAuditingEntity {
     @Type(type = "uuid-char")
     private UUID id;
 
-    private String customerEmail;
-
+    @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
 
+    @Enumerated(value = EnumType.STRING)
     private OrderType type;
+
+    private String customerEmail;
 
     private String street;
 
@@ -38,6 +40,6 @@ public class Order extends AbstractAuditingEntity {
     @ManyToOne
     private City city;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private Set<OrderItem> orderItems;
 }

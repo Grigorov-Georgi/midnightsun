@@ -22,7 +22,7 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<Page<CategoryDTO>> getAll(Pageable pageable) {
-        log.debug("REST request to get all categories sorted by {}, page number: {} and page size: {}",
+        log.debug("REST request to get all CATEGORIES sorted by {}, page number: {} and page size: {}",
                 pageable.getSort(), pageable.getPageNumber(), pageable.getPageSize());
 
         final var categories = categoryService.getAll(pageable);
@@ -31,28 +31,28 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getOne(@PathVariable Long id) {
-        log.debug("REST request to get category by ID: {}", id);
+        log.debug("REST request to get CATEGORY by ID: {}", id);
         final var category = categoryService.getOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(category);
     }
 
     @PostMapping
     public ResponseEntity<CategoryDTO> save(@RequestBody CategoryDTO categoryDTO) {
-        log.debug("REST request to save category with content: {}", categoryDTO);
+        log.debug("REST request to save CATEGORY with content: {}", categoryDTO);
         final var savedCategory = categoryService.save(categoryDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCategory);
     }
 
     @PutMapping
     public ResponseEntity<CategoryDTO> update(@RequestBody CategoryDTO categoryDTO) {
-        log.debug("REST request to updated category with ID: {} with content {}", categoryDTO.getId(), categoryDTO);
+        log.debug("REST request to updated CATEGORY with ID: {} with content {}", categoryDTO.getId(), categoryDTO);
         final var updatedCategory = categoryService.update(categoryDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updatedCategory);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.debug("REST request to delete category with ID: {}", id);
+        log.debug("REST request to delete CATEGORY with ID: {}", id);
         categoryService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
