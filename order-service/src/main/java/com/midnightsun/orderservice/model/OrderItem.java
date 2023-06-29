@@ -22,6 +22,6 @@ public class OrderItem extends AbstractAuditingEntity {
 
     private Long quantity;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Order order;
 }

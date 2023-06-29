@@ -2,6 +2,7 @@ package com.midnightsun.orderservice.service;
 
 import com.midnightsun.orderservice.mapper.OrderMapper;
 import com.midnightsun.orderservice.model.Order;
+import com.midnightsun.orderservice.model.OrderItem;
 import com.midnightsun.orderservice.repository.OrderItemRepository;
 import com.midnightsun.orderservice.repository.OrderRepository;
 import com.midnightsun.orderservice.service.dto.OrderDTO;
@@ -10,7 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -57,12 +60,17 @@ public class OrderService {
     }
 
     private OrderDTO save(Order order) {
-        final var initialOrder = orderRepository.save(order);
-
-        final var orderItems = initialOrder.getOrderItems();
-        orderItems.forEach(orderItem -> orderItem.setOrder(initialOrder));
+        final Set<OrderItem> orderItemSet = order.getOrderItems();
+        order.resetOrderItems();
 
         final var savedOrder = orderRepository.save(order);
+
+        if (orderItemSet != null && !orderItemSet.isEmpty()) {
+            orderItemSet.forEach(orderItem -> orderItem.setOrder(savedOrder));
+            final var savedOrderItems = orderItemRepository.saveAll(orderItemSet);
+            savedOrder.setOrderItems(Set.copyOf(savedOrderItems));
+        }
+
         return orderMapper.toDTO(savedOrder);
     }
 

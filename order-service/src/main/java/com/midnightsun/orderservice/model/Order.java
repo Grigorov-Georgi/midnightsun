@@ -40,6 +40,10 @@ public class Order extends AbstractAuditingEntity {
     @ManyToOne
     private City city;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrderItem> orderItems;
+
+    public void resetOrderItems() {
+        this.orderItems = null;
+    }
 }
