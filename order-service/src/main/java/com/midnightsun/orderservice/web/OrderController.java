@@ -32,9 +32,9 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOne(@PathVariable UUID uuid) {
-        log.debug("REST request to get ORDER by ID: {}", uuid);
-        final var city = orderService.getOne(uuid);
+    public ResponseEntity<OrderDTO> getOne(@PathVariable UUID id) {
+        log.debug("REST request to get ORDER by ID: {}", id);
+        final var city = orderService.getOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(city);
     }
 
@@ -53,9 +53,9 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
-        log.debug("REST request to delete ORDER with ID: {}", uuid);
-        orderService.delete(uuid);
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        log.debug("REST request to delete ORDER with ID: {}", id);
+        orderService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

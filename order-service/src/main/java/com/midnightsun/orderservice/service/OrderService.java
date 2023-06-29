@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,11 +30,13 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
+    @Transactional
     public Page<OrderDTO> getAll(Pageable pageable) {
         log.debug("Request to get all ORDERS");
         return orderRepository.findAll(pageable).map(orderMapper::toDTO);
     }
 
+    @Transactional
     public OrderDTO getOne(UUID uuid) {
         log.debug("Request to get ORDER by ID: {}", uuid);
         return orderMapper.toDTO(orderRepository.findById(uuid).orElse(null));

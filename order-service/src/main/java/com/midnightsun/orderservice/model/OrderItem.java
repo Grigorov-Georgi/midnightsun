@@ -1,12 +1,11 @@
 package com.midnightsun.orderservice.model;
 
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
+import lombok.*;
+
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +23,13 @@ public class OrderItem extends AbstractAuditingEntity {
 
     @ManyToOne(optional = false)
     private Order order;
+
+
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

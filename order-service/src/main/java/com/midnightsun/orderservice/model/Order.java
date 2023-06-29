@@ -3,16 +3,15 @@ package com.midnightsun.orderservice.model;
 import com.midnightsun.orderservice.model.enums.OrderStatus;
 import com.midnightsun.orderservice.model.enums.OrderType;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import java.util.Set;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,5 +44,18 @@ public class Order extends AbstractAuditingEntity {
 
     public void resetOrderItems() {
         this.orderItems = null;
+    }
+
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", status=" + status +
+                ", type=" + type +
+                ", customerEmail='" + customerEmail + '\'' +
+                ", street='" + street + '\'' +
+                ", postalCode=" + postalCode +
+                ", city=" + city +
+                ", orderItems=" + orderItems +
+                '}';
     }
 }
