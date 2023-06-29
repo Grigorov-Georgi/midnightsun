@@ -1,18 +1,17 @@
 package com.midnightsun.productservice.model;
 
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@Builder
+import lombok.*;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "category")
 public class Category extends AbstractAuditingEntity {
+
     @Id
     @GeneratedValue(generator = "category_sequence_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "category_sequence_generator", initialValue = 1000, allocationSize = 1)

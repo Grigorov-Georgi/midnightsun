@@ -3,20 +3,18 @@ package com.midnightsun.orderservice.service.dto;
 import com.midnightsun.orderservice.model.City;
 import com.midnightsun.orderservice.model.enums.OrderStatus;
 import com.midnightsun.orderservice.model.enums.OrderType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDTO {
+public class OrderDTO extends AbstractAuditingDTO {
+
     private UUID id;
 
     private String customerEmail;

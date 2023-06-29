@@ -1,15 +1,13 @@
 package com.midnightsun.productservice.service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDTO {
+public class CategoryDTO extends AbstractAuditingDTO {
+
     private Long id;
 
     private String name;

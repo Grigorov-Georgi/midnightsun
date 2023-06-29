@@ -1,7 +1,6 @@
-package com.midnightsun.productservice.service.dto;
+package com.midnightsun.orderservice.service.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;

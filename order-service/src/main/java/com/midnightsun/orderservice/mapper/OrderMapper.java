@@ -9,6 +9,11 @@ import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring", uses = {OrderItemMapper.class, CityMapper.class})
 public interface OrderMapper {
+
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
     Order toEntity(OrderDTO orderDTO);
 
     @Mapping(source = "orderItems", target = "orderItems")

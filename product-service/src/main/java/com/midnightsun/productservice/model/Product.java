@@ -1,20 +1,19 @@
 package com.midnightsun.productservice.model;
 
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 import java.math.BigDecimal;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "product")
 public class Product extends AbstractAuditingEntity {
+
     @Id
     @GeneratedValue(generator = "product_sequence_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "product_sequence_generator", initialValue = 1000, allocationSize = 1)
