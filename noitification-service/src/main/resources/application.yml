@@ -1,0 +1,27 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_PASSWORD}
+    smtp:
+      auth: true
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+
+logging:
+  level:
+    ROOT: INFO
+    com.midnightsun: DEBUG
+
+server:
+  port: 8083
+
+info:
+  application:
+    name: Order Service
+    version: 0.0.1
+    description: Service managing orders in eCart Application
