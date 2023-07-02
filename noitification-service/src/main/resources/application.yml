@@ -22,6 +22,6 @@ server:
 
 info:
   application:
-    name: Order Service
+    name: Notification Service
     version: 0.0.1
-    description: Service managing orders in eCart Application
+    description: Service responsible for notification in eCart Application
