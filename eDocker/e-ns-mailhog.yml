@@ -1,9 +1,9 @@
 version: '3.8'
 services:
 
-  e-notification-service:
+  e-ns-mailhog:
     image: mailhog/mailhog
-    container_name: e-notification-service-mailhog
+    container_name: e-ns-mailhog
     ports:
       - "1025:1025"
       - "8025:8025"

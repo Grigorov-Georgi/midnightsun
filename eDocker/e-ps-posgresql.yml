@@ -1,9 +1,9 @@
 version: '3.8'
 services:
 
-  e-product-service:
+  e-ps-posgresql:
     image: postgres:14.1
-    container_name: e-product-service
+    container_name: e-ps-posgresql
     restart: always
     volumes:
       - e-product-service:/data/lib

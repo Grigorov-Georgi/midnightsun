@@ -1,9 +1,9 @@
 version: '3.8'
 services:
 
-  e-order-service:
+  e-os-posgresql:
     image: postgres:14.1
-    container_name: e-order-service
+    container_name: e-os-posgresql
     restart: always
     volumes:
       - e-order-service:/data/lib
