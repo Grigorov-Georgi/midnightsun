@@ -7,6 +7,7 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Type;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "order")
-public class Order extends AbstractAuditingEntity {
+public class Order extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "uuid2")

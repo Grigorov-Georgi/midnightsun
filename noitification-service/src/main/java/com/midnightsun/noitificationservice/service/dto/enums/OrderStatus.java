@@ -1,4 +1,4 @@
-package com.midnightsun.orderservice.model.enums.enums;
+package com.midnightsun.noitificationservice.service.dto.enums;
 
 public enum OrderStatus {
     PENDING,

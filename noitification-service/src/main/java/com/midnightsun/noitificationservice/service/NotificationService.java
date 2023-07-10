@@ -1,22 +1,40 @@
-package com.midnightsun.noitificationservice;
+package com.midnightsun.noitificationservice.service;
 
+import com.midnightsun.noitificationservice.service.dto.OrderDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-@RestController
-@RequestMapping("/api")
-public class NotificationController {
+@Slf4j
+@Service
+public class NotificationService {
 
-    @RequestMapping("/sendemail/")
-    public String sendEmail() throws MessagingException, IOException {
+    private final TemplateEngine templateEngine;
+
+    public NotificationService(TemplateEngine templateEngine) {
+        this.templateEngine = templateEngine;
+    }
+
+    @RabbitListener(queues = {"${rabbitmq.queue.name}"})
+    public void sendEmail(OrderDTO order) throws MessagingException, IOException {
+        log.debug("Receiving ORDER {} from Order Service", order.getId());
+        log.debug("Sending email to {} for creation of ORDER {}", order.getCreatedBy(), order.getId());
+
+        Context context = new Context();
+        context.setVariable("order", order);
+        context.setVariable("totalPrice", "123");
+        String processedHTML = templateEngine.process("created-order.html", context);
+
         var mailSender = new JavaMailSenderImpl();
         mailSender.setHost("127.0.0.1");
         mailSender.setPort(1025);
@@ -32,10 +50,10 @@ public class NotificationController {
         mimeMessageHelper.setFrom("system@mail.com");
         mimeMessageHelper.setTo("g.grigorov@blubito");
         mimeMessageHelper.setSubject("Order is created");
-        mimeMessageHelper.setText(getHtmlContent("mail-templates/created-order.html"), true);
+//        mimeMessageHelper.setText(getHtmlContent("templates/created-order.html"), true);
+        mimeMessageHelper.setText(processedHTML, true);
 
         mailSender.send(mimeMessage);
-        return "Email sent!";
     }
 
     private String getHtmlContent(String htmlFilePath) throws IOException {

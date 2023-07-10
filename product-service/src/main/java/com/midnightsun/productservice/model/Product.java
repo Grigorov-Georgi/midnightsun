@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
@@ -12,7 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 @Table(name = "product")
-public class Product extends AbstractAuditingEntity {
+public class Product extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "product_sequence_generator", strategy = GenerationType.SEQUENCE)

@@ -4,13 +4,15 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "category")
-public class Category extends AbstractAuditingEntity {
+public class Category extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "category_sequence_generator", strategy = GenerationType.SEQUENCE)

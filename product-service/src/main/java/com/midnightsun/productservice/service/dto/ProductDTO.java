@@ -2,13 +2,14 @@ package com.midnightsun.productservice.service.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDTO extends AbstractAuditingDTO {
+public class ProductDTO extends AbstractAuditingDTO implements Serializable {
 
     private Long id;
 

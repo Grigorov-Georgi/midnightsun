@@ -1,8 +1,11 @@
-package com.midnightsun.orderservice.service.dto;
+package com.midnightsun.noitificationservice.service.dto;
 
-import com.midnightsun.orderservice.model.enums.OrderStatus;
-import com.midnightsun.orderservice.model.enums.OrderType;
-import lombok.*;
+import com.midnightsun.noitificationservice.service.dto.enums.OrderStatus;
+import com.midnightsun.noitificationservice.service.dto.enums.OrderType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Set;

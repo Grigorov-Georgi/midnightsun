@@ -1,5 +1,6 @@
 package com.midnightsun.orderservice.service;
 
+import com.midnightsun.orderservice.config.rabbitmq.producer.RabbitMQProducer;
 import com.midnightsun.orderservice.mapper.OrderMapper;
 import com.midnightsun.orderservice.model.Order;
 import com.midnightsun.orderservice.model.OrderItem;
@@ -23,11 +24,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final RabbitMQProducer rabbitMQProducer;
 
-    public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, OrderMapper orderMapper) {
+    public OrderService(OrderRepository orderRepository,
+                        OrderItemRepository orderItemRepository,
+                        OrderMapper orderMapper,
+                        RabbitMQProducer rabbitMQProducer) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
+        this.rabbitMQProducer = rabbitMQProducer;
     }
 
     @Transactional
@@ -72,7 +78,10 @@ public class OrderService {
             savedOrder.setOrderItems(Set.copyOf(savedOrderItems));
         }
 
-        return orderMapper.toDTO(savedOrder);
+        final var savedOrderDTO = orderMapper.toDTO(savedOrder);
+        rabbitMQProducer.sendEmailForCreatedOrder(savedOrderDTO);
+
+        return savedOrderDTO;
     }
 
     public void delete(UUID uuid) {

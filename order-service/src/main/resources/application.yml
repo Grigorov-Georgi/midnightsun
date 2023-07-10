@@ -11,9 +11,11 @@ spring:
     properties:
       hibernate:
         default_schema: public
-  output:
-    ansi:
-      enabled: ALWAYS
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 logging:
   level:
@@ -26,6 +28,14 @@ server:
 global:
   exception-handling:
     debug-message: TRUE
+
+rabbitmq:
+  queue:
+    name: notification-queue
+  exchange:
+    name: notification-exchange
+  routing:
+    key: notification-routing-key
 
 info:
   application:
