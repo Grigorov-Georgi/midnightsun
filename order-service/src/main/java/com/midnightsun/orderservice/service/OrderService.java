@@ -67,6 +67,12 @@ public class OrderService {
     }
 
     private OrderDTO save(Order order) {
+        //TODO
+//        if (!areProductAvailable()) {
+        if (true) {
+            throw new HttpBadRequestException("Products doesn't exists or insufficient quantity");
+        }
+
         final Set<OrderItem> orderItemSet = order.getOrderItems();
         order.resetOrderItems();
 
@@ -79,6 +85,7 @@ public class OrderService {
         }
 
         final var savedOrderDTO = orderMapper.toDTO(savedOrder);
+
         rabbitMQProducer.sendEmailForCreatedOrder(savedOrderDTO);
 
         return savedOrderDTO;
