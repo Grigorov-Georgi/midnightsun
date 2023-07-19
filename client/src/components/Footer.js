@@ -12,7 +12,7 @@ const Footer = () => {
           <img src={linkedin_logo} alt="linked_image" height="40" width="40" />
         </a>
         <a class="btn github_btn" href="https://github.com/Grigorov-Georgi" role="button">
-          <img src={github_logo} alt="github_image" height="25" width="25" />
+          <img src={github_logo} alt="github_image" height="35" width="35" />
         </a>
       </div>
     </footer>
