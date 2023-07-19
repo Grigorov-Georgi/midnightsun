@@ -1,13 +1,13 @@
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css'; 
-import 'primeicons/primeicons.css';
+import React from 'react';
 import './App.css';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <div>
       <Navbar />
+      <Footer />
     </div>
   );
 }
