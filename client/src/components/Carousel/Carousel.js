@@ -3,6 +3,7 @@ import { Button } from "primereact/button";
 import { Carousel } from "primereact/carousel";
 import { Tag } from "primereact/tag";
 import { getAllProducts } from "../../services/ProductService";
+import Card from "../Card/Card";
 
 const BasicCarousel = () => {
   const [products, setProducts] = useState([]);
@@ -61,7 +62,7 @@ const BasicCarousel = () => {
   };
 
   return (
-    <div className="card">
+    <Card>
       <Carousel
         value={products}
         numVisible={3}
@@ -69,7 +70,7 @@ const BasicCarousel = () => {
         responsiveOptions={responsiveOptions}
         itemTemplate={productTemplate}
       />
-    </div>
+    </Card>
   );
 };
 
