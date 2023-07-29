@@ -5,6 +5,13 @@ import "./Product.css";
 
 
 const Product = (props) => {
+  let shorterDescription = props.desc;
+  if (shorterDescription.length > 67) {
+    shorterDescription = shorterDescription.substring(0, 50) + "...";
+  } else if (shorterDescription.length === 0) {
+    shorterDescription = "No description provided"
+  }
+
   return (
     <Card className='product-item'>
         <div>
@@ -17,7 +24,7 @@ const Product = (props) => {
           <h6 className="mt-0 mb-3">${props.price}</h6> */}
           <h3 className="align-center">Arduino</h3>
           <h4 className="product-item__category">Electronics</h4>
-          <h4 className="product-item__description">Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic</h4>
+          <h4 className="product-item__description">{shorterDescription}</h4>
           <h4 className="align-center">Price: $4.00</h4>
           <Card className="product-item__btn">
           <button className="product-item__btn" style={{width: "100%"}}

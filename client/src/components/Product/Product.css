@@ -1,12 +1,14 @@
 .product-item {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    align-self: flex-start;
+    /* justify-content: space-between; */
     align-items: center;
     padding: 0.5rem;
     margin: 1em 1em;
     background-color: #343e4d;
     width: 300px;
+    height: 350px;
 }
 
 .product-item:hover {
@@ -32,7 +34,8 @@
 }
 
 .product-item__description {
-  text-align: justify;
+  height: 37px;
+  text-align: center;
 }
 
 /* .product-item__btn {
