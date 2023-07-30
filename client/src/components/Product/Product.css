@@ -38,9 +38,9 @@
   text-align: center;
 }
 
-/* .product-item__btn {
-  background-color: black;
-} */
+.product-item__btn {
+  background-color: rgb(25, 173, 25);
+}
 
 .align-center {
   text-align: center;

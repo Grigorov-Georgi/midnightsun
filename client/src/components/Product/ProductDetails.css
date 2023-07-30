@@ -1,0 +1,28 @@
+.product-details {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    /* justify-content: space-between; */
+    align-items: center;
+    margin: 8px 8px 70px 8px;
+}
+
+.product-details__image {
+    height: 400px;
+    width: 600px;
+    margin: 30px;
+}
+
+.product-details__information {
+    margin: 10px 100px 10px 100px;
+}
+
+.product-details__btn {
+    background-color: rgb(25, 173, 25);
+}
+
+.product-details__category {
+    text-align: center;
+    font-style: italic;
+    text-decoration: underline;
+  }
