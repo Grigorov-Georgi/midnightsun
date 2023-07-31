@@ -16,8 +16,10 @@ public class OrderDTO extends AbstractAuditingDTO {
 
     private UUID id;
 
+    //TODO: This will be changed when authentication is implemented
     private String customerEmail;
 
+    //TODO: Statuses needs to be changed from saga pattern orchestrator -> they will be ignored when saving order
     private OrderStatus status;
 
     private OrderType type;
@@ -28,7 +30,9 @@ public class OrderDTO extends AbstractAuditingDTO {
 
     private CityDTO city;
 
+    //TODO: Calculated and saved in the database
     private BigDecimal totalPrice;
 
+    //TODO: Fetched if frontend set queryParame ?withOrderItemsInformation=true
     private Set<OrderItemDTO> orderItems;
 }

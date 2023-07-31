@@ -14,32 +14,64 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${rabbitmq.queue.name}")
-    private String queue;
+    //Notification service variables
+    @Value("${rabbitmq.queues.ns_queue}")
+    private String nsQueue;
 
-    @Value("${rabbitmq.exchange.name}")
-    private String exchange;
+    @Value("${rabbitmq.exchanges.ns_exchange}")
+    private String nsExchange;
 
-    @Value("${rabbitmq.routing.key}")
-    private String routingKey;
+    @Value("${rabbitmq.routings.ns_key}")
+    private String nsRoutingKey;
 
+    //Product service setup
+    @Value("${rabbitmq.queues.ps_queue}")
+    private String psQueue;
+
+    @Value("${rabbitmq.exchanges.ps_exchange}")
+    private String psExchange;
+
+    @Value("${rabbitmq.routings.ps_key}")
+    private String psRoutingKey;
+
+    //TODO: Renaming has been made so the queue may not work -> needs to be retested
+    //Notification queue, exchange and binding setup
     @Bean
-    public Queue queue() {
-        return new Queue(queue);
+    public Queue nsQueue() {
+        return new Queue(nsQueue);
     }
 
     @Bean
-    public TopicExchange exchange() {
-        return new TopicExchange(exchange);
+    public TopicExchange nsExchange() {
+        return new TopicExchange(nsExchange);
     }
 
     @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue())
-                .to(exchange())
-                .with(routingKey);
+    public Binding nsBinding() {
+        return BindingBuilder.bind(nsQueue())
+                .to(nsExchange())
+                .with(nsRoutingKey);
     }
 
+    //Product service queue, exchange and binding setup
+    @Bean
+    public Queue psQueue() {
+        return new Queue(psQueue);
+    }
+
+    @Bean
+    public TopicExchange psExchange() {
+        return new TopicExchange(psExchange);
+    }
+
+    @Bean
+    public Binding psBinding() {
+        return BindingBuilder.bind(nsQueue())
+                .to(psExchange())
+                .with(psRoutingKey);
+    }
+
+    //Global configs
     @Bean
     public MessageConverter messageConverter(ObjectMapper objectMapper) {
         objectMapper.registerModule(new JavaTimeModule());

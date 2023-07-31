@@ -30,12 +30,15 @@ global:
     debug-message: TRUE
 
 rabbitmq:
-  queue:
-    name: notification-queue
-  exchange:
-    name: notification-exchange
-  routing:
-    key: notification-routing-key
+  queues:
+    ns_queue: notification-queue
+    ps_queue: product-queue
+  exchanges:
+    ns_exchange: notification-exchange
+    ps_exchange: product-exchange
+  routings:
+    ns_key: notification-routing-key
+    ps_key: product-routing-key
 
 info:
   application:

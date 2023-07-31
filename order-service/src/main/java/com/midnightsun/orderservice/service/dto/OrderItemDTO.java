@@ -13,4 +13,6 @@ public class OrderItemDTO extends AbstractAuditingDTO {
     private Long productId;
 
     private Long quantity;
+
+    private OrderItemExtendedInfoDTO orderItemExtendedInfoDTO;
 }
