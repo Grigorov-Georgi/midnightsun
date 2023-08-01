@@ -11,10 +11,18 @@ function App() {
   return (
     <div>
       <Navbar />
-      {/* <BasicCarousel /> */}
+      
+      //Home page
+      <BasicCarousel />
+
+      //Add Product - Edit Optional
       {/* <ProductForm /> */}
+
+      //List All Products - Catalog
       {/* <ProductGrid /> */}
-      <ProductDetails />
+
+      //Product Details
+      {/* <ProductDetails /> */}
       <Footer />
     </div>
   );

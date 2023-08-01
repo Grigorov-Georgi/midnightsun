@@ -34,13 +34,14 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routings.ps_key}")
     private String psRoutingKey;
 
-    //TODO: Renaming has been made so the queue may not work -> needs to be retested
+    //DANGER: Renaming has been made so the queue may not work -> needs to be retested
     //Notification queue, exchange and binding setup
     @Bean
     public Queue nsQueue() {
         return new Queue(nsQueue);
     }
 
+    //Using 2 separate exchanges in order to split the rabbitMQ channels in logical domains each related to different external service
     @Bean
     public TopicExchange nsExchange() {
         return new TopicExchange(nsExchange);
@@ -54,6 +55,7 @@ public class RabbitMQConfig {
     }
 
     //Product service queue, exchange and binding setup
+    //IDEA: Configure competing consumer queue!!!
     @Bean
     public Queue psQueue() {
         return new Queue(psQueue);
