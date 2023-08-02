@@ -1,4 +1,4 @@
-package com.midnightsun.orderservice.config.rabbitmq;
+package com.midnightsun.orderservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    //Notification service variables
     @Value("${rabbitmq.queues.ns_queue}")
     private String nsQueue;
 
@@ -24,24 +23,11 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routings.ns_key}")
     private String nsRoutingKey;
 
-    //Product service setup
-    @Value("${rabbitmq.queues.ps_queue}")
-    private String psQueue;
-
-    @Value("${rabbitmq.exchanges.ps_exchange}")
-    private String psExchange;
-
-    @Value("${rabbitmq.routings.ps_key}")
-    private String psRoutingKey;
-
-    //DANGER: Renaming has been made so the queue may not work -> needs to be retested
-    //Notification queue, exchange and binding setup
     @Bean
     public Queue nsQueue() {
         return new Queue(nsQueue);
     }
 
-    //Using 2 separate exchanges in order to split the rabbitMQ channels in logical domains each related to different external service
     @Bean
     public TopicExchange nsExchange() {
         return new TopicExchange(nsExchange);
@@ -52,25 +38,6 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(nsQueue())
                 .to(nsExchange())
                 .with(nsRoutingKey);
-    }
-
-    //Product service queue, exchange and binding setup
-    //IDEA: Configure competing consumer queue!!!
-    @Bean
-    public Queue psQueue() {
-        return new Queue(psQueue);
-    }
-
-    @Bean
-    public TopicExchange psExchange() {
-        return new TopicExchange(psExchange);
-    }
-
-    @Bean
-    public Binding psBinding() {
-        return BindingBuilder.bind(nsQueue())
-                .to(psExchange())
-                .with(psRoutingKey);
     }
 
     //Global configs

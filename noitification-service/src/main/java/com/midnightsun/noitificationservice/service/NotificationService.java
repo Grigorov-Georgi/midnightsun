@@ -2,18 +2,13 @@ package com.midnightsun.noitificationservice.service;
 
 import com.midnightsun.noitificationservice.service.dto.OrderDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StreamUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
@@ -25,9 +20,7 @@ public class NotificationService {
         this.templateEngine = templateEngine;
     }
 
-    @RabbitListener(queues = {"${rabbitmq.queue.name}"})
-    public void sendEmail(OrderDTO order) throws MessagingException, IOException {
-        log.debug("Receiving ORDER {} from Order Service", order.getId());
+    public void sendEmail(OrderDTO order) throws MessagingException {
         log.debug("Sending email to {} for creation of ORDER {}", order.getCreatedBy(), order.getId());
 
         Context context = new Context();
@@ -50,20 +43,8 @@ public class NotificationService {
         mimeMessageHelper.setFrom("system@mail.com");
         mimeMessageHelper.setTo("g.grigorov@blubito");
         mimeMessageHelper.setSubject("Order is created");
-//        mimeMessageHelper.setText(getHtmlContent("templates/created-order.html"), true);
         mimeMessageHelper.setText(processedHTML, true);
 
         mailSender.send(mimeMessage);
-    }
-
-    private String getHtmlContent(String htmlFilePath) throws IOException {
-        ClassLoader classLoader = getClass().getClassLoader();
-        try (InputStream inputStream = classLoader.getResourceAsStream(htmlFilePath)) {
-            if (inputStream != null) {
-                return StreamUtils.copyToString(inputStream, StandardCharsets.UTF_8);
-            } else {
-                throw new IllegalArgumentException("HTML file not found: " + htmlFilePath);
-            }
-        }
     }
 }

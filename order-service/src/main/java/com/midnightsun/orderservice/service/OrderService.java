@@ -1,27 +1,22 @@
 package com.midnightsun.orderservice.service;
 
-import com.midnightsun.orderservice.config.rabbitmq.producer.RabbitMQProducer;
+import com.midnightsun.orderservice.service.rabbitmq.producer.RabbitMQProducer;
 import com.midnightsun.orderservice.mapper.OrderMapper;
 import com.midnightsun.orderservice.model.Order;
 import com.midnightsun.orderservice.model.OrderItem;
 import com.midnightsun.orderservice.repository.OrderItemRepository;
 import com.midnightsun.orderservice.repository.OrderRepository;
 import com.midnightsun.orderservice.service.dto.OrderDTO;
-import com.midnightsun.orderservice.service.dto.OrderItemDTO;
 import com.midnightsun.orderservice.web.exception.HttpBadRequestException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,18 +26,15 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private final RabbitMQProducer rabbitMQProducer;
-    private final RabbitTemplate rabbitTemplate;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         OrderMapper orderMapper,
-                        RabbitMQProducer rabbitMQProducer,
-                        RabbitTemplate rabbitTemplate) {
+                        RabbitMQProducer rabbitMQProducer) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
         this.rabbitMQProducer = rabbitMQProducer;
-        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Transactional
@@ -52,19 +44,9 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderDTO getOne(UUID uuid, boolean withProducts) {
-        log.debug("Request to get ORDER by ID: {}", uuid);
-
-        //TODO: Implement internal call to product service to fetch data
-        if (withProducts) {
-
-        }
-
-        return orderMapper.toDTO(orderRepository.findById(uuid).orElse(null));
-    }
-
     public OrderDTO getOne(UUID uuid) {
-        return this.getOne(uuid, false);
+        log.debug("Request to get ORDER by ID: {}", uuid);
+        return orderMapper.toDTO(orderRepository.findById(uuid).orElse(null));
     }
 
     public OrderDTO save(OrderDTO orderDTO) {
@@ -86,12 +68,6 @@ public class OrderService {
     }
 
     private OrderDTO save(Order order) {
-        //TODO
-//        if (!areProductAvailable()) {
-        if (true) {
-            throw new HttpBadRequestException("Products doesn't exists or insufficient quantity");
-        }
-
         final Set<OrderItem> orderItemSet = order.getOrderItems();
         order.resetOrderItems();
 
@@ -105,7 +81,7 @@ public class OrderService {
 
         final var savedOrderDTO = orderMapper.toDTO(savedOrder);
 
-        rabbitMQProducer.sendEmailForCreatedOrder(savedOrderDTO);
+        rabbitMQProducer.sendEmailForOrderCreation(savedOrderDTO);
 
         return savedOrderDTO;
     }
@@ -113,17 +89,5 @@ public class OrderService {
     public void delete(UUID uuid) {
         log.debug("Request to delete ORDER with ID: {}", uuid);
         orderRepository.deleteById(uuid);
-    }
-
-    private void fetchProducts(OrderDTO orderDTO) {
-        List<Long> productIds = orderDTO.getOrderItems().stream().map(OrderItemDTO::getProductId).collect(Collectors.toList());
-
-        String correlationId = UUID.randomUUID().toString();
-
-        MessageProperties messageProperties = new MessageProperties();
-        messageProperties.setCorrelationId(correlationId);
-
-        Message requestMessage = rabbitTemplate.getMessageConverter().toMessage(productIds, messageProperties);
-
     }
 }

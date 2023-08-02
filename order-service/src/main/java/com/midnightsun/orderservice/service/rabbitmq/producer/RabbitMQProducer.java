@@ -1,4 +1,4 @@
-package com.midnightsun.orderservice.config.rabbitmq.producer;
+package com.midnightsun.orderservice.service.rabbitmq.producer;
 
 import com.midnightsun.orderservice.service.dto.OrderDTO;
 import lombok.extern.slf4j.Slf4j;
@@ -11,19 +11,18 @@ import org.springframework.stereotype.Service;
 public class RabbitMQProducer {
 
     @Value("${rabbitmq.exchanges.ns_exchange}")
-    private String exchange;
+    private String nsExchange;
 
     @Value("${rabbitmq.routings.ns_key}")
-    private String routingKey;
+    private String nsRoutingKey;
 
-    private RabbitTemplate rabbitTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     public RabbitMQProducer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendEmailForCreatedOrder(OrderDTO order) {
-        log.debug("Sending ORDER {} to Notification Service", order.getId());
-        rabbitTemplate.convertAndSend(exchange, routingKey, order);
+    public void sendEmailForOrderCreation(OrderDTO order) {
+        rabbitTemplate.convertAndSend(nsExchange, nsRoutingKey, order);
     }
 }
