@@ -11,6 +11,7 @@ import com.midnightsun.orderservice.service.rabbitmq.rpc.ExternalProductService;
 import com.midnightsun.orderservice.web.exception.HttpBadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,22 +42,34 @@ public class OrderService {
     }
 
     @Transactional
-    public Page<OrderDTO> getAll(Pageable pageable) {
+    public Page<OrderDTO> getAll(Pageable pageable, boolean withFullInfo) {
         log.debug("Request to get all ORDERS");
-        return orderRepository.findAll(pageable).map(orderMapper::toDTO);
+        final var orderDTOs = orderRepository.findAll(pageable).map(orderMapper::toDTO);
+
+        if (withFullInfo) {
+            final var fullInfoOrderDTOs = externalProductService.getFullOrderInformation(orderDTOs.getContent());
+            return fullInfoOrderDTOs != null ?
+                    new PageImpl<>(fullInfoOrderDTOs, pageable, orderRepository.count()) :
+                    orderDTOs;
+        }
+        return orderDTOs;
     }
 
     @Transactional
     public OrderDTO getOne(UUID uuid, boolean withFullInfo) {
         log.debug("Request to get ORDER by ID: {}", uuid);
 
-        var order = orderRepository.findById(uuid)
+        var orderDTO = orderRepository.findById(uuid)
                 .map(orderMapper::toDTO)
                 .orElse(null);
 
-        if (order == null) return null;
+        if (orderDTO == null) return null;
 
-        return withFullInfo ? externalProductService.getFullOrderInformation(order) : order;
+        if (withFullInfo){
+            final var orderWithFullInfo = externalProductService.getFullOrderInformation(orderDTO);
+            return orderWithFullInfo != null ? orderWithFullInfo : orderDTO;
+        }
+        return orderDTO;
     }
 
     public OrderDTO save(OrderDTO orderDTO) {

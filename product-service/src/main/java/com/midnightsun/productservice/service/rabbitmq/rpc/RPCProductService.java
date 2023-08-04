@@ -1,5 +1,6 @@
 package com.midnightsun.productservice.service.rabbitmq.rpc;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.midnightsun.productservice.service.ProductService;
 import com.midnightsun.productservice.service.dto.ProductDTO;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -34,32 +36,36 @@ public class RPCProductService {
     public void process(Message message) throws IOException {
         //DANGER: add error handling
         byte[] body = message.getBody();
-        OrderDTO order = objectMapper.readValue(body, OrderDTO.class);
+        List<OrderDTO> orderDTOList = objectMapper.readValue(body, new TypeReference<List<OrderDTO>>() {});
 
-        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (OrderDTO orderDTO : orderDTOList) {
+            BigDecimal totalPrice = BigDecimal.ZERO;
 
-        Set<OrderItemDTO> orderItems = order.getOrderItems();
-        for (OrderItemDTO orderItem : orderItems) {
-            ProductDTO product = productService.getOne(orderItem.getProductId());
+            Set<OrderItemDTO> orderItems = orderDTO.getOrderItems();
+            for (OrderItemDTO orderItem : orderItems) {
+                ProductDTO product = productService.getOne(orderItem.getProductId());
 
-            OrderItemExtendedInfoDTO orderItemExtendedInfo = new OrderItemExtendedInfoDTO();
-            orderItemExtendedInfo.setName(product.getName());
-            orderItemExtendedInfo.setDescription(product.getDescription());
-            orderItemExtendedInfo.setPrice(product.getPrice());
+                OrderItemExtendedInfoDTO orderItemExtendedInfo = new OrderItemExtendedInfoDTO();
+                orderItemExtendedInfo.setName(product.getName());
+                orderItemExtendedInfo.setDescription(product.getDescription());
+                orderItemExtendedInfo.setPrice(product.getPrice());
 
-            orderItem.setOrderItemExtendedInfoDTO(orderItemExtendedInfo);
+                orderItem.setOrderItemExtendedInfoDTO(orderItemExtendedInfo);
 
-            BigDecimal orderItemQuantity = BigDecimal.valueOf(orderItem.getQuantity());
-            BigDecimal productPrice = product.getPrice();
-            BigDecimal totalPriceOfCurrentProduct = orderItemQuantity.multiply(productPrice);
-            totalPrice = totalPrice.add(totalPriceOfCurrentProduct);
+                BigDecimal orderItemQuantity = BigDecimal.valueOf(orderItem.getQuantity());
+                BigDecimal productPrice = product.getPrice();
+                BigDecimal totalPriceOfCurrentProduct = orderItemQuantity.multiply(productPrice);
+                totalPrice = totalPrice.add(totalPriceOfCurrentProduct);
+            }
+
+            orderDTO.setTotalPrice(totalPrice);
         }
-
-        order.setTotalPrice(totalPrice);
 
         MessageProperties messageProperties = new MessageProperties();
         messageProperties.setContentType(MessageProperties.CONTENT_TYPE_JSON);
-        Message build = MessageBuilder.withBody(objectMapper.writeValueAsBytes(order)).andProperties(messageProperties).build();
+
+        Message build = MessageBuilder.withBody(objectMapper.writeValueAsBytes(orderDTOList))
+                .andProperties(messageProperties).build();
 
         String replyTo = message.getMessageProperties().getReplyTo();
 
