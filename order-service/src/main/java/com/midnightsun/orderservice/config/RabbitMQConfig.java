@@ -57,6 +57,9 @@ public class RabbitMQConfig {
     @Bean
     public Queue psQueue() { return new Queue(psQueue); }
 
+    //DANGER: This actually creates bottleneck - the worker isn't scalable
+    //TODO: reply-queue must be anonymous and disposable - every new request creates new replyQueue that is deleted after the response
+    //TODO: try to set prefetchCount = 1 -> .basicQos(1)
     @Bean
     public Queue psReplyQueue() { return new Queue(psReplyQueue); }
 
