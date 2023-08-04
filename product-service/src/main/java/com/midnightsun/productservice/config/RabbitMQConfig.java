@@ -8,7 +8,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,23 +20,14 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queues.ps_queue}")
     private String psQueue;
 
-    @Value("${rabbitmq.queues.ps_reply_queue}")
-    private String psReplyQueue;
-
     @Value("${rabbitmq.exchanges.ps_exchange}")
     private String psExchange;
 
     @Value("${rabbitmq.routings.ps_key}")
     private String psRoutingKey;
 
-    @Value("${rabbitmq.routings.ps_reply_key}")
-    private String psReplyRoutingKey;
-
     @Bean
     public Queue psQueue() { return new Queue(psQueue); }
-
-    @Bean
-    public Queue psReplyQueue() { return new Queue(psReplyQueue); }
 
     @Bean
     public TopicExchange psExchange() { return new TopicExchange(psExchange); }
@@ -47,13 +37,6 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(psQueue())
                 .to(psExchange())
                 .with(psRoutingKey);
-    }
-
-    @Bean
-    public Binding psReplyBinding() {
-        return BindingBuilder.bind(psReplyQueue())
-                .to(psExchange())
-                .with(psReplyRoutingKey);
     }
 
     @Bean

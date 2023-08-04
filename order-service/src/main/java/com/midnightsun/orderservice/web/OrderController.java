@@ -32,9 +32,9 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOne(@PathVariable UUID id) {
+    public ResponseEntity<OrderDTO> getOne(@PathVariable UUID id, @RequestParam(defaultValue = "false") boolean withFullInfo) {
         log.debug("REST request to get ORDER by ID: {}", id);
-        final var city = orderService.getOne(id);
+        final var city = orderService.getOne(id, withFullInfo);
         return ResponseEntity.status(HttpStatus.OK).body(city);
     }
 

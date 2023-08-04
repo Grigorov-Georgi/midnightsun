@@ -5,7 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,17 +28,11 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.queues.ps_queue}")
     private String psQueue;
 
-    @Value("${rabbitmq.queues.ps_reply_queue}")
-    private String psReplyQueue;
-
     @Value("${rabbitmq.exchanges.ps_exchange}")
     private String psExchange;
 
     @Value("${rabbitmq.routings.ps_key}")
     private String psRoutingKey;
-
-    @Value("${rabbitmq.routings.ps_reply_key}")
-    private String psReplyRoutingKey;
 
     @Bean
     public Queue nsQueue() { return new Queue(nsQueue); }
@@ -57,12 +50,6 @@ public class RabbitMQConfig {
     @Bean
     public Queue psQueue() { return new Queue(psQueue); }
 
-    //DANGER: This actually creates bottleneck - the worker isn't scalable
-    //TODO: reply-queue must be anonymous and disposable - every new request creates new replyQueue that is deleted after the response
-    //TODO: try to set prefetchCount = 1 -> .basicQos(1)
-    @Bean
-    public Queue psReplyQueue() { return new Queue(psReplyQueue); }
-
     @Bean
     public TopicExchange psExchange() { return new TopicExchange(psExchange); }
 
@@ -71,13 +58,6 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(psQueue())
                 .to(psExchange())
                 .with(psRoutingKey);
-    }
-
-    @Bean
-    public Binding psReplyBinding() {
-        return BindingBuilder.bind(psReplyQueue())
-                .to(psExchange())
-                .with(psReplyRoutingKey);
     }
 
     //Global configs
@@ -91,17 +71,9 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setMessageConverter(messageConverter);
-        template.setReplyAddress(psReplyQueue);
-//        template.setReplyTimeout(5000);
+        template.setUseTemporaryReplyQueues(true);
+        template.setUseChannelForCorrelation(true);
+        template.setReplyTimeout(3000);
         return template;
-    }
-
-    @Bean
-    public SimpleMessageListenerContainer replyContainer(ConnectionFactory connectionFactory, MessageConverter messageConverter){
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(psReplyQueue);
-        container.setMessageListener(rabbitTemplate(connectionFactory, messageConverter));
-        return container;
     }
 }
