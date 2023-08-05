@@ -1,0 +1,33 @@
+.dpdMenu {
+  position: absolute;
+  min-width: 5rem;
+  max-height: fit-content;
+  padding: 5px 5px;
+  background-color: var(--ecart-main-bg-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.optionsList {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.option {
+  padding: 3px 3px;
+}
+
+.optionLink {
+  color: white;
+  text-decoration: none;
+}
+
+.option:hover {
+  cursor: pointer;
+  border: 1px solid white;
+}
+
+.option:visited {
+  color: unset;
+}

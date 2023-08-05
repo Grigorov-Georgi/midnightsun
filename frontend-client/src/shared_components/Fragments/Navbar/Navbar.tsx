@@ -5,6 +5,7 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import { FiPhone } from "react-icons/fi";
+import { Dropdown } from "../../Dropdown/Dropdown";
 
 export const Navbar = () => {
   return (
@@ -13,7 +14,9 @@ export const Navbar = () => {
         <AiOutlineHome />
         Home
       </a>
-      <div style={{ marginRight: "1rem" }}>Dropdown</div>
+      <div style={{ marginRight: "1rem" }}>
+        <Dropdown title="Products" />
+      </div>
       <a href="/contacts" className={styles.link}>
         <FiPhone />
         Contacts

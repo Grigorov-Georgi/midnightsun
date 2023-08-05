@@ -1,0 +1,17 @@
+.dropdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  position: relative;
+}
+
+.dropdown:hover {
+  cursor: pointer;
+}
+
+.icon {
+  top: 0;
+  margin-left: 0.5rem;
+  margin-top: 0.4rem;
+}
