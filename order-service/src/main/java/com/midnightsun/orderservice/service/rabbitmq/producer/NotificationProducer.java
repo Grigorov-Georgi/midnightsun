@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class RabbitMQProducer {
+public class NotificationProducer {
 
     @Value("${rabbitmq.exchanges.ns_exchange}")
     private String nsExchange;
@@ -18,7 +18,7 @@ public class RabbitMQProducer {
 
     private final RabbitTemplate rabbitTemplate;
 
-    public RabbitMQProducer(RabbitTemplate rabbitTemplate) {
+    public NotificationProducer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 

@@ -1,16 +1,17 @@
 package com.midnightsun.orderservice.service;
 
-import com.midnightsun.orderservice.service.rabbitmq.producer.RabbitMQProducer;
+import com.midnightsun.orderservice.service.rabbitmq.producer.NotificationProducer;
 import com.midnightsun.orderservice.mapper.OrderMapper;
 import com.midnightsun.orderservice.model.Order;
 import com.midnightsun.orderservice.model.OrderItem;
 import com.midnightsun.orderservice.repository.OrderItemRepository;
 import com.midnightsun.orderservice.repository.OrderRepository;
 import com.midnightsun.orderservice.service.dto.OrderDTO;
+import com.midnightsun.orderservice.service.rabbitmq.rpc.ExternalProductService;
 import com.midnightsun.orderservice.web.exception.HttpBadRequestException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,28 +26,50 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
-    private final RabbitMQProducer rabbitMQProducer;
+    private final NotificationProducer notificationProducer;
+    private final ExternalProductService externalProductService;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         OrderMapper orderMapper,
-                        RabbitMQProducer rabbitMQProducer) {
+                        NotificationProducer notificationProducer,
+                        ExternalProductService externalProductService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
-        this.rabbitMQProducer = rabbitMQProducer;
+        this.notificationProducer = notificationProducer;
+        this.externalProductService = externalProductService;
     }
 
     @Transactional
-    public Page<OrderDTO> getAll(Pageable pageable) {
+    public Page<OrderDTO> getAll(Pageable pageable, boolean withFullInfo) {
         log.debug("Request to get all ORDERS");
-        return orderRepository.findAll(pageable).map(orderMapper::toDTO);
+        final var orderDTOs = orderRepository.findAll(pageable).map(orderMapper::toDTO);
+
+        if (withFullInfo) {
+            final var fullInfoOrderDTOs = externalProductService.getFullOrderInformation(orderDTOs.getContent());
+            return fullInfoOrderDTOs != null ?
+                    new PageImpl<>(fullInfoOrderDTOs, pageable, orderRepository.count()) :
+                    orderDTOs;
+        }
+        return orderDTOs;
     }
 
     @Transactional
-    public OrderDTO getOne(UUID uuid) {
+    public OrderDTO getOne(UUID uuid, boolean withFullInfo) {
         log.debug("Request to get ORDER by ID: {}", uuid);
-        return orderMapper.toDTO(orderRepository.findById(uuid).orElse(null));
+
+        var orderDTO = orderRepository.findById(uuid)
+                .map(orderMapper::toDTO)
+                .orElse(null);
+
+        if (orderDTO == null) return null;
+
+        if (withFullInfo){
+            final var orderWithFullInfo = externalProductService.getFullOrderInformation(orderDTO);
+            return orderWithFullInfo != null ? orderWithFullInfo : orderDTO;
+        }
+        return orderDTO;
     }
 
     public OrderDTO save(OrderDTO orderDTO) {
@@ -81,7 +104,7 @@ public class OrderService {
 
         final var savedOrderDTO = orderMapper.toDTO(savedOrder);
 
-        rabbitMQProducer.sendEmailForOrderCreation(savedOrderDTO);
+        notificationProducer.sendEmailForOrderCreation(savedOrderDTO);
 
         return savedOrderDTO;
     }

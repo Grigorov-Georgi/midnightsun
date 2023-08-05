@@ -23,18 +23,18 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<OrderDTO>> getAll(Pageable pageable) {
+    public ResponseEntity<Page<OrderDTO>> getAll(Pageable pageable, @RequestParam(defaultValue = "false") boolean withFullInfo) {
         log.debug("REST request to get all ORDERS sorted by {}, page number: {} and page size: {}",
                 pageable.getSort(), pageable.getPageNumber(), pageable.getPageSize());
 
-        final var orders = orderService.getAll(pageable);
+        final var orders = orderService.getAll(pageable, withFullInfo);
         return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderDTO> getOne(@PathVariable UUID id) {
+    public ResponseEntity<OrderDTO> getOne(@PathVariable UUID id, @RequestParam(defaultValue = "false") boolean withFullInfo) {
         log.debug("REST request to get ORDER by ID: {}", id);
-        final var city = orderService.getOne(id);
+        final var city = orderService.getOne(id, withFullInfo);
         return ResponseEntity.status(HttpStatus.OK).body(city);
     }
 
