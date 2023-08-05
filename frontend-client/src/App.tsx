@@ -23,6 +23,10 @@ const router = createBrowserRouter([
     path: "/shoppingCart",
     element: <div>Shopping cart</div>,
   },
+  {
+    path: "/userPage",
+    element: <div>Account</div>,
+  },
 ]);
 
 function App() {
