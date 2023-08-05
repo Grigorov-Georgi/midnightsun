@@ -1,8 +1,13 @@
-#root {
+:root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
+  --ecart-main-color: #5c77a0;
+  --cart-main-bg-color: #343e4d;
+  --ecart-main-text-color: white 0.6;
+  --ecart-main-text-hover: white;
 }
 
 .logo {

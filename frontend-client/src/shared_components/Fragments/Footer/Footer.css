@@ -1,24 +1,24 @@
 .footer {
-    background-color: #343e4d; 
-    color: rgba(255, 255, 255, 0.6); 
-    padding: 0.1rem;
-    text-align: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  
-  .footer h3 {
-    margin: 0;
-    font-size: 1.1rem;
-  }
-  
-  .footer a {
-    margin: 0 0.5rem;
-    display: inline-block;
-  }
-  
-  .footer img {
-    vertical-align: middle;
-  }
+  background-color: var(--ecart-main-bg-color);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.1rem;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.footer h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.footer a {
+  margin: 0 0.5rem;
+  display: inline-block;
+}
+
+.footer img {
+  vertical-align: middle;
+}
