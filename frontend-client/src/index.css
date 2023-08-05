@@ -3,6 +3,7 @@
   --cart-secondary-color: #343e4d;
   --ecart-main-text-color: white 0.6;
   --ecart-main-text-hover: white;
+  --ecart-view-height-basic: 89vh;
 }
 
 body {

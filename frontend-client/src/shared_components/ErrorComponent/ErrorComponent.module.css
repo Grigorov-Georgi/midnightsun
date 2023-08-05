@@ -5,5 +5,5 @@
   align-items: center;
   background-color: var(--cart-secondary-color);
   color: white;
-  height: 89vh;
+  height: var(--ecart-view-height-basic);
 }

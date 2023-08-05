@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Footer from "./shared_components/Fragments/Footer/Footer";
 import { Navbar } from "./shared_components/Fragments/Navbar/Navbar";
 import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponent";
+import { NewProductForm } from "./shared_components/ProductComponents/NewProductForm/NewProductForm";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/addProduct",
-    element: <div>Add Product</div>,
+    element: <NewProductForm />,
   },
   {
     path: "/contacts",
