@@ -41,7 +41,7 @@ const ProductForm = () => {
     }));
   };
 
-  const onUpload = () => {
+  const onUpload = (event) => {
     const file = event.files[0];
     const reader = new FileReader();
 
@@ -49,7 +49,7 @@ const ProductForm = () => {
       const base64String = reader.result.split(",")[1];
       setProduct((prevProduct) => ({
         ...prevProduct,
-        image: base64String
+        image: base64String,
       }));
     };
 

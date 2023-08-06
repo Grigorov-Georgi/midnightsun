@@ -1,0 +1,19 @@
+.form {
+  background-color: var(--cart-secondary-color);
+  height: var(--ecart-view-height-basic);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.formItem {
+  margin-bottom: 1rem !important;
+}
+
+.miscContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
