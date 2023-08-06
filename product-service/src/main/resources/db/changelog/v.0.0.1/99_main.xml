@@ -9,5 +9,6 @@
     <include file="/db/changelog/v.0.0.1/01_create_table_product.xml"/>
     <include file="/db/changelog/v.0.0.1/02_create_table_category.xml"/>
     <include file="/db/changelog/v.0.0.1/03_load_data_to_category_table.xml"/>
+    <include file="/db/changelog/v.0.0.1/04_load_data_to_product_table.xml"/>
 
 </databaseChangeLog>
