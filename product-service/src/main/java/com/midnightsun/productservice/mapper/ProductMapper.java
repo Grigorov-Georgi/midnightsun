@@ -2,10 +2,12 @@ package com.midnightsun.productservice.mapper;
 
 import com.midnightsun.productservice.model.Product;
 import com.midnightsun.productservice.service.dto.ProductDTO;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = CategoryMapper.class)
+@DecoratedWith(ProductMapperDecorator.class)
 public interface ProductMapper {
 
     @Mapping(target = "createdBy", ignore = true)
