@@ -17,8 +17,8 @@ import java.io.Serializable;
 public class Rating extends AbstractAuditingEntity implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "review_sequence_generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "review_sequence_generator", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(generator = "rating_sequence_generator", strategy = GenerationType.SEQUENCE)
+    @SequenceGenerator(name = "rating_sequence_generator", initialValue = 1000, allocationSize = 1)
     private Long id;
 
     private Long productId;
