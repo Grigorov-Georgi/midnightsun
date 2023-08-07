@@ -12,6 +12,7 @@ spring:
       hibernate:
         default_schema: public
   redis:
+    database: 0
     host: localhost
     port: 6379
     password: supersafepass!

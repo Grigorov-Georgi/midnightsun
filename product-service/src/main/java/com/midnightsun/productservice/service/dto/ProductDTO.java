@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,4 +31,8 @@ public class ProductDTO extends AbstractAuditingDTO implements Serializable {
     private Long height;
 
     private CategoryDTO category;
+
+    private Double ratingScore;
+
+    private List<String> reviews;
 }
