@@ -14,8 +14,8 @@ import java.util.List;
 @Service
 public class CacheService {
 
-    private static final String RATING_PREFIX = "rating_";
-    private static final String REVIEW_PREFIX = "review_";
+    private static final String RATING_PREFIX = "rev-rate:rating:";
+    private static final String REVIEW_PREFIX = "rev-rate:review:";
 
     private RedisTemplate<String, String> redisTemplate;
 
