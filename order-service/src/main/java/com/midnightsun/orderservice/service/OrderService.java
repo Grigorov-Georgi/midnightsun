@@ -1,5 +1,6 @@
 package com.midnightsun.orderservice.service;
 
+import com.midnightsun.orderservice.service.cache.ProductInfoService;
 import com.midnightsun.orderservice.service.rabbitmq.producer.NotificationProducer;
 import com.midnightsun.orderservice.mapper.OrderMapper;
 import com.midnightsun.orderservice.model.Order;
@@ -7,11 +8,9 @@ import com.midnightsun.orderservice.model.OrderItem;
 import com.midnightsun.orderservice.repository.OrderItemRepository;
 import com.midnightsun.orderservice.repository.OrderRepository;
 import com.midnightsun.orderservice.service.dto.OrderDTO;
-import com.midnightsun.orderservice.service.rabbitmq.rpc.ExternalProductService;
 import com.midnightsun.orderservice.web.exception.HttpBadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,32 +26,23 @@ public class OrderService {
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
     private final NotificationProducer notificationProducer;
-    private final ExternalProductService externalProductService;
+    private final ProductInfoService productInfoService;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         OrderMapper orderMapper,
-                        NotificationProducer notificationProducer,
-                        ExternalProductService externalProductService) {
+                        NotificationProducer notificationProducer, ProductInfoService productInfoService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
         this.notificationProducer = notificationProducer;
-        this.externalProductService = externalProductService;
+        this.productInfoService = productInfoService;
     }
 
     @Transactional
-    public Page<OrderDTO> getAll(Pageable pageable, boolean withFullInfo) {
+    public Page<OrderDTO> getAll(Pageable pageable) {
         log.debug("Request to get all ORDERS");
-        final var orderDTOs = orderRepository.findAll(pageable).map(orderMapper::toDTO);
-
-        if (withFullInfo) {
-            final var fullInfoOrderDTOs = externalProductService.getFullOrderInformation(orderDTOs.getContent());
-            return fullInfoOrderDTOs != null ?
-                    new PageImpl<>(fullInfoOrderDTOs, pageable, orderRepository.count()) :
-                    orderDTOs;
-        }
-        return orderDTOs;
+        return orderRepository.findAll(pageable).map(orderMapper::toDTO);
     }
 
     @Transactional
@@ -66,9 +56,9 @@ public class OrderService {
         if (orderDTO == null) return null;
 
         if (withFullInfo){
-            final var orderWithFullInfo = externalProductService.getFullOrderInformation(orderDTO);
-            return orderWithFullInfo != null ? orderWithFullInfo : orderDTO;
+            return productInfoService.getExtendedProductInfo(orderDTO);
         }
+
         return orderDTO;
     }
 

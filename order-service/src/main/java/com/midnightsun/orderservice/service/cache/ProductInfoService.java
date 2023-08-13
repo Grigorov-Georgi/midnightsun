@@ -28,7 +28,7 @@ public class ProductInfoService {
         this.redisTemplate = redisTemplate;
     }
 
-    public OrderDTO getDetailedOrder(OrderDTO orderDTO) {
+    public OrderDTO getExtendedProductInfo(OrderDTO orderDTO) {
         List<Long> productIds = orderDTO.getOrderItems().stream().map(OrderItemDTO::getProductId).collect(Collectors.toList());
 
         List<String> productKeysForRedis = productIds.stream().map(this::buildKey).collect(Collectors.toList());
