@@ -1,4 +1,4 @@
-package com.midnightsun.orderservice.config.rabbitmq;
+package com.midnightsun.orderservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    //Notification service variables
+    //Notification service messaging variables
     @Value("${rabbitmq.queues.ns_queue}")
     private String nsQueue;
 
@@ -24,7 +24,7 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routings.ns_key}")
     private String nsRoutingKey;
 
-    //Product service setup
+    //Product service messaging variables
     @Value("${rabbitmq.queues.ps_queue}")
     private String psQueue;
 
@@ -34,18 +34,11 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routings.ps_key}")
     private String psRoutingKey;
 
-    //DANGER: Renaming has been made so the queue may not work -> needs to be retested
-    //Notification queue, exchange and binding setup
     @Bean
-    public Queue nsQueue() {
-        return new Queue(nsQueue);
-    }
+    public Queue nsQueue() { return new Queue(nsQueue); }
 
-    //Using 2 separate exchanges in order to split the rabbitMQ channels in logical domains each related to different external service
     @Bean
-    public TopicExchange nsExchange() {
-        return new TopicExchange(nsExchange);
-    }
+    public TopicExchange nsExchange() { return new TopicExchange(nsExchange); }
 
     @Bean
     public Binding nsBinding() {
@@ -54,21 +47,15 @@ public class RabbitMQConfig {
                 .with(nsRoutingKey);
     }
 
-    //Product service queue, exchange and binding setup
-    //IDEA: Configure competing consumer queue!!!
     @Bean
-    public Queue psQueue() {
-        return new Queue(psQueue);
-    }
+    public Queue psQueue() { return new Queue(psQueue); }
 
     @Bean
-    public TopicExchange psExchange() {
-        return new TopicExchange(psExchange);
-    }
+    public TopicExchange psExchange() { return new TopicExchange(psExchange); }
 
     @Bean
     public Binding psBinding() {
-        return BindingBuilder.bind(nsQueue())
+        return BindingBuilder.bind(psQueue())
                 .to(psExchange())
                 .with(psRoutingKey);
     }
@@ -81,9 +68,12 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
-        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(messageConverter);
-        return rabbitTemplate;
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        template.setMessageConverter(messageConverter);
+        template.setUseTemporaryReplyQueues(true);
+        template.setUseChannelForCorrelation(true);
+        template.setReplyTimeout(3000);
+        return template;
     }
 }

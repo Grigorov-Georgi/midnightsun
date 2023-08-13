@@ -21,8 +21,12 @@ server:
   port: 8083
 
 rabbitmq:
-  queue:
-    name: notification-queue
+  queues:
+    ns_queue: notification-queue
+  exchanges:
+    ns_exchange: notification-exchange
+  routings:
+    ns_key: notification-routing-key
 
 info:
   application:

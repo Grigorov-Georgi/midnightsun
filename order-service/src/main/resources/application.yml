@@ -12,14 +12,13 @@ spring:
       hibernate:
         default_schema: public
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    publisher-confirm-type: correlated
+    publisher-returns: true
 
 logging:
   level:
     ROOT: INFO
+    org.springframework.amqp: DEBUG
     com.midnightsun: DEBUG
 
 server:
@@ -33,12 +32,14 @@ rabbitmq:
   queues:
     ns_queue: notification-queue
     ps_queue: product-queue
+    ps_reply_queue: reply-product-queue
   exchanges:
     ns_exchange: notification-exchange
     ps_exchange: product-exchange
   routings:
     ns_key: notification-routing-key
     ps_key: product-routing-key
+    ps_reply_key: product-reply-routing-key
 
 info:
   application:

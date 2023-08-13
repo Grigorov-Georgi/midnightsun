@@ -11,17 +11,34 @@ spring:
     properties:
       hibernate:
         default_schema: public
-  output:
-    ansi:
-      enabled: ALWAYS
+  rabbitmq:
+    publisher-confirm-type: correlated
+    publisher-returns: true
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: supersafepass!
+    timeout: 2000
 
 logging:
   level:
     ROOT: INFO
+    org.springframework.amqp: DEBUG
     com.midnightsun: DEBUG
 
 server:
   port: 8082
+
+rabbitmq:
+  queues:
+    ps_queue: product-queue
+    ps_reply_queue: reply-product-queue
+  exchanges:
+    ps_exchange: product-exchange
+  routings:
+    ps_key: product-routing-key
+    ps_reply_key: product-reply-routing-key
 
 global:
   exception-handling:

@@ -26,29 +26,4 @@
                         incrementBy="1"/>
     </changeSet>
 
-    <changeSet id="load_data_to_city_table" author="ggrigorov">
-        <loadData file="db/changelog/data/01_add_predefined_cities.csv"
-                  separator=";"
-                  tableName="city">
-            <column name="id" type="bigint" />
-            <column name="name" type="varchar(255)" />
-        </loadData>
-    </changeSet>
-
-    <changeSet id="update_auditing_fields_to_city" author="ggrigorov">
-        <sql>
-            -- Set created_by for null values
-            UPDATE city SET created_by = 'system' WHERE created_by IS NULL;
-
-            -- Set created_by for null values
-            UPDATE city SET created_date = current_timestamp WHERE created_date IS NULL;
-
-            -- Set last_modified_by for all rows
-            UPDATE city SET last_modified_by = 'system' WHERE last_modified_by IS NULL;
-
-            -- Set last_modified_by for all rows
-            UPDATE city SET last_modified_date = current_timestamp WHERE last_modified_date IS NULL;
-        </sql>
-    </changeSet>
-
 </databaseChangeLog>
