@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
+import { NewProduct } from "../types/NewProduct";
 
 const API_BASE_URL = "http://localhost:8082/api/products/";
 
@@ -20,21 +21,28 @@ export async function getProductById(productId: any) {
 //   return axios.get(`${API_BASE_URL}${productId}`);
 // };
 
-export async function createProduct(product: any) {
-  const response = await fetch(API_BASE_URL, {
-    method: "POST",
-    body: JSON.stringify(product),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const data = await response.json();
-  return data;
-}
+// export async function createProduct(newProduct: NewProduct) {
+//   const response = await fetch(API_BASE_URL, {
+//     method: "POST",
+//     body: JSON.stringify(newProduct),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   const data = await response.json();
+//   console.log(data);
+//   return data;
+// }
 
-// export const createProduct = (newProductData) => {
-//   return axios.post(`${API_BASE_URL}`, newProductData);
-// };
+export const createProduct = (newProductData: NewProduct) => {
+  return axios
+    .post(`${API_BASE_URL}`, newProductData)
+    .then((response) => {
+      console.log(response);
+      return response;
+    })
+    .catch((err) => err);
+};
 
 export const updateProduct = (updatedProductData: any) => {
   return axios.put(`${API_BASE_URL}`, updatedProductData);

@@ -6,9 +6,11 @@ import { Button } from "primereact/button";
 import { FileUpload, FileUploadUploadEvent } from "primereact/fileupload";
 import styles from "./NewProductForm.module.css";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../../../services/CategoryService";
 import { Category } from "../../../types/Category";
+import { NewProduct } from "../../../types/NewProduct";
+import { createProduct } from "../../../services/ProductService";
 
 export const NewProductForm = () => {
   const [name, setName] = useState<string>("");
@@ -20,6 +22,10 @@ export const NewProductForm = () => {
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
     queryFn: getAllCategories,
+  });
+
+  const newProductMutation = useMutation({
+    mutationFn: (newProduct: NewProduct) => createProduct(newProduct),
   });
 
   const loadCategories = (): Category[] => {
@@ -43,15 +49,33 @@ export const NewProductForm = () => {
     setSelectedOption(-1);
   };
 
-  const handleSubmit = () => {
-    console.log("Perfom REST call");
-    resetState();
+  const handleSubmit = async () => {
+    const newProduct: NewProduct = {
+      name: name,
+      price: price ? price : 0,
+      quantity: quantity ? quantity : 0,
+      description: description,
+      category: { id: selectedOption },
+    };
+    try {
+      await newProductMutation.mutateAsync(newProduct);
+      resetState();
+    } catch (err) {
+      console.log("Something went wrong.");
+    }
   };
 
   const handleUpload = (event: FileUploadUploadEvent) => {
     // TODO -> Discuss and handle the file upload logic + troubleshoot and implement the toast component
     console.log(event);
   };
+
+  const isSubmitDisabled =
+    name === "" ||
+    price === null ||
+    quantity === null ||
+    description === "" ||
+    selectedOption === -1;
 
   return (
     <div className={styles.form}>
@@ -108,6 +132,7 @@ export const NewProductForm = () => {
         label={"Submit"}
         className={styles.submitBtn}
         onClick={handleSubmit}
+        disabled={isSubmitDisabled}
       />
     </div>
   );
