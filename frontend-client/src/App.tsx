@@ -3,6 +3,7 @@ import Footer from "./shared_components/Fragments/Footer/Footer";
 import { Navbar } from "./shared_components/Fragments/Navbar/Navbar";
 import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponent";
 import { NewProductForm } from "./shared_components/ProductComponents/NewProductForm/NewProductForm";
+import { AllProducts } from "./shared_components/ProductComponents/AllProductsComponent/AllProducts";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/products",
-    element: <div>Products</div>,
+    element: <AllProducts />,
   },
   {
     path: "/addProduct",
