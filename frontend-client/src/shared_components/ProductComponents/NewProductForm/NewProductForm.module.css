@@ -17,3 +17,18 @@
   align-items: center;
   margin-bottom: 1rem;
 }
+
+.submitBtn {
+  background-color: #9d00ff !important;
+  border: transparent !important;
+  width: 120px !important;
+  height: 45px !important;
+}
+
+.submitBtn:hover {
+  background-color: #c06ff3 !important;
+}
+
+.submitBtn:focus {
+  box-shadow: unset !important;
+}

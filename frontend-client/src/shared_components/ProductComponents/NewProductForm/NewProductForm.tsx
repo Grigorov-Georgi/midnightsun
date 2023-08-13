@@ -13,6 +13,7 @@ const dummyProductOptions = ["option 1", "option 2", "option 3", "option 4"];
 export const NewProductForm = () => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number | null>(null);
+  const [quantity, setQuantity] = useState<number | null>(null);
   const [description, setDescription] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<string>("");
   const toastRef = useRef<Toast>(null);
@@ -52,6 +53,13 @@ export const NewProductForm = () => {
         currency={"EUR"}
         value={price}
         onValueChange={(e) => setPrice(e.value as number)}
+        className={styles.formItem}
+      />
+      <InputNumber
+        placeholder={"Enter product quantity..."}
+        maxFractionDigits={0}
+        value={quantity}
+        onValueChange={(e) => setQuantity(e.value as number)}
         className={styles.formItem}
       />
       <InputTextarea
