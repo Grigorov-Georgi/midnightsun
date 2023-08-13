@@ -31,7 +31,8 @@ public class OrderService {
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         OrderMapper orderMapper,
-                        NotificationProducer notificationProducer, ProductInfoService productInfoService) {
+                        NotificationProducer notificationProducer,
+                        ProductInfoService productInfoService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;

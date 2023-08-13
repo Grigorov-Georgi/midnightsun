@@ -76,6 +76,9 @@ public class ProductInfoService {
 
     private void fetchAndCacheProductInfo(List<Long> unavailableInCacheProductIds, Map<Long, OrderItemExtendedInfoDTO> resultMap) {
         final var originalMap = externalProductService.getProductsInfo(unavailableInCacheProductIds);
+
+        if (originalMap == null) return;
+
         final var transformedMap = originalMap.entrySet()
                 .stream()
                 .collect(Collectors.toMap(

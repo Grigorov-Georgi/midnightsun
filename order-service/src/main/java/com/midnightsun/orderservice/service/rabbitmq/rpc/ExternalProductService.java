@@ -57,32 +57,4 @@ public class ExternalProductService {
             return null;
         }
     }
-
-    //TODO: Remove methods below
-    public List<OrderDTO> getFullOrderInformation(@NonNull List<OrderDTO> orderDTOList) {
-        try {
-            var body = objectMapper.writeValueAsBytes(orderDTOList);
-
-            MessageProperties messageProperties = new MessageProperties();
-            messageProperties.setContentType("application/json");
-            Message newMessage = MessageBuilder.withBody(body).andProperties(messageProperties).build();
-
-            log.debug("Sending request to ProductService");
-            Message result = rabbitTemplate.sendAndReceive(psExchange, psRoutingKey, newMessage);
-
-            if (result != null) {
-                log.debug("Received response from ProductService");
-                return objectMapper.readValue(result.getBody(), new TypeReference<List<OrderDTO>>() {});
-            }
-            return null;
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return null;
-        }
-    }
-
-    public OrderDTO getFullOrderInformation(@NonNull OrderDTO orderDTO) {
-        final var result = this.getFullOrderInformation(List.of(orderDTO));
-        return result != null ? result.get(0) : null;
-    }
 }
