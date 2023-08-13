@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class CacheService {
 
-    private static final String RATING_PREFIX = "rating_";
-    private static final String REVIEW_PREFIX = "review_";
+    //naming pattern -> {service-name}:{table-name}:{id}
+    private static final String RATING_PREFIX = "rev-rate:rating:";
+    private static final String REVIEW_PREFIX = "rev-rate:review:";
 
     private final RedisTemplate<String, String> redisTemplate;
     private final RatingRepository ratingRepository;

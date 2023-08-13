@@ -73,7 +73,7 @@ public class RabbitMQConfig {
         template.setMessageConverter(messageConverter);
         template.setUseTemporaryReplyQueues(true);
         template.setUseChannelForCorrelation(true);
-        template.setReplyTimeout(3000);
+        template.setReplyTimeout(5000);
         return template;
     }
 }

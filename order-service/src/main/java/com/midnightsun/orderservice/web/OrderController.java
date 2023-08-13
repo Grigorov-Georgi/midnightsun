@@ -23,11 +23,10 @@ public class OrderController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<OrderDTO>> getAll(Pageable pageable, @RequestParam(defaultValue = "false") boolean withFullInfo) {
+    public ResponseEntity<Page<OrderDTO>> getAll(Pageable pageable) {
         log.debug("REST request to get all ORDERS sorted by {}, page number: {} and page size: {}",
                 pageable.getSort(), pageable.getPageNumber(), pageable.getPageSize());
-
-        final var orders = orderService.getAll(pageable, withFullInfo);
+        final var orders = orderService.getAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(orders);
     }
 
