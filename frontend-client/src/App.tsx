@@ -4,6 +4,7 @@ import { Navbar } from "./shared_components/Fragments/Navbar/Navbar";
 import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponent";
 import { NewProductForm } from "./shared_components/ProductComponents/NewProductForm/NewProductForm";
 import { AllProducts } from "./shared_components/ProductComponents/AllProductsComponent/AllProducts";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   {
@@ -37,12 +38,16 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
   return (
     <div>
-      <Navbar />
-      <RouterProvider router={router} />
-      <Footer />
+      <QueryClientProvider client={queryClient}>
+        <Navbar />
+        <RouterProvider router={router} />
+        <Footer />
+      </QueryClientProvider>
     </div>
   );
 }

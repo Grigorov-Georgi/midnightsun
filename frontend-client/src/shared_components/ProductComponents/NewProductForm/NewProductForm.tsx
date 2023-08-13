@@ -3,39 +3,82 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { FileUpload, FileUploadUploadEvent } from "primereact/fileupload";
 import styles from "./NewProductForm.module.css";
-import { useRef, useState } from "react";
-
-const dummyProductOptions = ["option 1", "option 2", "option 3", "option 4"];
+import { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getAllCategories } from "../../../services/CategoryService";
+import { Category } from "../../../types/Category";
+import { NewProduct } from "../../../types/NewProduct";
+import { createProduct } from "../../../services/ProductService";
 
 export const NewProductForm = () => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number | null>(null);
+  const [quantity, setQuantity] = useState<number | null>(null);
   const [description, setDescription] = useState<string>("");
-  const [selectedOption, setSelectedOption] = useState<string>("");
-  const toastRef = useRef<Toast>(null);
+  const [selectedOption, setSelectedOption] = useState<number>(-1);
 
-  const handleSubmit = () => {
-    console.log("Perfom REST call");
+  const categoriesQuery = useQuery({
+    queryKey: ["categories"],
+    queryFn: getAllCategories,
+  });
+
+  const newProductMutation = useMutation({
+    mutationFn: (newProduct: NewProduct) => createProduct(newProduct),
+  });
+
+  const loadCategories = (): Category[] => {
+    let categories: Category[] = [];
+    if (categoriesQuery.status === "success") {
+      categories = categoriesQuery.data.content.map(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (el: any) => {
+          return { value: el.id, label: el.name };
+        }
+      );
+    }
+    return categories;
+  };
+
+  const resetState = () => {
+    setName("");
+    setPrice(null);
+    setQuantity(null);
+    setDescription("");
+    setSelectedOption(-1);
+  };
+
+  const handleSubmit = async () => {
+    const newProduct: NewProduct = {
+      name: name,
+      price: price ? price : 0,
+      quantity: quantity ? quantity : 0,
+      description: description,
+      category: { id: selectedOption },
+    };
+    try {
+      await newProductMutation.mutateAsync(newProduct);
+      resetState();
+    } catch (err) {
+      console.log("Something went wrong.");
+    }
   };
 
   const handleUpload = (event: FileUploadUploadEvent) => {
     // TODO -> Discuss and handle the file upload logic + troubleshoot and implement the toast component
     console.log(event);
-    if (toastRef.current) {
-      toastRef.current.show({
-        severity: "info",
-        summary: "Success",
-        detail: "File Uploaded",
-      });
-    }
   };
+
+  const isSubmitDisabled =
+    name === "" ||
+    price === null ||
+    quantity === null ||
+    description === "" ||
+    selectedOption === -1;
 
   return (
     <div className={styles.form}>
-      <Toast ref={toastRef} style={{ zIndex: "1000000" }} position="top-left" />
       <h2 style={{ color: "white" }} className={styles.formItem}>
         Create a new product
       </h2>
@@ -54,6 +97,13 @@ export const NewProductForm = () => {
         onValueChange={(e) => setPrice(e.value as number)}
         className={styles.formItem}
       />
+      <InputNumber
+        placeholder={"Enter product quantity..."}
+        maxFractionDigits={0}
+        value={quantity}
+        onValueChange={(e) => setQuantity(e.value as number)}
+        className={styles.formItem}
+      />
       <InputTextarea
         placeholder={"Enter product description..."}
         rows={10}
@@ -64,7 +114,7 @@ export const NewProductForm = () => {
       />
       <div className={styles.miscContainer}>
         <Dropdown
-          options={dummyProductOptions}
+          options={loadCategories()}
           value={selectedOption}
           onChange={(e) => setSelectedOption(e.value)}
           placeholder={"Choose an option..."}
@@ -75,12 +125,14 @@ export const NewProductForm = () => {
           accept="image/*"
           maxFileSize={1000000}
           onUpload={(ev) => handleUpload(ev)}
+          disabled={true}
         />
       </div>
       <Button
         label={"Submit"}
         className={styles.submitBtn}
         onClick={handleSubmit}
+        disabled={isSubmitDisabled}
       />
     </div>
   );
