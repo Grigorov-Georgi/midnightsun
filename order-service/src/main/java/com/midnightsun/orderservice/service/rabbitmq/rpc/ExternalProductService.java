@@ -3,6 +3,7 @@ package com.midnightsun.orderservice.service.rabbitmq.rpc;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.midnightsun.orderservice.service.dto.OrderDTO;
+import com.midnightsun.orderservice.service.dto.OrderItemExtendedInfoDTO;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -34,6 +36,29 @@ public class ExternalProductService {
         this.objectMapper = objectMapper;
     }
 
+    public Map<Long, OrderItemExtendedInfoDTO> getProductsInfo(@NonNull List<Long> productIds) {
+        try {
+            var body = objectMapper.writeValueAsBytes(productIds);
+
+            MessageProperties messageProperties = new MessageProperties();
+            messageProperties.setContentType("application/json");
+            Message newMessage = MessageBuilder.withBody(body).andProperties(messageProperties).build();
+
+            log.debug("Sending request to ProductService");
+            Message result = rabbitTemplate.sendAndReceive(psExchange, psRoutingKey, newMessage);
+
+            if (result != null) {
+                log.debug("Received response from ProductService");
+                return objectMapper.readValue(result.getBody(), new TypeReference<>() {});
+            }
+            return null;
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
+    //TODO: Remove methods below
     public List<OrderDTO> getFullOrderInformation(@NonNull List<OrderDTO> orderDTOList) {
         try {
             var body = objectMapper.writeValueAsBytes(orderDTOList);
