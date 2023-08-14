@@ -3,7 +3,6 @@ package com.midnightsun.orderservice.service;
 import com.midnightsun.orderservice.service.cache.ProductInfoService;
 import com.midnightsun.orderservice.service.rabbitmq.producer.NotificationProducer;
 import com.midnightsun.orderservice.mapper.OrderMapper;
-import com.midnightsun.orderservice.model.Order;
 import com.midnightsun.orderservice.model.OrderItem;
 import com.midnightsun.orderservice.repository.OrderItemRepository;
 import com.midnightsun.orderservice.repository.OrderRepository;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -68,8 +68,7 @@ public class OrderService {
         if (orderDTO.getId() != null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         }
-        final var order = orderMapper.toEntity(orderDTO);
-        return save(order);
+        return saveEntity(orderDTO);
     }
 
     public OrderDTO update(OrderDTO orderDTO) {
@@ -77,11 +76,15 @@ public class OrderService {
         if (orderDTO.getId() == null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         }
-        final var order = orderMapper.toEntity(orderDTO);
-        return save(order);
+        return saveEntity(orderDTO);
     }
 
-    private OrderDTO save(Order order) {
+    private OrderDTO saveEntity(OrderDTO orderDTO) {
+        final var detailedOrder = productInfoService.getExtendedProductInfo(orderDTO);
+        detailedOrder.setTotalPrice(calculateTotalPrice(detailedOrder));
+
+        final var order = orderMapper.toEntity(detailedOrder);
+
         final Set<OrderItem> orderItemSet = order.getOrderItems();
         order.resetOrderItems();
 
@@ -95,13 +98,25 @@ public class OrderService {
 
         final var savedOrderDTO = orderMapper.toDTO(savedOrder);
 
-        notificationProducer.sendEmailForOrderCreation(savedOrderDTO);
+        detailedOrder.setId(savedOrderDTO.getId());
+        notificationProducer.sendEmailForOrderCreation(detailedOrder);
 
-        return savedOrderDTO;
+        return detailedOrder;
     }
 
     public void delete(UUID uuid) {
         log.debug("Request to delete ORDER with ID: {}", uuid);
         orderRepository.deleteById(uuid);
+    }
+
+    private BigDecimal calculateTotalPrice(OrderDTO detailedOrder) {
+        return detailedOrder.getOrderItems()
+                .stream()
+                .map(item -> {
+                    final var price = item.getOrderItemExtendedInfoDTO().getPrice();
+                    final var quantity = BigDecimal.valueOf(item.getQuantity());
+                    return price.multiply(quantity);
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
