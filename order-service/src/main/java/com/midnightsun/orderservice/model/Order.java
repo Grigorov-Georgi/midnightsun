@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +36,8 @@ public class Order extends AbstractAuditingEntity implements Serializable {
     private String street;
 
     private Long postalCode;
+
+    private BigDecimal totalPrice;
 
     @ManyToOne
     private City city;

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="add_total_price_column_to_order_table" author="ggrigorov">
+        <addColumn tableName="order">
+            <column name="total_price" type="decimal(21,2)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="update_total_price_to_existing_orders" author="ggrigorov">
+        <sql>
+            UPDATE "order"
+            SET total_price = 666
+            WHERE total_price IS NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

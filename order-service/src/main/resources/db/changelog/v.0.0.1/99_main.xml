@@ -10,5 +10,6 @@
     <include file="/db/changelog/v.0.0.1/02_create_table_order.xml"/>
     <include file="/db/changelog/v.0.0.1/03_create_table_order_item.xml"/>
     <include file="/db/changelog/v.0.0.1/04_load_data_to_table_city.xml"/>
+    <include file="/db/changelog/v.0.0.1/05_add_column_to_order_table.xml"/>
 
 </databaseChangeLog>

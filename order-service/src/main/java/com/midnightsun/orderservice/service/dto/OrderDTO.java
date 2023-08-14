@@ -30,9 +30,7 @@ public class OrderDTO extends AbstractAuditingDTO {
 
     private CityDTO city;
 
-    //TODO: Calculated and saved in the database
     private BigDecimal totalPrice;
 
-    //TODO: Fetched if frontend set queryParame ?withOrderItemsInformation=true
     private Set<OrderItemDTO> orderItems;
 }
