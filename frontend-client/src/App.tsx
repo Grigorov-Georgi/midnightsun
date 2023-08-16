@@ -5,6 +5,7 @@ import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponen
 import { NewProductForm } from "./shared_components/ProductComponents/NewProductForm/NewProductForm";
 import { AllProducts } from "./shared_components/ProductComponents/AllProductsComponent/AllProducts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ContactPage from "./shared_components/ContactPage/ContactPage";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/contacts",
-    element: <div>Contacts</div>,
+    element: <ContactPage />,
   },
   {
     path: "/shoppingCart",
