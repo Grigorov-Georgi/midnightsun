@@ -39,13 +39,18 @@ rabbitmq:
     ns_queue: notification-queue
     ps_queue: product-queue
     ps_reply_queue: reply-product-queue
+    ps_saga_queue: product-saga-queue
+    os_saga_queue: order-saga-queue
   exchanges:
     ns_exchange: notification-exchange
     ps_exchange: product-exchange
+    saga_exchange: saga-exchange
   routings:
     ns_key: notification-routing-key
     ps_key: product-routing-key
     ps_reply_key: product-reply-routing-key
+    ps_saga_key: product-saga-routing-key
+    os_saga_key: order-saga-routing-key
 
 info:
   application:

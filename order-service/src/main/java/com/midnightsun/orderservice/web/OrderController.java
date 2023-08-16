@@ -44,13 +44,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedOrder);
     }
 
-    @PutMapping
-    public ResponseEntity<OrderDTO> update(@RequestBody OrderDTO orderDTO) {
-        log.debug("REST request to updated ORDER with ID: {} with content {}", orderDTO.getId(), orderDTO);
-        final var updatedCity = orderService.update(orderDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(updatedCity);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         log.debug("REST request to delete ORDER with ID: {}", id);

@@ -20,7 +20,7 @@ public class OrderCreationConsumer {
 
     @RabbitListener(queues = {"${rabbitmq.queues.ns_queue}"})
     public void sendEmailForOrderCreation(OrderDTO order) throws MessagingException {
-        log.debug("Receiving ORDER {} from Order Service", order.getId());
+        log.debug("Received ORDER {} from Order Service", order.getId());
         notificationService.sendEmail(order);
     }
 }

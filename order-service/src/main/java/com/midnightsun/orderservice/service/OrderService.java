@@ -1,14 +1,14 @@
 package com.midnightsun.orderservice.service;
 
 import com.midnightsun.orderservice.service.cache.ProductInfoService;
-import com.midnightsun.orderservice.service.rabbitmq.producer.NotificationProducer;
+import com.midnightsun.orderservice.service.event.OrderCreatedEvent;
 import com.midnightsun.orderservice.mapper.OrderMapper;
-import com.midnightsun.orderservice.model.OrderItem;
 import com.midnightsun.orderservice.repository.OrderItemRepository;
 import com.midnightsun.orderservice.repository.OrderRepository;
 import com.midnightsun.orderservice.service.dto.OrderDTO;
 import com.midnightsun.orderservice.web.exception.HttpBadRequestException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,18 +25,18 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
-    private final NotificationProducer notificationProducer;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final ProductInfoService productInfoService;
 
     public OrderService(OrderRepository orderRepository,
                         OrderItemRepository orderItemRepository,
                         OrderMapper orderMapper,
-                        NotificationProducer notificationProducer,
+                        ApplicationEventPublisher applicationEventPublisher,
                         ProductInfoService productInfoService) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.orderMapper = orderMapper;
-        this.notificationProducer = notificationProducer;
+        this.applicationEventPublisher = applicationEventPublisher;
         this.productInfoService = productInfoService;
     }
 
@@ -68,24 +68,45 @@ public class OrderService {
         if (orderDTO.getId() != null) {
             throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         }
-        return saveEntity(orderDTO);
+        orderDTO = setTotalPrice(orderDTO);
+
+        final var savedOrder = saveOrderAndOrderItems(orderDTO);
+        savedOrder.setOrderItems(orderDTO.getOrderItems());
+
+        publishOrderCreatedEvent(savedOrder);
+
+        return savedOrder;
     }
 
-    public OrderDTO update(OrderDTO orderDTO) {
-        log.debug("Request to update ORDER: {}", orderDTO);
-        if (orderDTO.getId() == null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        }
-        return saveEntity(orderDTO);
+    public void delete(UUID uuid) {
+        log.debug("Request to delete ORDER with ID: {}", uuid);
+        orderRepository.deleteById(uuid);
     }
 
-    private OrderDTO saveEntity(OrderDTO orderDTO) {
-        final var detailedOrder = productInfoService.getExtendedProductInfo(orderDTO);
-        detailedOrder.setTotalPrice(calculateTotalPrice(detailedOrder));
+    //Here the invocation of extended products info is used to get their prices and calculate the total price.
+    //Creation of an order is always followed by fetching of it. In order to optimize the process
+    //extended products information will be cached and directly pulled from the cache when needed.
+    private OrderDTO setTotalPrice(OrderDTO orderDTO) {
+        orderDTO = productInfoService.getExtendedProductInfo(orderDTO);
+        orderDTO.setTotalPrice(calculateTotalPrice(orderDTO));
+        return orderDTO;
+    }
 
-        final var order = orderMapper.toEntity(detailedOrder);
+    private BigDecimal calculateTotalPrice(OrderDTO order) {
+        return order.getOrderItems()
+                .stream()
+                .map(item -> {
+                    final var price = item.getOrderItemExtendedInfoDTO().getPrice();
+                    final var quantity = BigDecimal.valueOf(item.getQuantity());
+                    return price.multiply(quantity);
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
 
-        final Set<OrderItem> orderItemSet = order.getOrderItems();
+    private OrderDTO saveOrderAndOrderItems(OrderDTO orderDTO){
+        final var order = orderMapper.toEntity(orderDTO);
+
+        final var orderItemSet = order.getOrderItems();
         order.resetOrderItems();
 
         final var savedOrder = orderRepository.save(order);
@@ -96,27 +117,11 @@ public class OrderService {
             savedOrder.setOrderItems(Set.copyOf(savedOrderItems));
         }
 
-        final var savedOrderDTO = orderMapper.toDTO(savedOrder);
-
-        detailedOrder.setId(savedOrderDTO.getId());
-        notificationProducer.sendEmailForOrderCreation(detailedOrder);
-
-        return detailedOrder;
+        return orderMapper.toDTO(savedOrder);
     }
 
-    public void delete(UUID uuid) {
-        log.debug("Request to delete ORDER with ID: {}", uuid);
-        orderRepository.deleteById(uuid);
-    }
-
-    private BigDecimal calculateTotalPrice(OrderDTO detailedOrder) {
-        return detailedOrder.getOrderItems()
-                .stream()
-                .map(item -> {
-                    final var price = item.getOrderItemExtendedInfoDTO().getPrice();
-                    final var quantity = BigDecimal.valueOf(item.getQuantity());
-                    return price.multiply(quantity);
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    private void publishOrderCreatedEvent(OrderDTO orderDTO) {
+        OrderCreatedEvent event = new OrderCreatedEvent(this, orderDTO);
+        applicationEventPublisher.publishEvent(event);
     }
 }

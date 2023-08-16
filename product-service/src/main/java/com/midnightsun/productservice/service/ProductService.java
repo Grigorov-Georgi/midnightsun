@@ -10,6 +10,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class ProductService {
@@ -58,5 +63,24 @@ public class ProductService {
     public void delete(Long id) {
         log.debug("Request to delete PRODUCT with ID: {}", id);
         productRepository.deleteById(id);
+    }
+
+    public Map<Long, Long> checkProductsAvailability(Map<Long, Long> productsIdQuantityMap) {
+        List<ProductDTO> productsToSave = new ArrayList<>();
+
+        for (Map.Entry<Long, Long> entry : productsIdQuantityMap.entrySet()) {
+            final var product = getOne(entry.getKey());
+
+            if (product == null || (product.getQuantity() - entry.getValue()) < 0) {
+                entry.setValue(-1L);
+                return null;
+            } else {
+                product.setQuantity(product.getQuantity() - entry.getValue());
+                productsToSave.add(product);
+            }
+        }
+        productRepository.saveAll(productsToSave.stream().map(productMapper::toEntity).collect(Collectors.toList()));
+
+        return productsIdQuantityMap;
     }
 }

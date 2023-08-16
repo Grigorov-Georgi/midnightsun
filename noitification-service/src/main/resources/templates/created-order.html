@@ -52,14 +52,17 @@
             border-collapse: collapse;
             width: 100%;
         }
+
         th, td {
             border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
+
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
         th {
             background-color: #dddddd;
             font-weight: bold;
@@ -70,42 +73,68 @@
 <div class="container">
     <h1 class="center">Thank you for your order!</h1>
 
-    <h3><strong>Order details</strong></h3>
+    <h3>Order details</h3>
+    <p>
+        ----------------------------------------------------------------------------------------------------------------
+    </p>
 
     <ul>
         <li><strong>Order ID: </strong><span th:text="${order.id}"></span></li>
         <li><strong>Customer Email: </strong><span th:text="${order.customerEmail}"></span></li>
+        <li><strong>Status: </strong><span th:text="${order.getStatus()}"></span></li>
     </ul>
 
-    <p>----------------------------------------------------------------------------------------------------------------</p>
-
-    <h3><strong>Products</strong></h3>
-
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Quantity</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="product: ${order.getOrderItems()}">
-            <td><span th:text="${product.getOrderItemExtendedInfoDTO().getName()}"></span></td>
-            <td><strong>€</strong><span th:text="${product.getOrderItemExtendedInfoDTO().getPrice()}"></span></td>
-            <td><span th:text="${product.getQuantity()}"></span></td>
-        </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li><strong>Total Price: €</strong><span th:text="${order.totalPrice}"></span></li>
-    </ul>
-
-    <p class="center">We have received your order and are processing it. We will notify you once your order
-        has been shipped. If you have any questions or need further assistance, please don't hesitate to
-        contact our customer support team.
+    <p>
+        ----------------------------------------------------------------------------------------------------------------
     </p>
+
+    <th:block th:if="${order.getStatus().name() == 'PENDING'}">
+
+        <h3>Products</h3>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product: ${order.getOrderItems()}">
+                <td><span th:text="${product.getOrderItemExtendedInfoDTO().getName()}"></span></td>
+                <td><strong>€</strong><span th:text="${product.getOrderItemExtendedInfoDTO().getPrice()}"></span></td>
+                <td><span th:text="${product.getQuantity()}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <ul>
+            <li><strong>Total Price: €</strong><span th:text="${order.totalPrice}"></span></li>
+        </ul>
+
+    </th:block>
+
+    <th:block th:if="${order.getStatus().name() == 'PENDING'}">
+        <p class="center">
+            We have received your order and are processing it. We will notify you once your order has been
+            approved. If you have any questions or need further assistance, please don't hesitate to contact
+            our customer support team.
+        </p>
+    </th:block>
+
+    <th:block th:if="${order.getStatus().name() == 'APPROVED'}">
+        <p class="center">
+            We are pleased to inform you that your recent order has been approved and is now being processed.
+        </p>
+    </th:block>
+
+    <th:block th:if="${order.getStatus().name() == 'CANCELED'}">
+        <p class="center">
+            We regret to inform you that your recent order has been cancelled due to insufficient
+            availability of some of the ordered products. We apologize for any inconvenience this may have caused.
+        </p>
+    </th:block>
 
     <p class="center">Thank you for choosing our service!</p>
 </div>

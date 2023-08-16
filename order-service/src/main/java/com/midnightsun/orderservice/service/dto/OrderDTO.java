@@ -19,7 +19,6 @@ public class OrderDTO extends AbstractAuditingDTO {
     //TODO: This will be changed when authentication is implemented
     private String customerEmail;
 
-    //TODO: Statuses needs to be changed from saga pattern orchestrator -> they will be ignored when saving order
     private OrderStatus status;
 
     private OrderType type;

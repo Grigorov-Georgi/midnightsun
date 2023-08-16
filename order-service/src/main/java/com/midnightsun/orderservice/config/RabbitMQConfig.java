@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    //Notification service messaging variables
+    /* Notification service messaging variables */
     @Value("${rabbitmq.queues.ns_queue}")
     private String nsQueue;
 
@@ -24,7 +24,7 @@ public class RabbitMQConfig {
     @Value("${rabbitmq.routings.ns_key}")
     private String nsRoutingKey;
 
-    //Product service messaging variables
+    /* Product service messaging variables */
     @Value("${rabbitmq.queues.ps_queue}")
     private String psQueue;
 
@@ -33,6 +33,22 @@ public class RabbitMQConfig {
 
     @Value("${rabbitmq.routings.ps_key}")
     private String psRoutingKey;
+
+    /* Saga pattern */
+    @Value("${rabbitmq.queues.ps_saga_queue}")
+    private String sagaQueue;
+
+    @Value("${rabbitmq.exchanges.saga-exchange}")
+    private String sagaExchange;
+
+    @Value("${rabbitmq.routings.ps_saga_key}")
+    private String sagaRoutingKey;
+
+    @Value("${rabbitmq.queues.os_saga_queue}")
+    private String secondSagaQueue;
+
+    @Value("${rabbitmq.routings.os_saga_key}")
+    private String secondSagaRoutingKey;
 
     @Bean
     public Queue nsQueue() { return new Queue(nsQueue); }
@@ -58,6 +74,28 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(psQueue())
                 .to(psExchange())
                 .with(psRoutingKey);
+    }
+
+    @Bean
+    public Queue sagaQueue() { return new Queue(sagaQueue); }
+
+    @Bean TopicExchange sagaExchange() { return new TopicExchange(sagaExchange); }
+
+    @Bean
+    public Binding sagaBinding() {
+        return BindingBuilder.bind(sagaQueue())
+                .to(sagaExchange())
+                .with(sagaRoutingKey);
+    }
+
+    @Bean
+    public Queue secondSagaQueue() { return new Queue(secondSagaQueue); }
+
+    @Bean
+    public Binding secondSagaBinding() {
+        return BindingBuilder.bind(secondSagaQueue())
+                .to(sagaExchange())
+                .with(secondSagaRoutingKey);
     }
 
     //Global configs

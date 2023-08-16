@@ -14,6 +14,7 @@ public interface OrderMapper {
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
     @Mapping(target = "lastModifiedDate", ignore = true)
+    @Mapping(target = "status", constant = "PENDING")
     Order toEntity(OrderDTO orderDTO);
 
     @Mapping(source = "orderItems", target = "orderItems")
