@@ -1,0 +1,8 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--cart-secondary-color);
+  color: white;
+  height: var(--ecart-view-height-basic);
+  padding: 1rem 1rem;
+}
