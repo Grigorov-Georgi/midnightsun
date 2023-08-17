@@ -18,12 +18,10 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
-    private final CacheService cacheService;
 
-    public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper, CacheService cacheService) {
+    public ReviewService(ReviewRepository reviewRepository, ReviewMapper reviewMapper) {
         this.reviewRepository = reviewRepository;
         this.reviewMapper = reviewMapper;
-        this.cacheService = cacheService;
     }
 
     public Page<ReviewDTO> getAll(Pageable pageable) {
@@ -38,40 +36,27 @@ public class ReviewService {
 
     public ReviewDTO save(ReviewDTO reviewDTO) {
         log.debug("Request to save REVIEW: {}", reviewDTO);
-        if (reviewDTO.getId() != null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
-        }
+        if (reviewDTO.getId() != null) throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         final var review = reviewMapper.toEntity(reviewDTO);
-        return save(review);
+        return saveEntity(review);
     }
 
     public ReviewDTO update(ReviewDTO reviewDTO) {
         log.debug("Request to update REVIEW: {}", reviewDTO);
-        if (reviewDTO.getId() == null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        }
+        if (reviewDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         final var review = reviewMapper.toEntity(reviewDTO);
-        return save(review);
+        return saveEntity(review);
     }
 
-    private ReviewDTO save(Review review) {
+    private ReviewDTO saveEntity(Review review) {
         final var savedReview = reviewRepository.save(review);
-        cacheService.updateProductReviews(review.getProductId());
         return reviewMapper.toDTO(savedReview);
     }
 
     public void delete(Long id) {
         log.debug("Request to delete REVIEW with ID: {}", id);
-
         final var review = reviewRepository.findById(id);
-
-        if (review.isEmpty()) {
-            throw new HttpNotFoundException("Entity not found");
-        }
-
-        final var productId = review.get().getProductId();
-
+        if (review.isEmpty()) throw new HttpNotFoundException("Entity not found");
         reviewRepository.deleteById(id);
-        cacheService.updateProductReviews(productId);
     }
 }
