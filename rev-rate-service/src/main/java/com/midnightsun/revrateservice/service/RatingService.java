@@ -18,12 +18,10 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
-    private final CacheService cacheService;
 
-    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, CacheService cacheService) {
+    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper) {
         this.ratingRepository = ratingRepository;
         this.ratingMapper = ratingMapper;
-        this.cacheService = cacheService;
     }
 
     public Page<RatingDTO> getAll(Pageable pageable) {
@@ -38,40 +36,27 @@ public class RatingService {
 
     public RatingDTO save(RatingDTO ratingDTO) {
         log.debug("Request to save RATING: {}", ratingDTO);
-        if (ratingDTO.getId() != null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
-        }
+        if (ratingDTO.getId() != null) throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         final var rating = ratingMapper.toEntity(ratingDTO);
-        return save(rating);
+        return saveEntity(rating);
     }
 
     public RatingDTO update(RatingDTO ratingDTO) {
         log.debug("Request to update RATING: {}", ratingDTO);
-        if (ratingDTO.getId() == null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        }
+        if (ratingDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         final var rating = ratingMapper.toEntity(ratingDTO);
-        return save(rating);
+        return saveEntity(rating);
     }
 
-    private RatingDTO save(Rating rating) {
+    private RatingDTO saveEntity(Rating rating) {
         final var savedRating = ratingRepository.save(rating);
-        cacheService.updateProductAverageRating(savedRating.getProductId());
         return ratingMapper.toDTO(savedRating);
     }
 
     public void delete(Long id) {
         log.debug("Request to delete RATING with ID: {}", id);
-
         final var rating = ratingRepository.findById(id);
-
-        if (rating.isEmpty()) {
-            throw new HttpNotFoundException("Entity not found");
-        }
-
-        final var productId = rating.get().getProductId();
-
+        if (rating.isEmpty()) throw new HttpNotFoundException("Entity not found");
         ratingRepository.deleteById(id);
-        cacheService.updateProductAverageRating(productId);
     }
 }
