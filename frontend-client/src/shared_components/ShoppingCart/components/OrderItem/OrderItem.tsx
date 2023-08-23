@@ -3,10 +3,13 @@ import placeholderImage from "../../../../assets/2-2-space-free-png-image.png";
 import { ProductInfo } from "../../../../types/ProductInfo";
 import { InputNumber } from "primereact/inputnumber";
 import { useState } from "react";
+import { FcEmptyTrash } from "react-icons/fc";
 
 export const OrderItem = (props: ProductInfo) => {
   const [quantity, setQuantity] = useState<number>(1);
-
+  const removeProductFromCart = () => {
+    console.log("Delete product");
+  };
   return (
     <div className={styles.orderItem}>
       <img
@@ -26,6 +29,12 @@ export const OrderItem = (props: ProductInfo) => {
         inputClassName={styles.input}
       />
       <span>{props.price}$</span>
+      <span
+        className={styles.removeIcon}
+        onClick={() => removeProductFromCart()}
+      >
+        <FcEmptyTrash />
+      </span>
     </div>
   );
 };

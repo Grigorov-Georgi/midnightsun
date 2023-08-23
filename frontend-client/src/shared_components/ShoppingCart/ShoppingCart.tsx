@@ -17,7 +17,12 @@ export const ShoppingCart = () => {
     const data: JSX.Element[] = [];
     dummyProducts.forEach((product) =>
       data.push(
-        <OrderItem id={product.id} name={product.name} price={product.price} />
+        <OrderItem
+          key={`order-item-${product.id}`}
+          id={product.id}
+          name={product.name}
+          price={product.price}
+        />
       )
     );
     return data;

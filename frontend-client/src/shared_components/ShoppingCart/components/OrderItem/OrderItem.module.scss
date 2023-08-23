@@ -49,4 +49,11 @@
       }
     }
   }
+
+  .removeIcon {
+    padding: 1px 1px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
