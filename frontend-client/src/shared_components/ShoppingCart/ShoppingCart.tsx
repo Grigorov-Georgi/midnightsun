@@ -8,7 +8,7 @@ import { useCartStore } from "../../stores/CartStore";
 export const ShoppingCart = () => {
   const itemsInCart = useCartStore((state) => state.orderItems);
 
-  const generateDummyData = (): JSX.Element[] => {
+  const generateOrderItems = (): JSX.Element[] => {
     const data: JSX.Element[] = [];
     itemsInCart.forEach((product) =>
       data.push(
@@ -25,7 +25,7 @@ export const ShoppingCart = () => {
 
   return (
     <div className={styles.shoppingCart}>
-      <div className={styles.orderItemsList}>{generateDummyData()}</div>
+      <div className={styles.orderItemsList}>{generateOrderItems()}</div>
       <div className={styles.infoSection}>
         <OrderInfo />
         <Button label={"Order"} className={styles.orderBtn} />

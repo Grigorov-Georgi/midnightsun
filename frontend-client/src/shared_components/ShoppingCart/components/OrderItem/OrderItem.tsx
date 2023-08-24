@@ -2,14 +2,31 @@ import styles from "./OrderItem.module.scss";
 import placeholderImage from "../../../../assets/2-2-space-free-png-image.png";
 import { ProductInfo } from "../../../../types/ProductInfo";
 import { InputNumber } from "primereact/inputnumber";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FcEmptyTrash } from "react-icons/fc";
+import { useCartStore } from "../../../../stores/CartStore";
 
 export const OrderItem = (props: ProductInfo) => {
-  const [quantity, setQuantity] = useState<number>(1);
+  const itemInfo = useCartStore((state) => {
+    const itemIdx = state.findOrderItemIdx(props.id);
+    return state.orderItems[itemIdx];
+  });
+  const modifyOrderItem = useCartStore((state) => state.modifyOrderItem);
+  const [quantity, setQuantity] = useState<number>(0);
+
+  useEffect(() => {
+    setQuantity(itemInfo.quantity);
+  }, [itemInfo, props.name]);
+
+  const handleQtyChange = (newQty: number) => {
+    modifyOrderItem(props.id, newQty);
+  };
+
   const removeProductFromCart = () => {
     console.log("Delete product");
   };
+
+  console.log(`${itemInfo.info.name} has qty ${itemInfo.quantity}`);
   return (
     <div className={styles.orderItem}>
       <img
@@ -20,7 +37,7 @@ export const OrderItem = (props: ProductInfo) => {
       <span className={styles.name}>{props.name}</span>
       <InputNumber
         value={quantity}
-        onValueChange={(e) => setQuantity(e.value as number)}
+        onValueChange={(e) => handleQtyChange(e.value as number)}
         showButtons={true}
         buttonLayout="vertical"
         className={styles.quantity}

@@ -18,7 +18,8 @@ interface CartStore {
   totalPrice: number;
   appendOrderItem: (newItem: IOrderItem) => void;
   removeOrderItem: (productId: number) => void;
-  modifyOrderItem: (productId: number) => void;
+  modifyOrderItem: (productId: number, newQty: number) => void;
+  findOrderItemIdx: (productId: number) => number;
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
@@ -32,7 +33,18 @@ export const useCartStore = create<CartStore>((set, get) => ({
   removeOrderItem: (productId: number) => {
     console.log("remove: ", productId);
   },
-  modifyOrderItem: (productId: number) => {
-    console.log("modify: "), productId;
+  modifyOrderItem: (productId: number, newQty: number) => {
+    const idxOfItem = get().findOrderItemIdx(productId);
+    const items = get().orderItems;
+    items[idxOfItem].quantity = newQty;
+    console.log(items[idxOfItem]);
+    set(() => ({ orderItems: items }));
+  },
+  findOrderItemIdx: (productId: number) => {
+    const currentItems: IOrderItem[] = get().orderItems;
+    const idxOfItem = currentItems.findIndex(
+      (item) => item.info.id === productId
+    );
+    return idxOfItem;
   },
 }));
