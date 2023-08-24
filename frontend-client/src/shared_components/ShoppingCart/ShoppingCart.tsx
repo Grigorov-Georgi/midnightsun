@@ -1,27 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from "primereact/button";
 import OrderInfo from "./components/OrderInfo/OrderInfo";
 import OrderItem from "./components/OrderItem/OrderItem";
 import styles from "./ShoppingCart.module.scss";
-import { ProductInfo } from "../../types/ProductInfo";
-
-const dummyProducts: ProductInfo[] = [
-  { id: 1, name: "Clone trooper", price: 15 },
-  { id: 2, name: "Newest Junji Ito manga", price: 20 },
-  { id: 3, name: "Halo 10", price: 60 },
-  { id: 4, name: "Space Marines Tactical Squad", price: 30 },
-  { id: 5, name: "HG Gundam Barbatos", price: 25 },
-];
+import { useCartStore } from "../../stores/CartStore";
 
 export const ShoppingCart = () => {
+  const itemsInCart = useCartStore((state) => state.orderItems);
+
   const generateDummyData = (): JSX.Element[] => {
     const data: JSX.Element[] = [];
-    dummyProducts.forEach((product) =>
+    itemsInCart.forEach((product) =>
       data.push(
         <OrderItem
-          key={`order-item-${product.id}`}
-          id={product.id}
-          name={product.name}
-          price={product.price}
+          key={`order-item-${product.info.id}`}
+          id={product.info.id}
+          name={product.info.name}
+          price={product.info.price}
         />
       )
     );
