@@ -20,11 +20,12 @@ interface CartStore {
   removeOrderItem: (productId: number) => void;
   modifyOrderItem: (productId: number, newQty: number) => void;
   findOrderItemIdx: (productId: number) => number;
+  calculateTotalPrice: () => void;
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
   orderItems: dummyProducts,
-  totalPrice: 40000,
+  totalPrice: 0,
   appendOrderItem: (newItem: IOrderItem) => {
     const currentItems: IOrderItem[] = get().orderItems;
     currentItems.push(newItem);
@@ -37,7 +38,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
     const idxOfItem = get().findOrderItemIdx(productId);
     const items = get().orderItems;
     items[idxOfItem].quantity = newQty;
-    console.log(items[idxOfItem]);
     set(() => ({ orderItems: items }));
   },
   findOrderItemIdx: (productId: number) => {
@@ -46,5 +46,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
       (item) => item.info.id === productId
     );
     return idxOfItem;
+  },
+  calculateTotalPrice: () => {
+    const currentItems: IOrderItem[] = get().orderItems;
+    let totalPrice = 0;
+    currentItems.forEach(
+      (item) => (totalPrice += item.info.price * item.quantity)
+    );
+    set(() => ({ totalPrice: totalPrice }));
   },
 }));

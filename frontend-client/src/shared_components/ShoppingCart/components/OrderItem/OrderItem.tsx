@@ -12,21 +12,24 @@ export const OrderItem = (props: ProductInfo) => {
     return state.orderItems[itemIdx];
   });
   const modifyOrderItem = useCartStore((state) => state.modifyOrderItem);
+  const calculateTotalPrice = useCartStore(
+    (state) => state.calculateTotalPrice
+  );
   const [quantity, setQuantity] = useState<number>(0);
 
   useEffect(() => {
     setQuantity(itemInfo.quantity);
-  }, [itemInfo, props.name]);
+  }, [itemInfo]);
 
   const handleQtyChange = (newQty: number) => {
     modifyOrderItem(props.id, newQty);
+    calculateTotalPrice();
   };
 
   const removeProductFromCart = () => {
     console.log("Delete product");
   };
 
-  console.log(`${itemInfo.info.name} has qty ${itemInfo.quantity}`);
   return (
     <div className={styles.orderItem}>
       <img
