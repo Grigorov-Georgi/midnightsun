@@ -17,6 +17,7 @@ export const ShoppingCart = () => {
           id={product.info.id}
           name={product.info.name}
           price={product.info.price}
+          quantity={product.quantity}
         />
       )
     );

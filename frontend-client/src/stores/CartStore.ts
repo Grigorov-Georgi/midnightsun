@@ -43,11 +43,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // Incr/decr quantity and recalculate pr
   modifyOrderItem: (productId: number, newQty: number) => {
-    const items = get().orderItems;
-    const selectedItem = items.find((item) => item.info.id === productId);
+    const allItems = get().orderItems;
+    const selectedItem = allItems.find((item) => item.info.id === productId);
     if (!selectedItem) return;
     selectedItem.quantity = newQty;
-    set(() => ({ orderItems: items }));
+    set(() => ({ orderItems: [...allItems] }));
     get().calculateTotalPrice();
   },
 
