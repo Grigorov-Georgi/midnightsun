@@ -35,9 +35,10 @@ export const useCartStore = create<CartStore>((set, get) => ({
     console.log("remove: ", productId);
   },
   modifyOrderItem: (productId: number, newQty: number) => {
-    const idxOfItem = get().findOrderItemIdx(productId);
     const items = get().orderItems;
-    items[idxOfItem].quantity = newQty;
+    const selectedItem = items.find((item) => item.info.id === productId);
+    if (!selectedItem) return;
+    selectedItem.quantity = newQty;
     set(() => ({ orderItems: items }));
   },
   findOrderItemIdx: (productId: number) => {
