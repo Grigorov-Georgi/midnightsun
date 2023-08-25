@@ -11,18 +11,15 @@ export const OrderItem = (props: ProductInfo) => {
     if (item) return item.quantity;
   });
   const modifyOrderItem = useCartStore((state) => state.modifyOrderItem);
-  const calculateTotalPrice = useCartStore(
-    (state) => state.calculateTotalPrice
-  );
+  const removeOrderItem = useCartStore((state) => state.removeOrderItem);
 
   const handleQtyChange = (newQty: number) => {
     if (newQty < 1) return;
     modifyOrderItem(props.id, newQty);
-    calculateTotalPrice();
   };
 
   const removeProductFromCart = () => {
-    console.log("Delete product");
+    removeOrderItem(props.id);
   };
 
   return (

@@ -32,7 +32,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
   },
 
   removeOrderItem: (productId: number) => {
-    console.log("remove: ", productId);
+    const allItems = get().orderItems;
+    const idxToDelete = allItems.findIndex(
+      (item) => item.info.id === productId
+    );
+    allItems.splice(idxToDelete, 1);
+    set(() => ({ orderItems: [...allItems] }));
+    get().calculateTotalPrice();
   },
 
   // Incr/decr quantity and recalculate pr
