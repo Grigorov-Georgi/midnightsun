@@ -7,8 +7,8 @@ import { useCartStore } from "../../../../stores/CartStore";
 
 export const OrderItem = (props: ProductInfo) => {
   const quantity = useCartStore((state) => {
-    const itemIdx = state.findOrderItemIdx(props.id);
-    return state.orderItems[itemIdx].quantity;
+    const item = state.orderItems.find((item) => item.info.id === props.id);
+    if (item) return item.quantity;
   });
   const modifyOrderItem = useCartStore((state) => state.modifyOrderItem);
   const calculateTotalPrice = useCartStore(
@@ -34,7 +34,7 @@ export const OrderItem = (props: ProductInfo) => {
       />
       <span className={styles.name}>{props.name}</span>
       <InputNumber
-        value={quantity}
+        value={quantity ?? 1}
         min={1}
         onValueChange={(e) => handleQtyChange(e.value as number)}
         showButtons={true}

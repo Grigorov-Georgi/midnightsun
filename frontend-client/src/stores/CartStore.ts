@@ -12,42 +12,40 @@ const dummyProducts: IOrderItem[] = [
   { info: { id: 5, name: "HG Gundam Barbatos", price: 25 }, quantity: 1 },
 ];
 
-// TODO: Define total price calculations
 interface CartStore {
   orderItems: IOrderItem[];
   totalPrice: number;
   appendOrderItem: (newItem: IOrderItem) => void;
   removeOrderItem: (productId: number) => void;
   modifyOrderItem: (productId: number, newQty: number) => void;
-  findOrderItemIdx: (productId: number) => number;
   calculateTotalPrice: () => void;
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
   orderItems: dummyProducts,
   totalPrice: 0,
+
   appendOrderItem: (newItem: IOrderItem) => {
     const currentItems: IOrderItem[] = get().orderItems;
     currentItems.push(newItem);
     set(() => ({ orderItems: currentItems }));
   },
+
   removeOrderItem: (productId: number) => {
     console.log("remove: ", productId);
   },
+
+  // Incr/decr quantity and recalculate pr
   modifyOrderItem: (productId: number, newQty: number) => {
     const items = get().orderItems;
     const selectedItem = items.find((item) => item.info.id === productId);
     if (!selectedItem) return;
     selectedItem.quantity = newQty;
     set(() => ({ orderItems: items }));
+    get().calculateTotalPrice();
   },
-  findOrderItemIdx: (productId: number) => {
-    const currentItems: IOrderItem[] = get().orderItems;
-    const idxOfItem = currentItems.findIndex(
-      (item) => item.info.id === productId
-    );
-    return idxOfItem;
-  },
+
+  // Needed instead of a reaction (no native computed)
   calculateTotalPrice: () => {
     const currentItems: IOrderItem[] = get().orderItems;
     let totalPrice = 0;
