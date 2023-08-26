@@ -2,7 +2,7 @@ package com.midnightsun.revrateservice.service.aspect;
 
 import com.midnightsun.revrateservice.service.RatingService;
 import com.midnightsun.revrateservice.service.ReviewService;
-import com.midnightsun.revrateservice.service.redis.CacheService;
+import com.midnightsun.revrateservice.service.cache.CacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

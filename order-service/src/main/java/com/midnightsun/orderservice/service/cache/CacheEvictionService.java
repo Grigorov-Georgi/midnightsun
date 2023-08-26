@@ -12,9 +12,9 @@ import java.util.Set;
 @Service
 public class CacheEvictionService {
 
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public CacheEvictionService(RedisTemplate redisTemplate) {
+    public CacheEvictionService(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

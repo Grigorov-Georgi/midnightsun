@@ -1,4 +1,4 @@
-package com.midnightsun.productservice.service.redis;
+package com.midnightsun.productservice.service.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,14 +12,14 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class CacheService {
+public class PrecomputedCacheService {
 
     private static final String RATING_PREFIX = "rev-rate:rating:";
     private static final String REVIEW_PREFIX = "rev-rate:review:";
 
     private RedisTemplate<String, String> redisTemplate;
 
-    public CacheService(RedisTemplate<String, String> redisTemplate) {
+    public PrecomputedCacheService(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 

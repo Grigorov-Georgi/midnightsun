@@ -1,10 +1,12 @@
 package com.midnightsun.productservice.service;
 
 import com.midnightsun.productservice.mapper.ProductMapper;
-import com.midnightsun.productservice.model.Product;
+import com.midnightsun.productservice.repository.CategoryRepository;
 import com.midnightsun.productservice.repository.ProductRepository;
+import com.midnightsun.productservice.service.cache.CacheBufferRepository;
 import com.midnightsun.productservice.service.dto.ProductDTO;
 import com.midnightsun.productservice.web.exception.HttpBadRequestException;
+import com.midnightsun.productservice.web.exception.HttpNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +21,18 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
+    private final CacheBufferRepository cacheBufferRepository;
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryRepository categoryRepository;
 
-    public ProductService(ProductRepository productRepository, ProductMapper productMapper) {
+    public ProductService(CacheBufferRepository cacheBufferRepository,
+                          ProductRepository productRepository,
+                          ProductMapper productMapper, CategoryRepository categoryRepository) {
+        this.cacheBufferRepository = cacheBufferRepository;
         this.productRepository = productRepository;
         this.productMapper = productMapper;
+        this.categoryRepository = categoryRepository;
     }
 
     public Page<ProductDTO> getAll(Pageable pageable) {
@@ -39,24 +47,26 @@ public class ProductService {
 
     public ProductDTO save(ProductDTO productDTO) {
         log.debug("Request to save PRODUCT: {}", productDTO);
-        if (productDTO.getId() != null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
-        }
+
+        if (productDTO.getId() != null) throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
+        if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
+
         final var product = productMapper.toEntity(productDTO);
-        return save(product);
+        final var savedProduct = cacheBufferRepository.save(product);
+
+        return productMapper.toDTO(savedProduct);
     }
 
     public ProductDTO update(ProductDTO productDTO) {
         log.debug("Request to update PRODUCT: {}", productDTO);
-        if (productDTO.getId() == null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        }
-        final var product = productMapper.toEntity(productDTO);
-        return save(product);
-    }
 
-    private ProductDTO save(Product product) {
-        final var savedProduct = productRepository.save(product);
+        if (productDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
+        if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
+        if (!productRepository.existsById(productDTO.getId())) throw new HttpNotFoundException("Product not found");
+
+        final var product = productMapper.toEntity(productDTO);
+        final var savedProduct = cacheBufferRepository.update(product);
+
         return productMapper.toDTO(savedProduct);
     }
 
