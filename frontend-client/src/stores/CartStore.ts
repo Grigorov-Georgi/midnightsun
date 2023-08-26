@@ -15,7 +15,7 @@ const dummyProducts: IOrderItem[] = [
 interface CartStore {
   orderItems: IOrderItem[];
   totalPrice: number;
-  appendOrderItem: (newItem: IOrderItem) => void;
+  addOrderItem: (newItem: IOrderItem) => void;
   removeOrderItem: (productId: number) => void;
   modifyOrderItem: (productId: number, newQty: number) => void;
   calculateTotalPrice: () => void;
@@ -25,10 +25,11 @@ export const useCartStore = create<CartStore>((set, get) => ({
   orderItems: dummyProducts,
   totalPrice: 0,
 
-  appendOrderItem: (newItem: IOrderItem) => {
-    const currentItems: IOrderItem[] = get().orderItems;
-    currentItems.push(newItem);
-    set(() => ({ orderItems: currentItems }));
+  addOrderItem: (newItem: IOrderItem) => {
+    const allItems: IOrderItem[] = get().orderItems;
+    allItems.push(newItem);
+    set(() => ({ orderItems: [...allItems] }));
+    get().calculateTotalPrice();
   },
 
   removeOrderItem: (productId: number) => {
