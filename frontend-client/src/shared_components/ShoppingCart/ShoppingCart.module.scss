@@ -1,0 +1,38 @@
+.shoppingCart {
+  height: 100vh;
+  padding: 1rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--cart-secondary-color);
+
+  .orderItemsList {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    max-width: fit-content;
+    overflow: auto;
+  }
+
+  .infoSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .orderBtn {
+      margin-top: 2rem;
+      background-color: #9d00ff !important;
+      border: transparent !important;
+      width: 120px !important;
+      height: 45px !important;
+
+      &:hover {
+        background-color: #c06ff3 !important;
+      }
+
+      &:focus {
+        box-shadow: unset !important;
+      }
+    }
+  }
+}

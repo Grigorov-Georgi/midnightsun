@@ -10,7 +10,7 @@ export const DropdownOptions = (props: DropdownOptionsProps) => {
     <div className={styles.dpdMenu}>
       <ul className={styles.optionsList}>
         {options.map((option) => (
-          <li className={styles.option}>
+          <li key={`dpd-${option.name}`} className={styles.option}>
             <a className={styles.optionLink} href={option.path}>
               {option.name}
             </a>

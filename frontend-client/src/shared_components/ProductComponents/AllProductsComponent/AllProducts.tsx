@@ -5,7 +5,7 @@ export const AllProducts = () => {
   const getDummyProducts = (): JSX.Element[] => {
     const products: JSX.Element[] = [];
     for (let index = 0; index < 10; index++) {
-      products.push(<ProductCard />);
+      products.push(<ProductCard key={`product-${index}`} />);
     }
     return products;
   };

@@ -1,0 +1,64 @@
+.orderItem {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 40rem;
+  max-width: 50rem;
+  min-height: 5rem;
+  padding: 1rem 1rem;
+  border: 1px solid #9d00ff;
+  color: white;
+
+  .image {
+    max-width: 5rem;
+    max-height: 3rem;
+    pointer-events: none;
+  }
+
+  .name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 15rem;
+  }
+
+  .quantity {
+    .input {
+      max-width: 3rem !important;
+      max-height: 1rem !important;
+      &:focus {
+        box-shadow: unset !important;
+        border-color: unset !important;
+      }
+    }
+
+    .btn {
+      max-width: 3rem !important;
+      max-height: 1rem !important;
+      background-color: #9d00ff !important;
+      border-color: #9d00ff !important;
+
+      &:focus {
+        box-shadow: unset !important;
+      }
+
+      &:hover {
+        background-color: #c06ff3 !important;
+        border-color: #c06ff3 !important;
+      }
+
+      &.disabled {
+        opacity: 0.8;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .removeIcon {
+    padding: 1px 1px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
