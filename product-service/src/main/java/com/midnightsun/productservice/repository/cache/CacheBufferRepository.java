@@ -1,4 +1,4 @@
-package com.midnightsun.productservice.service.cache;
+package com.midnightsun.productservice.repository.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

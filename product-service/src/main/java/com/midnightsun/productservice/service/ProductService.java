@@ -3,7 +3,7 @@ package com.midnightsun.productservice.service;
 import com.midnightsun.productservice.mapper.ProductMapper;
 import com.midnightsun.productservice.repository.CategoryRepository;
 import com.midnightsun.productservice.repository.ProductRepository;
-import com.midnightsun.productservice.service.cache.CacheBufferRepository;
+import com.midnightsun.productservice.repository.cache.CacheBufferRepository;
 import com.midnightsun.productservice.service.dto.ProductDTO;
 import com.midnightsun.productservice.web.exception.HttpBadRequestException;
 import com.midnightsun.productservice.web.exception.HttpNotFoundException;
