@@ -7,9 +7,17 @@ import { ProductFullInfo } from "../AllProductsComponent/AllProducts";
 
 export const ProductCard = (props: { allInfo: ProductFullInfo }) => {
   const { allInfo } = props;
+  const currentCartIds = useCartStore((state) =>
+    state.orderItems.map((item) => item.info.id)
+  );
   const addOrderItem = useCartStore((state) => state.addOrderItem);
 
   const handleBuyClick = () => {
+    if (currentCartIds.includes(allInfo.id)) {
+      // TODO: Replace with toast, when its ready.
+      window.alert("This item is already in the cart!");
+      return;
+    }
     const newOrderItem: IOrderItem = {
       info: { id: allInfo.id, name: allInfo.name, price: allInfo.price },
       quantity: 1,
