@@ -4,11 +4,22 @@ import { NewProduct } from "../types/NewProduct";
 
 const API_BASE_URL = "http://localhost:8082/api/products/";
 
+// export async function getAllProducts() {
+//   const response = await fetch(API_BASE_URL);
+//   const data = await response.json();
+//   return data;
+//   // return axios.get(`${API_BASE_URL}`);
+// }
+
 export async function getAllProducts() {
-  const response = await fetch(API_BASE_URL);
-  const data = await response.json();
-  return data;
-  // return axios.get(`${API_BASE_URL}`);
+  return axios
+    .get(`${API_BASE_URL}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((err) => {
+      return err;
+    });
 }
 
 export async function getProductById(productId: any) {
