@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ProductCard } from "../Product/ProductCard";
-import styles from "./AllProducts.module.css";
+import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
+import styles from "./AllProducts.module.scss";
 import { getAllProducts } from "../../../services/ProductService";
 
 export interface ProductFullInfo {
@@ -38,9 +39,20 @@ export const AllProducts = () => {
     return products;
   };
 
+  const handlePageChange = (ev: PaginatorPageChangeEvent) => {
+    console.log("Page change ev: ", ev);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.grid}>{getProducts()}</div>
+      <Paginator
+        className={styles.paginator}
+        first={0}
+        rows={10}
+        totalRecords={120}
+        onPageChange={(ev) => handlePageChange(ev)}
+      />
     </div>
   );
 };

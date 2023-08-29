@@ -1,0 +1,32 @@
+.page {
+  background-color: var(--cart-secondary-color);
+  min-height: 100vh;
+  overflow: auto;
+
+  .grid {
+    margin: 25px 25px;
+    padding-bottom: 5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-height: 100vh;
+  }
+
+  .paginator{
+    background-color: transparent !important;
+    
+    button{
+      //TODO->active state needed
+      color: white !important;
+      background: unset !important;
+      border-color: unset !important;
+
+      &:hover{
+        background-color: #9d00ff !important;
+      }
+
+      &:focus {
+        box-shadow: unset !important;
+      }
+    }
+  }
+}
