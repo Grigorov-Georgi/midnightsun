@@ -15,13 +15,15 @@
     background-color: transparent !important;
     
     button{
-      //TODO->active state needed
       color: white !important;
-      background: unset !important;
       border-color: unset !important;
 
+      &:global(.p-highlight){
+        background-color: #9d00ff !important ;
+      }
+
       &:hover{
-        background-color: #9d00ff !important;
+        background-color: #c06ff3 !important;
       }
 
       &:focus {

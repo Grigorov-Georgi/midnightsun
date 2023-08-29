@@ -3,6 +3,7 @@ import { ProductCard } from "../Product/ProductCard";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import styles from "./AllProducts.module.scss";
 import { getAllProducts } from "../../../services/ProductService";
+import { useState } from "react";
 
 export interface ProductFullInfo {
   id: number;
@@ -13,6 +14,8 @@ export interface ProductFullInfo {
 }
 
 export const AllProducts = () => {
+  const [first, setFirst] = useState<number>(0);
+
   const productsQuery = useQuery({
     queryKey: ["products"],
     queryFn: getAllProducts,
@@ -41,6 +44,7 @@ export const AllProducts = () => {
 
   const handlePageChange = (ev: PaginatorPageChangeEvent) => {
     console.log("Page change ev: ", ev);
+    setFirst(ev.first);
   };
 
   return (
@@ -48,7 +52,7 @@ export const AllProducts = () => {
       <div className={styles.grid}>{getProducts()}</div>
       <Paginator
         className={styles.paginator}
-        first={0}
+        first={first}
         rows={10}
         totalRecords={120}
         onPageChange={(ev) => handlePageChange(ev)}
