@@ -29,14 +29,14 @@ public class ProductInfoService {
     }
 
     public OrderDTO getExtendedProductInfo(OrderDTO orderDTO) {
-        List<Long> productIds = orderDTO.getOrderItems().stream().map(OrderItemDTO::getProductId).collect(Collectors.toList());
+        List<UUID> productIds = orderDTO.getOrderItems().stream().map(OrderItemDTO::getProductId).collect(Collectors.toList());
 
         List<String> productKeysForRedis = productIds.stream().map(this::buildKey).collect(Collectors.toList());
         List<String> cachedProducts = redisTemplate.opsForValue().multiGet(productKeysForRedis);
 
-        Map<Long, OrderItemExtendedInfoDTO> resultMap = new HashMap<>();
+        Map<UUID, OrderItemExtendedInfoDTO> resultMap = new HashMap<>();
 
-        List<Long> unavailableInCacheProductIds = findUnavailableProductIds(productIds, cachedProducts, resultMap);
+        List<UUID> unavailableInCacheProductIds = findUnavailableProductIds(productIds, cachedProducts, resultMap);
 
         if (!unavailableInCacheProductIds.isEmpty()) {
             fetchAndCacheProductInfo(unavailableInCacheProductIds, resultMap);
@@ -47,13 +47,13 @@ public class ProductInfoService {
         return orderDTO;
     }
 
-    private List<Long> findUnavailableProductIds(List<Long> productIds,
+    private List<UUID> findUnavailableProductIds(List<UUID> productIds,
                                                  List<String> cachedProducts,
-                                                 Map<Long, OrderItemExtendedInfoDTO> resultMap) {
-        List<Long> unavailableInCacheProductIds = new ArrayList<>();
+                                                 Map<UUID, OrderItemExtendedInfoDTO> resultMap) {
+        List<UUID> unavailableInCacheProductIds = new ArrayList<>();
 
         for (int i = 0; i < productIds.size(); i++) {
-            Long currentProductId = productIds.get(i);
+            UUID currentProductId = productIds.get(i);
             String currentCachedProductInfo = cachedProducts.get(i);
 
             if (currentCachedProductInfo == null) {
@@ -71,10 +71,14 @@ public class ProductInfoService {
             }
         }
 
+        log.debug("CACHE HITS: {}, CACHE MISSES: {}",
+                productIds.size() - unavailableInCacheProductIds.size(),
+                unavailableInCacheProductIds.size());
+
         return unavailableInCacheProductIds;
     }
 
-    private void fetchAndCacheProductInfo(List<Long> unavailableInCacheProductIds, Map<Long, OrderItemExtendedInfoDTO> resultMap) {
+    private void fetchAndCacheProductInfo(List<UUID> unavailableInCacheProductIds, Map<UUID, OrderItemExtendedInfoDTO> resultMap) {
         final var originalMap = externalProductService.getProductsInfo(unavailableInCacheProductIds);
 
         if (originalMap == null) return;
@@ -91,7 +95,7 @@ public class ProductInfoService {
         redisTemplate.opsForValue().multiSet(transformedMap);
     }
 
-    private void updateOrderItemsWithExtendedInfo(OrderDTO orderDTO, Map<Long, OrderItemExtendedInfoDTO> resultMap) {
+    private void updateOrderItemsWithExtendedInfo(OrderDTO orderDTO, Map<UUID, OrderItemExtendedInfoDTO> resultMap) {
         orderDTO.getOrderItems().forEach(o -> {
             final var currentProductId = o.getProductId();
             OrderItemExtendedInfoDTO currentExtendedInfo = resultMap.get(currentProductId);
@@ -102,8 +106,8 @@ public class ProductInfoService {
         });
     }
 
-    private String buildKey(Long id) {
-        return String.format("%s%d", PRODUCT_PREFIX, id);
+    private String buildKey(UUID id) {
+        return String.format("%s%s", PRODUCT_PREFIX, id);
     }
 
     private String stringifyValue(OrderItemExtendedInfoDTO orderItemExtendedInfoDTO) {

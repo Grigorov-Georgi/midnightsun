@@ -21,7 +21,7 @@ public class CacheEvictionService {
     @Scheduled(cron = "0 0/10 * * * *")
     public void invalidateProductsCache() {
         log.debug("Scheduled job to delete products cache started");
-        Set<String> keysToDelete = redisTemplate.keys(String.format("%s****", Constants.PRODUCT_PREFIX));
+        Set<String> keysToDelete = redisTemplate.keys(String.format("%s%s", Constants.PRODUCT_PREFIX, ("*").repeat(36)));
         if (keysToDelete != null && !keysToDelete.isEmpty()) {
             redisTemplate.delete(keysToDelete);
         }
