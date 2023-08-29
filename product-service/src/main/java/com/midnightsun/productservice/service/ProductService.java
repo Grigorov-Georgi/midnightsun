@@ -52,7 +52,8 @@ public class ProductService {
         log.debug("Request to save PRODUCT: {}", productDTO);
 
         if (productDTO.getId() != null) throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
-        if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
+        if (!categoryRepository.existsById(productDTO.getCategory().getId()))
+            throw new HttpNotFoundException("Category not found!");
 
         final var product = productMapper.toEntity(productDTO);
         final var savedProduct = productCacheService.save(product);
@@ -64,7 +65,8 @@ public class ProductService {
         log.debug("Request to update PRODUCT: {}", productDTO);
 
         if (productDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
+        if (!categoryRepository.existsById(productDTO.getCategory().getId()))
+            throw new HttpNotFoundException("Category not found!");
         if (!productRepository.existsById(productDTO.getId())) throw new HttpNotFoundException("Product not found");
 
         final var product = productMapper.toEntity(productDTO);
@@ -93,7 +95,11 @@ public class ProductService {
                 productsToSave.add(product);
             }
         }
-        productRepository.saveAll(productsToSave.stream().map(productMapper::toEntity).collect(Collectors.toList()));
+
+        productsToSave.stream()
+                .map(productMapper::toEntity)
+                .forEach(productCacheService::save);
+//        productRepository.saveAll(productsToSave.stream().map(productMapper::toEntity).collect(Collectors.toList()));
 
         return productsIdQuantityMap;
     }
