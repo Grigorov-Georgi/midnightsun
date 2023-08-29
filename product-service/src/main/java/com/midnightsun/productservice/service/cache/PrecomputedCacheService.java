@@ -28,13 +28,13 @@ public class PrecomputedCacheService {
     }
 
     public Double getProductRatingScore(UUID id) {
-        final var key = String.format("%s%s", RATING_PREFIX, id.toString());
+        final var key = String.format("%s%s", RATING_PREFIX, id);
         final var rating = redisTemplate.opsForValue().get(key);
         return rating != null ? Double.parseDouble(rating) : 0;
     }
 
     public List<String> getProductReviews(UUID id) {
-        final var key = String.format("%s%s", REVIEW_PREFIX, id.toString());
+        final var key = String.format("%s%s", REVIEW_PREFIX, id);
         final var serializedReviews = redisTemplate.opsForValue().get(key);
 
         if (serializedReviews == null) {
