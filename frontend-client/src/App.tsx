@@ -12,19 +12,17 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <div>Home</div>,
-    errorElement: <ErrorComponent />,
-  },
-  {
-    path: "/productCreation",
-    element: <div>Product creation page</div>,
+    errorElement: <ErrorComponent isPathRelated={true} />,
   },
   {
     path: "/products",
     element: <AllProducts />,
+    errorElement: <ErrorComponent isPathRelated={false} />,
   },
   {
     path: "/addProduct",
     element: <NewProductForm />,
+    errorElement: <ErrorComponent isPathRelated={false} />,
   },
   {
     path: "/contacts",
@@ -33,6 +31,7 @@ const router = createBrowserRouter([
   {
     path: "/shoppingCart",
     element: <ShoppingCart />,
+    errorElement: <ErrorComponent isPathRelated={false} />,
   },
   {
     path: "/userPage",

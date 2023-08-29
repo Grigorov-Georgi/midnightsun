@@ -2,16 +2,16 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { IOrderItem } from "../types/IOrderItem";
 
-const dummyProducts: IOrderItem[] = [
-  { info: { id: 1, name: "Clone trooper", price: 15 }, quantity: 1 },
-  { info: { id: 2, name: "Newest Junji Ito manga", price: 20 }, quantity: 1 },
-  { info: { id: 3, name: "Halo 10", price: 60 }, quantity: 1 },
-  {
-    info: { id: 4, name: "Space Marines Tactical Squad", price: 30 },
-    quantity: 1,
-  },
-  { info: { id: 5, name: "HG Gundam Barbatos", price: 25 }, quantity: 1 },
-];
+// const dummyProducts: IOrderItem[] = [
+//   { info: { id: 1, name: "Clone trooper", price: 15 }, quantity: 1 },
+//   { info: { id: 2, name: "Newest Junji Ito manga", price: 20 }, quantity: 1 },
+//   { info: { id: 3, name: "Halo 10", price: 60 }, quantity: 1 },
+//   {
+//     info: { id: 4, name: "Space Marines Tactical Squad", price: 30 },
+//     quantity: 1,
+//   },
+//   { info: { id: 5, name: "HG Gundam Barbatos", price: 25 }, quantity: 1 },
+// ];
 
 interface CartStore {
   orderItems: IOrderItem[];
@@ -25,7 +25,7 @@ interface CartStore {
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
-      orderItems: dummyProducts,
+      orderItems: [],
       totalPrice: 0,
 
       addOrderItem: (newItem: IOrderItem) => {
