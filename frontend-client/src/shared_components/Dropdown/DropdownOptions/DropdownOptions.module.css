@@ -3,7 +3,7 @@
   min-width: 5rem;
   max-height: fit-content;
   padding: 5px 5px;
-  background-color: var(--ecart-main-bg-color);
+  background-color: var(--ecart-secondary-bg-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,13 +19,13 @@
 }
 
 .optionLink {
-  color: white;
+  color: var(--ecart-main-text-color);
   text-decoration: none;
 }
 
 .option:hover {
   cursor: pointer;
-  border: 1px solid white;
+  border: 1px solid var(--ecart-main-text-color);
 }
 
 .option:visited {

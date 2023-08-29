@@ -1,8 +1,8 @@
 .page {
   display: flex;
   flex-direction: column;
-  background-color: var(--cart-secondary-color);
-  color: white;
-  height: var(--ecart-view-height-basic);
+  background-color: var(--ecart-main-bg-color);
+  color: var(--ecart-main-text-color);
+  height: 100vh;
   padding: 1rem 1rem;
 }

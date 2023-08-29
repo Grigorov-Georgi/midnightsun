@@ -1,5 +1,5 @@
 .page {
-  background-color: var(--cart-secondary-color);
+  background-color: var(--ecart-main-bg-color);
   min-height: 100vh;
   overflow: auto;
 
@@ -15,15 +15,15 @@
     background-color: transparent !important;
     
     button{
-      color: white !important;
+      color: var(--ecart-main-text-color) !important;
       border-color: unset !important;
 
       &:global(.p-highlight){
-        background-color: #9d00ff !important ;
+        background-color: var(--ecart-btn-bg-color) !important ;
       }
 
       &:hover{
-        background-color: #c06ff3 !important;
+        background-color: var(--ecart-btn-bg-hover) !important;
       }
 
       &:focus {

@@ -1,6 +1,6 @@
 .form {
-  background-color: var(--cart-secondary-color);
-  height: var(--ecart-view-height-basic);
+  background-color: var(--ecart-main-bg-color);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,14 +19,14 @@
 }
 
 .submitBtn {
-  background-color: #9d00ff !important;
+  background-color: var(--ecart-btn-bg-color) !important;
   border: transparent !important;
   width: 120px !important;
   height: 45px !important;
 }
 
 .submitBtn:hover {
-  background-color: #c06ff3 !important;
+  background-color: var(--ecart-btn-bg-hover) !important;
 }
 
 .submitBtn:focus {
