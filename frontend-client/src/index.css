@@ -4,6 +4,7 @@
   --ecart-main-text-color: white;
   --ecart-btn-bg-color: #9d00ff;
   --ecart-btn-bg-hover: #c06ff3;
+  --ecart-border-color: blueviolet;
 }
 
 body {
