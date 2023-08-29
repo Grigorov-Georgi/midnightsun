@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/products")
@@ -30,7 +32,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getOne(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> getOne(@PathVariable UUID id) {
         log.debug("REST request to get PRODUCT by ID: {}", id);
         final var product = productService.getOne(id);
         return ResponseEntity.status(HttpStatus.OK).body(product);
@@ -51,7 +53,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         log.debug("REST request to delete PRODUCT with ID: {}", id);
         productService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

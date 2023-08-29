@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 @Table(name = "category")
-public class Category extends AbstractAuditingEntity implements Serializable {
+public class Category extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(generator = "category_sequence_generator", strategy = GenerationType.SEQUENCE)

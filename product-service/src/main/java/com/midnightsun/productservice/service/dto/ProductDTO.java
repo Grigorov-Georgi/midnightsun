@@ -2,9 +2,9 @@ package com.midnightsun.productservice.service.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ProductDTO extends AbstractAuditingDTO {
 
-    private Long id;
+    private UUID id;
 
     private String name;
 
@@ -35,14 +35,4 @@ public class ProductDTO extends AbstractAuditingDTO {
     private Double ratingScore;
 
     private List<String> reviews;
-
-    private boolean dirty = false;
-
-    public void markAsDirty() {
-        this.dirty = true;
-    }
-
-    public boolean isDirty() {
-        return this.dirty;
-    }
 }

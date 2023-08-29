@@ -53,6 +53,6 @@ public class SagaManager {
     private static class SagaMessage {
         private Boolean isTransactionSuccessful;
         private UUID orderId;
-        private Map<Long, Long> productIdQuantityMap;
+        private Map<UUID, Long> productIdQuantityMap;
     }
 }
