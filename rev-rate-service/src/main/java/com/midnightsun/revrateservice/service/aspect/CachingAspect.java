@@ -2,7 +2,7 @@ package com.midnightsun.revrateservice.service.aspect;
 
 import com.midnightsun.revrateservice.service.RatingService;
 import com.midnightsun.revrateservice.service.ReviewService;
-import com.midnightsun.revrateservice.service.redis.CacheService;
+import com.midnightsun.revrateservice.service.cache.CacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 @Slf4j
 @Aspect
@@ -38,11 +39,11 @@ public class CachingAspect {
     public void deleteMethods() {}
 
     @AfterReturning(value = "saveOrUpdateMethods()", returning = "result")
-    public void afterSaveOperationAdvice(JoinPoint joinPoint, Object result) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void afterSaveOperationAdvice(JoinPoint joinPoint, Object result) throws NoSuchMethodException {
         Class<?> clazz = joinPoint.getArgs()[0].getClass();
         Method getProductId = clazz.getMethod("getProductId");
         try {
-            Long productId = (Long) getProductId.invoke(joinPoint.getArgs()[0]);
+            UUID productId = (UUID) getProductId.invoke(joinPoint.getArgs()[0]);
             String serviceName = joinPoint.getSignature().getDeclaringType().getSimpleName();
             updateCache(serviceName, productId);
         } catch (Exception e) {
@@ -54,13 +55,13 @@ public class CachingAspect {
     public Object afterDeleteOperationAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
         Long entityId = Long.parseLong(joinPoint.getArgs()[0].toString());
         String serviceName = joinPoint.getSignature().getDeclaringType().getSimpleName();
-        Long productId = getProductId(serviceName, entityId);
+        UUID productId = getProductId(serviceName, entityId);
         Object returnValue = joinPoint.proceed();
         updateCache(serviceName, productId);
         return returnValue;
     }
 
-    private void updateCache(String serviceName, Long productId) {
+    private void updateCache(String serviceName, UUID productId) {
         switch (serviceName) {
             case "ReviewService":
                 cacheService.updateProductReviews(productId);
@@ -71,8 +72,8 @@ public class CachingAspect {
         }
     }
 
-    private Long getProductId(String serviceName, Long entityId) {
-        Long productId = null;
+    private UUID getProductId(String serviceName, Long entityId) {
+        UUID productId = null;
         if ("ReviewService".equals(serviceName)) {
             productId = reviewService.getOne(entityId).getProductId();
         } else if ("RatingService".equals(serviceName)) {

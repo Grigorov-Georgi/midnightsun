@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class ExternalProductService {
@@ -33,10 +34,10 @@ public class ExternalProductService {
     public void process(Message message) throws IOException {
         //TODO: add error handling
         byte[] body = message.getBody();
-        List<Long> productIds = objectMapper.readValue(body, new TypeReference<>() {});
+        List<UUID> productIds = objectMapper.readValue(body, new TypeReference<>() {});
 
-        Map<Long, OrderItemExtendedInfoDTO> productIdInfoMap = new HashMap<>();
-        for (Long id : productIds) {
+        Map<UUID, OrderItemExtendedInfoDTO> productIdInfoMap = new HashMap<>();
+        for (UUID id : productIds) {
             //TODO: Make batch operation
             final var product = productService.getOne(id);
             final var orderItemExtended = new OrderItemExtendedInfoDTO();

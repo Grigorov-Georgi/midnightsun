@@ -45,7 +45,7 @@ public class SagaManager {
     public void startSagaForProductsValidation(OrderDTO order) {
         log.debug("Initiated products validation for order with ID: {}", order.getId());
 
-        Map<Long, Long> productIdQuantityMap = new HashMap<>();
+        Map<UUID, Long> productIdQuantityMap = new HashMap<>();
         order.getOrderItems().forEach(o -> productIdQuantityMap.putIfAbsent(o.getProductId(), o.getQuantity()));
 
         SagaMessage sagaMessage = new SagaMessage(Boolean.TRUE, order.getId(), productIdQuantityMap);
@@ -80,6 +80,6 @@ public class SagaManager {
     private static class SagaMessage {
         private Boolean isTransactionSuccessful;
         private UUID orderId;
-        private Map<Long, Long> productIdQuantityMap;
+        private Map<UUID, Long> productIdQuantityMap;
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,7 +37,7 @@ public class ExternalProductService {
         this.objectMapper = objectMapper;
     }
 
-    public Map<Long, OrderItemExtendedInfoDTO> getProductsInfo(@NonNull List<Long> productIds) {
+    public Map<UUID, OrderItemExtendedInfoDTO> getProductsInfo(@NonNull List<UUID> productIds) {
         try {
             var body = objectMapper.writeValueAsBytes(productIds);
 

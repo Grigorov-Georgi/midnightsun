@@ -4,7 +4,6 @@ import com.midnightsun.revrateservice.mapper.ReviewMapper;
 import com.midnightsun.revrateservice.model.Review;
 import com.midnightsun.revrateservice.repository.ReviewRepository;
 import com.midnightsun.revrateservice.service.dto.ReviewDTO;
-import com.midnightsun.revrateservice.service.redis.CacheService;
 import com.midnightsun.revrateservice.web.exception.HttpBadRequestException;
 import com.midnightsun.revrateservice.web.exception.HttpNotFoundException;
 import lombok.extern.slf4j.Slf4j;

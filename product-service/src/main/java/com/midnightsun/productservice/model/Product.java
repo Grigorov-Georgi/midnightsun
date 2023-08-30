@@ -3,9 +3,10 @@ package com.midnightsun.productservice.model;
 import javax.persistence.*;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -13,12 +14,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Entity
 @Table(name = "product")
-public class Product extends AbstractAuditingEntity implements Serializable {
+public class Product extends AbstractAuditingEntity {
 
     @Id
-    @GeneratedValue(generator = "product_sequence_generator", strategy = GenerationType.SEQUENCE)
-    @SequenceGenerator(name = "product_sequence_generator", initialValue = 1000, allocationSize = 1)
-    private Long id;
+    @Type(type = "uuid-char")
+    private UUID id;
 
     private String name;
 

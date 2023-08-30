@@ -1,4 +1,4 @@
-package com.midnightsun.productservice.service.redis;
+package com.midnightsun.productservice.service.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -9,31 +9,32 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
-public class CacheService {
+public class PrecomputedCacheService {
 
     private static final String RATING_PREFIX = "rev-rate:rating:";
     private static final String REVIEW_PREFIX = "rev-rate:review:";
 
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final ObjectMapper objectMapper;
 
-    public CacheService(RedisTemplate<String, String> redisTemplate) {
+    public PrecomputedCacheService(RedisTemplate<String, String> redisTemplate,
+                                   ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
+        this.objectMapper = objectMapper;
     }
 
-    public Double getProductRatingScore(Long id) {
-        final var key = String.format("%s%d", RATING_PREFIX, id);
+    public Double getProductRatingScore(UUID id) {
+        final var key = String.format("%s%s", RATING_PREFIX, id);
         final var rating = redisTemplate.opsForValue().get(key);
         return rating != null ? Double.parseDouble(rating) : 0;
     }
 
-    public List<String> getProductReviews(Long id) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-
-        final var key = String.format("%s%d", REVIEW_PREFIX, id);
+    public List<String> getProductReviews(UUID id) {
+        final var key = String.format("%s%s", REVIEW_PREFIX, id);
         final var serializedReviews = redisTemplate.opsForValue().get(key);
 
         if (serializedReviews == null) {

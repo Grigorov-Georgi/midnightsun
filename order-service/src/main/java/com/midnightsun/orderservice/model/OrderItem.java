@@ -3,8 +3,10 @@ package com.midnightsun.orderservice.model;
 import javax.persistence.*;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -19,7 +21,8 @@ public class OrderItem extends AbstractAuditingEntity implements Serializable {
     @SequenceGenerator(name = "order_item_sequence_generator", initialValue = 1000, allocationSize = 1)
     private Long id;
 
-    private Long productId;
+    @Type(type = "uuid-char")
+    private UUID productId;
 
     private Long quantity;
 

@@ -1,4 +1,4 @@
-package com.midnightsun.revrateservice.service.redis;
+package com.midnightsun.revrateservice.service.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,10 +34,10 @@ public class CacheService {
         this.reviewRepository = reviewRepository;
     }
 
-    public void updateProductAverageRating(Long id) {
+    public void updateProductAverageRating(UUID id) {
         log.debug("Update Redis cache with the average score of product with ID: {}", id);
         final var averageRating = ratingRepository.getAverageRatingByProductId(id);
-        final var key = String.format("%s%d", RATING_PREFIX, id);
+        final var key = String.format("%s%s", RATING_PREFIX, id);
         final var value = String.valueOf(averageRating);
         this.updateCache(key, value);
     }
@@ -46,9 +47,9 @@ public class CacheService {
         final var ratingProductIds = ratingRepository.findAllDistinctProductIds();
         Map<String, String> productRatingsMap = new HashMap<>();
 
-        for (Long productId : ratingProductIds) {
+        for (UUID productId : ratingProductIds) {
             final var averageRating = ratingRepository.getAverageRatingByProductId(productId);
-            final var key = String.format("%s%d", RATING_PREFIX, productId);
+            final var key = String.format("%s%s", RATING_PREFIX, productId);
             final var value = String.valueOf(averageRating);
             productRatingsMap.put(key, value);
         }
@@ -56,12 +57,12 @@ public class CacheService {
         this.updateCache(productRatingsMap);
     }
 
-    public void updateProductReviews(Long id) {
+    public void updateProductReviews(UUID id) {
         log.debug("Update Redis cache with the reviews of product with ID: {}", id);
         final var reviews = reviewRepository.findAllByProductId(id);
         final var reviewsText = reviews.stream().map(Review::getText).collect(Collectors.toList());
 
-        final var key = String.format("%s%d", REVIEW_PREFIX, id);
+        final var key = String.format("%s%s", REVIEW_PREFIX, id);
 
         try {
             final var value = objectMapper.writeValueAsString(reviewsText);
@@ -76,11 +77,11 @@ public class CacheService {
         final var reviewProductIds = reviewRepository.findAllDistinctProductIds();
         Map<String, String> productReviewsMap = new HashMap<>();
 
-        for (Long productId : reviewProductIds) {
+        for (UUID productId : reviewProductIds) {
             final var reviews = reviewRepository.findAllByProductId(productId);
             final var reviewsText = reviews.stream().map(Review::getText).collect(Collectors.toList());
 
-            final var key = String.format("%s%d", REVIEW_PREFIX, productId);
+            final var key = String.format("%s%s", REVIEW_PREFIX, productId);
 
             try {
                 final var value = objectMapper.writeValueAsString(reviewsText);

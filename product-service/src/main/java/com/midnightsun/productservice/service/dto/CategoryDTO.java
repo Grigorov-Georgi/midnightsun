@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDTO extends AbstractAuditingDTO implements Serializable {
+public class CategoryDTO extends AbstractAuditingDTO {
 
     private Long id;
 
