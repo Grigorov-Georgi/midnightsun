@@ -17,7 +17,7 @@ public class CacheInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        cacheService.updateAllProductAverageScoreCache();
+        cacheService.updateAllProductAverageRatingZSet();
         cacheService.updateAllProductReviewsCache();
     }
 }

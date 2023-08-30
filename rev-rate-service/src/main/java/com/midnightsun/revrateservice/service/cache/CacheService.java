@@ -2,59 +2,55 @@ package com.midnightsun.revrateservice.service.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.midnightsun.revrateservice.config.Constants;
 import com.midnightsun.revrateservice.model.Review;
 import com.midnightsun.revrateservice.repository.RatingRepository;
 import com.midnightsun.revrateservice.repository.ReviewRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.midnightsun.revrateservice.config.Constants.*;
 
 @Slf4j
 @Service
 public class CacheService {
 
-    //naming pattern -> {service-name}:{table-name}:{id}
-    private static final String RATING_PREFIX = "rev-rate:rating:";
-    private static final String REVIEW_PREFIX = "rev-rate:review:";
-
-    private final RedisTemplate<String, String> redisTemplate;
+    private final ZSetOperations<String, String> zSetOperations;
+    private final ValueOperations<String, String> valueOperations;
     private final RatingRepository ratingRepository;
     private final ReviewRepository reviewRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public CacheService(RedisTemplate<String, String> redisTemplate, RatingRepository ratingRepository, ReviewRepository reviewRepository) {
-        this.redisTemplate = redisTemplate;
+        this.zSetOperations = redisTemplate.opsForZSet();
+        this.valueOperations = redisTemplate.opsForValue();
         this.ratingRepository = ratingRepository;
         this.reviewRepository = reviewRepository;
     }
 
-    public void updateProductAverageRating(UUID id) {
-        log.debug("Update Redis cache with the average score of product with ID: {}", id);
+    public void updateProductAverageRatingZSet(UUID id) {
+        log.debug("Update rating zset with the average score of product with ID: {}", id);
         final var averageRating = ratingRepository.getAverageRatingByProductId(id);
-        final var key = String.format("%s%s", RATING_PREFIX, id);
-        final var value = String.valueOf(averageRating);
-        this.updateCache(key, value);
+        zSetOperations.add(ZSET_RATING, id.toString(), averageRating);
     }
 
-    public void updateAllProductAverageScoreCache() {
-        log.debug("Update Redis cache with the average scores of all products");
+    public void updateAllProductAverageRatingZSet() {
+        log.debug("Update rating zset with the average scores of all products");
         final var ratingProductIds = ratingRepository.findAllDistinctProductIds();
-        Map<String, String> productRatingsMap = new HashMap<>();
+        Set<ZSetOperations.TypedTuple<String>> productAvgScoreTuples = new HashSet<>();
 
         for (UUID productId : ratingProductIds) {
             final var averageRating = ratingRepository.getAverageRatingByProductId(productId);
-            final var key = String.format("%s%s", RATING_PREFIX, productId);
-            final var value = String.valueOf(averageRating);
-            productRatingsMap.put(key, value);
+            productAvgScoreTuples.add(ZSetOperations.TypedTuple.of(productId.toString(), averageRating));
         }
-
-        this.updateCache(productRatingsMap);
+        zSetOperations.add(ZSET_RATING, productAvgScoreTuples);
     }
 
     public void updateProductReviews(UUID id) {
@@ -95,7 +91,7 @@ public class CacheService {
     }
 
     public void updateCache(Map<String, String> keyValuePairs) {
-        redisTemplate.opsForValue().multiSet(keyValuePairs);
+        valueOperations.multiSet(keyValuePairs);
     }
 
     public void updateCache(String key, String value) {

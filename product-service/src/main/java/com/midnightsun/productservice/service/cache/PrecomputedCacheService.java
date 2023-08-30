@@ -3,34 +3,35 @@ package com.midnightsun.productservice.service.cache;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.midnightsun.productservice.config.Constants.REVIEW_PREFIX;
+import static com.midnightsun.productservice.config.Constants.ZSET_RATING;
 
 @Slf4j
 @Service
 public class PrecomputedCacheService {
 
-    private static final String RATING_PREFIX = "rev-rate:rating:";
-    private static final String REVIEW_PREFIX = "rev-rate:review:";
-
     private final RedisTemplate<String, String> redisTemplate;
+    private final ZSetOperations<String, String>  zSetOperations;
     private final ObjectMapper objectMapper;
 
     public PrecomputedCacheService(RedisTemplate<String, String> redisTemplate,
                                    ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
+        this.zSetOperations = redisTemplate.opsForZSet();
         this.objectMapper = objectMapper;
     }
 
     public Double getProductRatingScore(UUID id) {
-        final var key = String.format("%s%s", RATING_PREFIX, id);
-        final var rating = redisTemplate.opsForValue().get(key);
-        return rating != null ? Double.parseDouble(rating) : 0;
+        final var score = zSetOperations.score(ZSET_RATING, id);
+        return score != null ? score : 0;
     }
 
     public List<String> getProductReviews(UUID id) {
@@ -49,5 +50,21 @@ public class PrecomputedCacheService {
             redisTemplate.delete(key);
             return null;
         }
+    }
+
+    public Set<UUID> getIdOfTopRatedProducts(Long n) {
+        Long zSetSize = redisTemplate.opsForZSet().zCard(ZSET_RATING);
+        Long start = 0L;
+        Long end = n - 1;
+
+        if (zSetSize == null) return new HashSet<>();
+
+        if (zSetSize < end) {
+            end = zSetSize - 1;
+        }
+
+        return Objects.requireNonNull(zSetOperations.reverseRange(ZSET_RATING, start, end))
+                .stream().map(UUID::fromString)
+                .collect(Collectors.toSet());
     }
 }

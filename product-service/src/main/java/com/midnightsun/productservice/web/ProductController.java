@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -29,6 +30,12 @@ public class ProductController {
 
         final var products = productService.getAll(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(products);
+    }
+
+    @GetMapping("/top/{n}")
+    public ResponseEntity<List<ProductDTO>> getTopProducts(@PathVariable Integer n) {
+        log.debug("REST request to get top {} PRODUCTS", n);
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getTopProducts(n));
     }
 
     @GetMapping("/{id}")

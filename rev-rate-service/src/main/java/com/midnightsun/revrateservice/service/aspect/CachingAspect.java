@@ -67,7 +67,7 @@ public class CachingAspect {
                 cacheService.updateProductReviews(productId);
                 break;
             case "RatingService":
-                cacheService.updateProductAverageRating(productId);
+                cacheService.updateProductAverageRatingZSet(productId);
                 break;
         }
     }
