@@ -3,6 +3,7 @@ package com.midnightsun.productservice.service;
 import com.midnightsun.productservice.mapper.ProductMapper;
 import com.midnightsun.productservice.repository.CategoryRepository;
 import com.midnightsun.productservice.repository.ProductRepository;
+import com.midnightsun.productservice.service.cache.PrecomputedCacheService;
 import com.midnightsun.productservice.service.cache.ProductCacheService;
 import com.midnightsun.productservice.service.dto.ProductDTO;
 import com.midnightsun.productservice.web.exception.HttpBadRequestException;
@@ -12,10 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,15 +22,17 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductCacheService productCacheService;
+    private final PrecomputedCacheService precomputedCacheService;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
 
     public ProductService(ProductRepository productRepository,
                           ProductCacheService productCacheService,
-                          ProductMapper productMapper,
+                          PrecomputedCacheService precomputedCacheService, ProductMapper productMapper,
                           CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.productCacheService = productCacheService;
+        this.precomputedCacheService = precomputedCacheService;
         this.productMapper = productMapper;
         this.categoryRepository = categoryRepository;
     }
@@ -41,6 +41,18 @@ public class ProductService {
     public Page<ProductDTO> getAll(Pageable pageable) {
         log.debug("Request to get all PRODUCTS");
         return productRepository.findAll(pageable).map(productMapper::toDTO);
+    }
+
+    public List<ProductDTO> getTopProducts(Integer n) {
+        log.debug("Request to get top {} PRODUCTS", n);
+        Set<UUID> idOfTopRatedProducts = precomputedCacheService.getIdOfTopRatedProducts((long) n);
+
+        if (idOfTopRatedProducts.isEmpty()) {
+            if (n > 200) n = 200;
+            return getAll(Pageable.ofSize(n)).getContent();
+        }
+
+        return getProductsWithRatings(idOfTopRatedProducts);
     }
 
     public ProductDTO getOne(UUID id) {
@@ -99,8 +111,15 @@ public class ProductService {
         productsToSave.stream()
                 .map(productMapper::toEntity)
                 .forEach(productCacheService::save);
-//        productRepository.saveAll(productsToSave.stream().map(productMapper::toEntity).collect(Collectors.toList()));
 
         return productsIdQuantityMap;
+    }
+
+    private List<ProductDTO> getProductsWithRatings(Set<UUID> ids){
+        return productRepository.findAllById(ids)
+                .stream()
+                .map(productMapper::toDTO)
+                .sorted((p1, p2) -> Double.compare(p2.getRatingScore(), p1.getRatingScore()))
+                .collect(Collectors.toList());
     }
 }
