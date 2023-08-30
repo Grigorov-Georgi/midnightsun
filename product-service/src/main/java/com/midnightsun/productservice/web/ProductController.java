@@ -32,8 +32,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 
-    @GetMapping("/top/{n}")
-    public ResponseEntity<List<ProductDTO>> getTopProducts(@PathVariable Integer n) {
+    @GetMapping("/top")
+    public ResponseEntity<List<ProductDTO>> getTopProducts(@RequestParam(defaultValue = "5") Integer n) {
         log.debug("REST request to get top {} PRODUCTS", n);
         return ResponseEntity.status(HttpStatus.OK).body(productService.getTopProducts(n));
     }

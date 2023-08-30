@@ -48,14 +48,11 @@ public class ProductService {
         Set<UUID> idOfTopRatedProducts = precomputedCacheService.getIdOfTopRatedProducts((long) n);
 
         if (idOfTopRatedProducts.isEmpty()) {
+            if (n > 200) n = 200;
             return getAll(Pageable.ofSize(n)).getContent();
         }
 
-        return productRepository.findAllById(idOfTopRatedProducts)
-                .stream()
-                .map(productMapper::toDTO)
-                .sorted((p1, p2) -> Double.compare(p2.getRatingScore(), p1.getRatingScore()))
-                .collect(Collectors.toList());
+        return getProductsWithRatings(idOfTopRatedProducts);
     }
 
     public ProductDTO getOne(UUID id) {
@@ -114,8 +111,15 @@ public class ProductService {
         productsToSave.stream()
                 .map(productMapper::toEntity)
                 .forEach(productCacheService::save);
-//        productRepository.saveAll(productsToSave.stream().map(productMapper::toEntity).collect(Collectors.toList()));
 
         return productsIdQuantityMap;
+    }
+
+    private List<ProductDTO> getProductsWithRatings(Set<UUID> ids){
+        return productRepository.findAllById(ids)
+                .stream()
+                .map(productMapper::toDTO)
+                .sorted((p1, p2) -> Double.compare(p2.getRatingScore(), p1.getRatingScore()))
+                .collect(Collectors.toList());
     }
 }
