@@ -7,11 +7,12 @@ import { AllProducts } from "./shared_components/ProductComponents/AllProductsCo
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ContactPage from "./shared_components/ContactPage/ContactPage";
 import ShoppingCart from "./shared_components/ShoppingCart/ShoppingCart";
+import Home from "./shared_components/Home/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <div>Home</div>,
+    element: <Home />,
     errorElement: <ErrorComponent isPathRelated={true} />,
   },
   {
