@@ -1,9 +1,5 @@
 import styles from "./Navbar.module.css";
-import {
-  AiOutlineHome,
-  AiOutlineShoppingCart,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiOutlineHome, AiOutlineShoppingCart } from "react-icons/ai";
 import { FiPhone } from "react-icons/fi";
 import { Dropdown } from "../../Dropdown/Dropdown";
 
@@ -25,10 +21,10 @@ export const Navbar = () => {
         <AiOutlineShoppingCart />
         Shopping cart
       </a>
-      <a href="/userPage" className={styles.link}>
+      {/* <a href="/userPage" className={styles.link}>
         <AiOutlineUser />
         Account
-      </a>
+      </a> */}
       <div>Log in</div>
     </div>
   );
