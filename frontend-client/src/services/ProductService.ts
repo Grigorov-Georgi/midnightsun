@@ -22,6 +22,23 @@ export async function getAllProducts() {
     });
 }
 
+export async function getProductsFromPage(
+  pageIdx: number
+): Promise<{ content: any; totalItems: number }> {
+  return axios
+    .get(`${API_BASE_URL}?page=${pageIdx}&size=20`)
+    .then((response) => {
+      return {
+        content: response.data.content,
+        totalItems: response.data.totalElements,
+      };
+    })
+    .catch((err) => {
+      console.log(err);
+      return { content: [], totalItems: 0 };
+    });
+}
+
 export async function getProductById(productId: any) {
   const response = await fetch(`${API_BASE_URL}/${productId}`);
   const data = await response.json();
