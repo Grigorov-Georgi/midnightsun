@@ -9,11 +9,11 @@
   align-items: center;
   justify-content: center;
   background-color: transparent;
-  color: white;
+  color: var(--ecart-main-text-color);
 }
 
 .card:hover {
-  border: 0.5px solid #9d00ff;
+  border: 0.5px solid var(--ecart-border-color);
 }
 
 .image {
@@ -54,14 +54,14 @@
 }
 
 .buyBtn {
-  background-color: #9d00ff !important;
+  background-color: var(--ecart-btn-bg-color) !important;
   border: transparent !important;
   width: 120px !important;
   height: 45px !important;
 }
 
 .buyBtn:hover {
-  background-color: #c06ff3 !important;
+  background-color: var(--ecart-btn-bg-hover) !important;
 }
 
 .buyBtn:focus {

@@ -7,8 +7,9 @@
   max-width: 50rem;
   min-height: 5rem;
   padding: 1rem 1rem;
-  border: 1px solid #9d00ff;
+  border: 1px solid var(--ecart-border-color);
   color: white;
+  margin-bottom: 3rem;
 
   .image {
     max-width: 5rem;
@@ -36,16 +37,16 @@
     .btn {
       max-width: 3rem !important;
       max-height: 1rem !important;
-      background-color: #9d00ff !important;
-      border-color: #9d00ff !important;
+      background-color: var(--ecart-btn-bg-color)!important;
+      border-color: var(--ecart-border-color) !important;
 
       &:focus {
         box-shadow: unset !important;
       }
 
       &:hover {
-        background-color: #c06ff3 !important;
-        border-color: #c06ff3 !important;
+        background-color: var(--ecart-btn-bg-hover) !important;
+        border-color: var(--ecart-btn-bg-hover) !important;
       }
 
       &.disabled {

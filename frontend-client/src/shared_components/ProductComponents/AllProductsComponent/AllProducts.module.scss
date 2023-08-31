@@ -1,0 +1,34 @@
+.page {
+  background-color: var(--ecart-main-bg-color);
+  min-height: 100vh;
+  overflow: auto;
+
+  .grid {
+    margin: 25px 25px;
+    padding-bottom: 5rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    min-height: 100vh;
+  }
+
+  .paginator{
+    background-color: transparent !important;
+    
+    button{
+      color: var(--ecart-main-text-color) !important;
+      border-color: unset !important;
+
+      &:global(.p-highlight){
+        background-color: var(--ecart-btn-bg-color) !important ;
+      }
+
+      &:hover{
+        background-color: var(--ecart-btn-bg-hover) !important;
+      }
+
+      &:focus {
+        box-shadow: unset !important;
+      }
+    }
+  }
+}

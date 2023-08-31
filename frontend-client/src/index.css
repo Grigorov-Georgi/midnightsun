@@ -1,9 +1,10 @@
 :root {
-  --ecart-main-bg-color: #5c77a0;
-  --cart-secondary-color: #343e4d;
-  --ecart-main-text-color: white 0.6;
-  --ecart-main-text-hover: white;
-  --ecart-view-height-basic: 89vh;
+  --ecart-main-bg-color: #343e4d;
+  --ecart-secondary-bg-color: #5c77a0;
+  --ecart-main-text-color: white;
+  --ecart-btn-bg-color: #9d00ff;
+  --ecart-btn-bg-hover: #c06ff3;
+  --ecart-border-color: blueviolet;
 }
 
 body {

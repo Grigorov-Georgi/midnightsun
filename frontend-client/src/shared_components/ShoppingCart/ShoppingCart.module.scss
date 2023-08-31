@@ -3,12 +3,11 @@
   padding: 1rem 1rem;
   display: flex;
   justify-content: space-between;
-  background-color: var(--cart-secondary-color);
+  background-color: var(--ecart-main-bg-color);
 
   .orderItemsList {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 1rem 1rem;
     max-width: fit-content;
     overflow: auto;
@@ -21,13 +20,13 @@
 
     .orderBtn {
       margin-top: 2rem;
-      background-color: #9d00ff !important;
+      background-color: var(--ecart-btn-bg-color) !important;
       border: transparent !important;
       width: 120px !important;
       height: 45px !important;
 
       &:hover {
-        background-color: #c06ff3 !important;
+        background-color: var(--ecart-btn-bg-hover) !important;
       }
 
       &:focus {

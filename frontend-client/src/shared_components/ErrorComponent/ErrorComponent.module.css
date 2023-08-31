@@ -3,7 +3,7 @@
   flex: 1;
   flex-direction: column;
   align-items: center;
-  background-color: var(--cart-secondary-color);
-  color: white;
-  height: var(--ecart-view-height-basic);
+  background-color: var(--ecart-main-bg-color);
+  color: var(--ecart-main-text-color);
+  height: 100vh;
 }
