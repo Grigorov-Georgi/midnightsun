@@ -50,6 +50,7 @@ export const AllProducts = () => {
   const handlePageChange = (ev: PaginatorPageChangeEvent) => {
     setFirst(ev.first);
     setCurrentPage(ev.page);
+    window.scrollTo(0, 0); // go back to the top
   };
 
   return (
