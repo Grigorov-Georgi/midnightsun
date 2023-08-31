@@ -12,16 +12,16 @@ import java.util.Set;
 @Service
 public class CacheEvictionService {
 
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public CacheEvictionService(RedisTemplate redisTemplate) {
+    public CacheEvictionService(RedisTemplate<String, String> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     @Scheduled(cron = "0 0/10 * * * *")
     public void invalidateProductsCache() {
         log.debug("Scheduled job to delete products cache started");
-        Set<String> keysToDelete = redisTemplate.keys(String.format("%s****", Constants.PRODUCT_PREFIX));
+        Set<String> keysToDelete = redisTemplate.keys(String.format("%s%s", Constants.PRODUCT_PREFIX, ("*").repeat(36)));
         if (keysToDelete != null && !keysToDelete.isEmpty()) {
             redisTemplate.delete(keysToDelete);
         }

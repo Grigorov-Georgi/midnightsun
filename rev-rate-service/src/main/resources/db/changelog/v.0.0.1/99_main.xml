@@ -10,5 +10,6 @@
     <include file="/db/changelog/v.0.0.1/02_create_table_rating.xml"/>
     <include file="/db/changelog/v.0.0.1/03_load_data_to_table_rating.xml"/>
     <include file="/db/changelog/v.0.0.1/04_load_data_to_table_review.xml"/>
+    <include file="/db/changelog/v.0.0.1/05_change_product_id_column_type.xml"/>
 
 </databaseChangeLog>

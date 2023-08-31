@@ -1,4 +1,4 @@
-package com.midnightsun.revrateservice.service.redis;
+package com.midnightsun.revrateservice.service.cache;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -7,17 +7,17 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class OnStartUpCacheInitializer implements ApplicationRunner {
+public class CacheInitializer implements ApplicationRunner {
 
     private final CacheService cacheService;
 
-    public OnStartUpCacheInitializer(CacheService cacheService) {
+    public CacheInitializer(CacheService cacheService) {
         this.cacheService = cacheService;
     }
 
     @Override
     public void run(ApplicationArguments args) {
-        cacheService.updateAllProductAverageScoreCache();
+        cacheService.updateAllProductAverageRatingZSet();
         cacheService.updateAllProductReviewsCache();
     }
 }

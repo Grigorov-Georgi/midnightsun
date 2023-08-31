@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="delete_all_existing_order_items" author="ggrigorov">
+        <sql>
+            DELETE FROM "order_item"
+            WHERE created_by LIKE 'system'
+        </sql>
+    </changeSet>
+
+    <changeSet  id="change_product_id_column_type_order_item" author="ggrigorov">
+        <modifyDataType columnName="product_id"
+                        newDataType="varchar(36)"
+                        schemaName="public"
+                        tableName="order_item"/>
+    </changeSet>
+
+</databaseChangeLog>

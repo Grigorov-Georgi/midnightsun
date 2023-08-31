@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,7 +15,7 @@ public class OrderItemDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    private Long productId;
+    private UUID productId;
 
     private Long quantity;
 
