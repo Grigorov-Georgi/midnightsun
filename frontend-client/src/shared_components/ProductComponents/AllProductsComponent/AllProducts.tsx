@@ -3,7 +3,7 @@ import { ProductCard } from "../Product/ProductCard";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import styles from "./AllProducts.module.scss";
 import { getProductsFromPage } from "../../../services/ProductService";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export interface ProductFullInfo {
   id: number;
@@ -22,6 +22,11 @@ export const AllProducts = () => {
     queryKey: ["pageProducts", currentPage],
     queryFn: () => getProductsFromPage(currentPage),
   });
+
+  useEffect(() => {
+    // TODO -> Native navigation does not work at all. Refactor!!!
+    window.history.replaceState(null, "", `/products?page=${currentPage + 1}`);
+  }, [currentPage]);
 
   const getProducts = (): JSX.Element[] => {
     let allProducts: ProductFullInfo[] = [];
