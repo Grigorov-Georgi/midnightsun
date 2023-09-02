@@ -7,6 +7,9 @@ import { AllProducts } from "./shared_components/ProductComponents/AllProductsCo
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ContactPage from "./shared_components/ContactPage/ContactPage";
 import ShoppingCart from "./shared_components/ShoppingCart/ShoppingCart";
+import { useEffect } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useAuthStore } from "./stores/AuthStore";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +45,20 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 function App() {
+  const { getAccessTokenSilently } = useAuth0();
+  const refreshToken = useAuthStore((state) => state.refreshToken);
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      const token = await getAccessTokenSilently();
+      return token;
+    };
+    fetchAccessToken().then((newToken: string) => {
+      if (newToken.length > 0) refreshToken(newToken);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getAccessTokenSilently]);
+
   return (
     <div>
       <QueryClientProvider client={queryClient}>
