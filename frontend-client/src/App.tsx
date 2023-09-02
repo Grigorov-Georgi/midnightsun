@@ -10,6 +10,7 @@ import ShoppingCart from "./shared_components/ShoppingCart/ShoppingCart";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthStore } from "./stores/AuthStore";
+import LoadingOverlay from "./shared_components/LoadingOverlay/LoadingOverlay";
 
 const router = createBrowserRouter([
   {
@@ -62,9 +63,11 @@ function App() {
   return (
     <div>
       <QueryClientProvider client={queryClient}>
-        <Navbar />
-        <RouterProvider router={router} />
-        <Footer />
+        <LoadingOverlay>
+          <Navbar />
+          <RouterProvider router={router} />
+          <Footer />
+        </LoadingOverlay>
       </QueryClientProvider>
     </div>
   );
