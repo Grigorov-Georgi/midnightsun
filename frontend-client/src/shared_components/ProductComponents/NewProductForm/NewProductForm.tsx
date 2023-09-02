@@ -11,7 +11,6 @@ import { getAllCategories } from "../../../services/CategoryService";
 import { Category } from "../../../types/Category";
 import { NewProduct } from "../../../types/NewProduct";
 import { createProduct } from "../../../services/ProductService";
-import { useAuthStore } from "../../../stores/AuthStore";
 
 export const NewProductForm = () => {
   const [name, setName] = useState<string>("");
@@ -20,16 +19,13 @@ export const NewProductForm = () => {
   const [description, setDescription] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<number>(-1);
 
-  const authToken = useAuthStore((state) => state.token);
-
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
     queryFn: getAllCategories,
   });
 
   const newProductMutation = useMutation({
-    mutationFn: (newProduct: NewProduct) =>
-      createProduct(newProduct, authToken),
+    mutationFn: (newProduct: NewProduct) => createProduct(newProduct),
   });
 
   const loadCategories = (): Category[] => {

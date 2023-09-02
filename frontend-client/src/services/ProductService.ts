@@ -62,11 +62,9 @@ export async function getProductById(productId: any) {
 //   return data;
 // }
 
-export const createProduct = (newProductData: NewProduct, token: string) => {
+export const createProduct = (newProductData: NewProduct) => {
   return axios
-    .post(`${API_BASE_URL}`, newProductData, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    .post(`${API_BASE_URL}`, newProductData)
     .then((response) => {
       console.log(response);
       return response;
