@@ -46,7 +46,7 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 function App() {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
   const refreshToken = useAuthStore((state) => state.refreshToken);
 
   useEffect(() => {
@@ -54,11 +54,13 @@ function App() {
       const token = await getAccessTokenSilently();
       return token;
     };
-    fetchAccessToken().then((newToken: string) => {
-      if (newToken.length > 0) refreshToken(newToken);
-    });
+    if (isAuthenticated) {
+      fetchAccessToken().then((newToken: string) => {
+        if (newToken.length > 0) refreshToken(newToken);
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getAccessTokenSilently]);
+  }, [getAccessTokenSilently, isAuthenticated]);
 
   return (
     <div>
