@@ -15,6 +15,15 @@
 	<description>Service responsible for notification in eCart Application</description>
 	<properties>
 		<java.version>11</java.version>
+
+		<!-- ============ CUSTOM ============ -->
+		<external.jib.version>3.3.1</external.jib.version>
+
+		<!-- ============ DockerHub	============ -->
+		<docker-username>ggrigorov1</docker-username>
+		<docker-image-name>ecart-notification-service</docker-image-name>
+		<docker-image-tag>local-georgi</docker-image-tag>
+		<docker-image-timestamp>${maven.build.timestamp}</docker-image-timestamp>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -72,6 +81,24 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${external.jib.version}</version>
+				<configuration>
+					<to>
+						<image>
+							docker.io/${docker-username}/${docker-image-name}:${docker-image-tag}
+						</image>
+					</to>
+					<container>
+						<creationTime>${docker-image-timestamp}</creationTime>
+						<ports>
+							<port>8083</port>
+						</ports>
+					</container>
 				</configuration>
 			</plugin>
 		</plugins>

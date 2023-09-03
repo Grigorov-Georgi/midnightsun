@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+
+  ecart-traefik:
+    image: traefik:v2.1
+    container_name: ecart-traefik
+    networks:
+      - backend
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.toml:/etc/traefik/traefik.toml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=PathPrefix(`/api`) || PathPrefix(`/dashboard`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=dashboard-auth"
+      - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$EdX8M5yY$$eempZrMtHiqAm56VpcXAP0"
+
+  ecart-mailhog:
+    image: mailhog/mailhog
+    container_name: ecart-mailhog
+    networks:
+      - backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=PathPrefix(`/mailhog`)"
+      - "traefik.http.routers.mailhog.middlewares=mailhog-stripprefix"
+      - "traefik.http.middlewares.mailhog-stripprefix.stripprefix.prefixes=/mailhog"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+
+
+  ecart-notification-service:
+    image: docker.io/ggrigorov1/ecart-notification-service:local-georgi
+    container_name: ecart-notification-service
+    restart: always
+    depends_on:
+      - ecart-mailhog
+    networks:
+      - backend
+    environment:
+      - SPRING_MAIL_HOST=ecart-mailhog
+      - SPRING_MAIL_PORT=1025
+
+networks:
+  backend:
+
+volumes:
+  marketing-automation-db:
