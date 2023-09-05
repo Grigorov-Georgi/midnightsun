@@ -13,7 +13,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       domain={`${import.meta.env.VITE_DOMAIN}`}
       clientId={`${import.meta.env.VITE_CLIENTID}`}
       authorizationParams={{
-        redirect_uri: window.location.origin,
+        audience: import.meta.env.VITE_AUDIENCE,
+        redirect_uri: window.location.origin
       }}
     >
       <App />
