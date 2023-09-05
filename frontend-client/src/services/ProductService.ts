@@ -2,7 +2,7 @@
 import axios from "axios";
 import { NewProduct } from "../types/NewProduct";
 
-const API_BASE_URL = "http://localhost:8082/api/products/";
+const API_BASE_URL = "http://localhost:8082/api/products";
 
 // export async function getAllProducts() {
 //   const response = await fetch(API_BASE_URL);
@@ -77,5 +77,5 @@ export const updateProduct = (updatedProductData: any) => {
 };
 
 export const deleteProduct = (productId: any) => {
-  return axios.delete(`${API_BASE_URL}${productId}`);
+  return axios.delete(`${API_BASE_URL}/${productId}`);
 };

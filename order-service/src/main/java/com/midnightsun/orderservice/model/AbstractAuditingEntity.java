@@ -18,7 +18,7 @@ import java.time.Instant;
 public abstract class AbstractAuditingEntity {
         @CreatedBy
         @Column( nullable = false, updatable = false)
-        private String createdBy = "system";
+        private String createdBy;
 
         @CreatedDate
         @Column(updatable = false)
@@ -26,7 +26,7 @@ public abstract class AbstractAuditingEntity {
 
         @LastModifiedBy
         @Column
-        private String lastModifiedBy  = "system";
+        private String lastModifiedBy;
 
         @LastModifiedDate
         @Column

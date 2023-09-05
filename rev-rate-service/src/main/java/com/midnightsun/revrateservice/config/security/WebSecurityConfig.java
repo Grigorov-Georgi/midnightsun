@@ -1,4 +1,4 @@
-package com.midnightsun.productservice.config.security;
+package com.midnightsun.revrateservice.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.oauth2.core.*;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2ErrorCodes;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
@@ -20,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
@@ -32,16 +37,16 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain httpSecurity(final HttpSecurity http) throws Exception {
         return http.authorizeRequests()
-                    .antMatchers(HttpMethod.GET, "/api/products", "/api/products/top").permitAll()
-                    .antMatchers("/api/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/ratings", "/api/reviews").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .and()
-                    .cors()
-                    .configurationSource(corsConfigurationSource())
+                .cors()
+                .configurationSource(corsConfigurationSource())
                 .and()
-                    .oauth2ResourceServer()
-                    .jwt()
-                    .decoder(makeJwtDecoder())
-                    .jwtAuthenticationConverter(makeAuthConverter())
+                .oauth2ResourceServer()
+                .jwt()
+                .decoder(makeJwtDecoder())
+                .jwtAuthenticationConverter(makeAuthConverter())
                 .and()
                 .and()
                 .build();
