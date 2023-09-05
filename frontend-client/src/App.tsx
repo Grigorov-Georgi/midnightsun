@@ -64,6 +64,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAccessTokenSilently, isAuthenticated]);
 
+  if( isAuthenticated ) {
   axios.interceptors.request.use(
     (config) => {
       config.headers["Authorization"] = `Bearer ${token}`;
@@ -73,7 +74,7 @@ function App() {
       console.log(error);
     }
   );
-
+  }
   return (
     <div>
       <QueryClientProvider client={queryClient}>
