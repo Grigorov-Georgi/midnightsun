@@ -1,0 +1,19 @@
+.carousel{
+    button{
+        &:focus{
+            box-shadow: none !important;
+        }
+
+        &:hover{
+            background: transparent !important
+        }
+    }
+}
+
+.image {
+    display: block;
+    max-width: 1000px;
+    min-width: 1000px;
+    max-height: 50px;
+    min-height: 550px;
+}
