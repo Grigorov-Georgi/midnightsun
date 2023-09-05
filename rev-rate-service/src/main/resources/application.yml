@@ -17,6 +17,14 @@ spring:
     port: 6379
     password: supersafepass!
     timeout: 2000
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-bvgptuthuktivpgq.us.auth0.com/
+
+auth0:
+  audience: http://ecart
 
 logging:
   level:
