@@ -20,8 +20,11 @@ const ImageCarousel = (props: ImageCarouselProps) => {
         showThumbnails={false}
         numVisible={1}
         circular
-        style={{ maxWidth: "1000px" }}
+        style={{ maxWidth: "1400px" }}
         className={styles.carousel}
+        autoPlay={true}
+        transitionInterval={2000}
+        showIndicators
       />
     </div>
   );
