@@ -6,7 +6,7 @@ import { getProductsFromPage } from "../../../services/ProductService";
 import { useEffect, useState } from "react";
 
 export interface ProductFullInfo {
-  id: number;
+  id: string;
   name: string;
   price: number;
   description: string;

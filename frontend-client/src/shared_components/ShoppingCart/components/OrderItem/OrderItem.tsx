@@ -5,7 +5,7 @@ import { FcEmptyTrash } from "react-icons/fc";
 import { useCartStore } from "../../../../stores/CartStore";
 
 interface OrderItemProps {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
