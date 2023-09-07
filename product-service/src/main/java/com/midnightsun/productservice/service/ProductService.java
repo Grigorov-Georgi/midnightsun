@@ -77,7 +77,7 @@ public class ProductService {
 
         if (productDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         if (!categoryRepository.existsById(productDTO.getCategory().getId())) throw new HttpNotFoundException("Category not found!");
-        if (!productRepository.existsById(productDTO.getId())) throw new HttpNotFoundException("Product not found");
+//        if (!productRepository.existsById(productDTO.getId())) throw new HttpNotFoundException("Product not found");
 
         final var product = productMapper.toEntity(productDTO);
         final var savedProduct = productCacheService.save(product);

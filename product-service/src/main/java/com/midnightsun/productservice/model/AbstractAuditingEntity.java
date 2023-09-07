@@ -20,7 +20,7 @@ import java.time.Instant;
 public abstract class AbstractAuditingEntity implements Serializable {
         @CreatedBy
         @Column( nullable = false, updatable = false)
-        private String createdBy;
+        private String createdBy = "system";
 
         @CreatedDate
         @Column(updatable = false)
@@ -28,7 +28,7 @@ public abstract class AbstractAuditingEntity implements Serializable {
 
         @LastModifiedBy
         @Column
-        private String lastModifiedBy;
+        private String lastModifiedBy  = "system";
 
         @LastModifiedDate
         @Column
