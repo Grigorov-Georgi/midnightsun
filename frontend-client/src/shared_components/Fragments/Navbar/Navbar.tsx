@@ -1,10 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import styles from "./Navbar.module.scss";
-import {
-  AiOutlineHome,
-  AiOutlineShoppingCart,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiOutlineHome, AiOutlineShoppingCart } from "react-icons/ai";
 import { FiPhone } from "react-icons/fi";
 import { Dropdown } from "../../Dropdown/Dropdown";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -29,10 +25,10 @@ export const Navbar = () => {
         <AiOutlineShoppingCart />
         Shopping cart
       </a>
-      <a href="/userPage" className={styles.link}>
+      {/* <a href="/userPage" className={styles.link}>
         <AiOutlineUser />
         Account
-      </a>
+  </a> */}
       <div
         className={`${styles.link} ${styles.divLink}`}
         onClick={() =>

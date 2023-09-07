@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { IOrderItem } from "../types/IOrderItem";
+import { NewOrderItem } from "../types/NewOrderItem";
 
 // const dummyProducts: IOrderItem[] = [
 //   { info: { id: 1, name: "Clone trooper", price: 15 }, quantity: 1 },
@@ -17,9 +18,11 @@ interface CartStore {
   orderItems: IOrderItem[];
   totalPrice: number;
   addOrderItem: (newItem: IOrderItem) => void;
-  removeOrderItem: (productId: number) => void;
-  modifyOrderItem: (productId: number, newQty: number) => void;
+  removeOrderItem: (productId: string) => void;
+  modifyOrderItem: (productId: string, newQty: number) => void;
+  generateItemsForOrder: () => NewOrderItem[];
   calculateTotalPrice: () => void;
+  resetStore: () => void;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -35,7 +38,7 @@ export const useCartStore = create<CartStore>()(
         get().calculateTotalPrice();
       },
 
-      removeOrderItem: (productId: number) => {
+      removeOrderItem: (productId: string) => {
         const allItems = get().orderItems;
         const idxToDelete = allItems.findIndex(
           (item) => item.info.id === productId
@@ -46,7 +49,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       // Incr/decr quantity and recalculate pr
-      modifyOrderItem: (productId: number, newQty: number) => {
+      modifyOrderItem: (productId: string, newQty: number) => {
         const allItems = get().orderItems;
         const selectedItem = allItems.find(
           (item) => item.info.id === productId
@@ -65,6 +68,20 @@ export const useCartStore = create<CartStore>()(
           (item) => (totalPrice += item.info.price * item.quantity)
         );
         set(() => ({ totalPrice: totalPrice }));
+      },
+
+      generateItemsForOrder: () => {
+        const currentItems: IOrderItem[] = get().orderItems;
+        return currentItems.map(
+          (orderItem): NewOrderItem => ({
+            productId: orderItem.info.id,
+            quantity: orderItem.quantity,
+          })
+        );
+      },
+
+      resetStore: () => {
+        set(() => ({ totalPrice: 0, orderItems: [] }));
       },
     }),
     { name: "cart-storage", storage: createJSONStorage(() => sessionStorage) }

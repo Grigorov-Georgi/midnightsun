@@ -11,6 +11,7 @@ import { getAllCategories } from "../../../services/CategoryService";
 import { Category } from "../../../types/Category";
 import { NewProduct } from "../../../types/NewProduct";
 import { createProduct } from "../../../services/ProductService";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export const NewProductForm = () => {
   const [name, setName] = useState<string>("");
@@ -19,9 +20,11 @@ export const NewProductForm = () => {
   const [description, setDescription] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<number>(-1);
 
+  const { isAuthenticated } = useAuth0();
+
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
-    queryFn: getAllCategories,
+    queryFn: () => getAllCategories(isAuthenticated),
   });
 
   const newProductMutation = useMutation({
@@ -30,8 +33,8 @@ export const NewProductForm = () => {
 
   const loadCategories = (): Category[] => {
     let categories: Category[] = [];
-    if (categoriesQuery.status === "success") {
-      categories = categoriesQuery.data.content.map(
+    if (categoriesQuery.status === "success" && isAuthenticated) {
+      categories = categoriesQuery.data.content?.map(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (el: any) => {
           return { value: el.id, label: el.name };

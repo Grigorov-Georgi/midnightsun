@@ -1,0 +1,33 @@
+.carousel{
+    button{
+        &:focus{
+            box-shadow: none !important;
+        }
+
+        &:hover{
+            background: transparent !important
+        }
+    }
+
+    li{ 
+        &:global(.p-highlight){
+            button{
+                background-color: var(--ecart-btn-bg-color) !important;
+            }
+        }
+
+        button{
+            &:hover{
+                background-color: var(--ecart-btn-bg-hover) !important;
+            }
+        }
+    }
+}
+
+.image {
+    display: block;
+    max-width: 1400px;
+    min-width: 1400px;
+    max-height: 600px;
+    min-height: 600px;
+}

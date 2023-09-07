@@ -4,9 +4,21 @@ import OrderInfo from "./components/OrderInfo/OrderInfo";
 import OrderItem from "./components/OrderItem/OrderItem";
 import styles from "./ShoppingCart.module.scss";
 import { useCartStore } from "../../stores/CartStore";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useMutation } from "@tanstack/react-query";
+import { NewOrderItem } from "../../types/NewOrderItem";
+import { createNewOrder } from "../../services/OrderService";
 
 export const ShoppingCart = () => {
   const itemsInCart = useCartStore((state) => state.orderItems);
+  const getOrderItems = useCartStore((state) => state.generateItemsForOrder);
+  const resetStore = useCartStore((state) => state.resetStore);
+  const { isAuthenticated } = useAuth0();
+
+  const newOrderMutation = useMutation({
+    mutationFn: (newOrderItems: NewOrderItem[]) =>
+      createNewOrder(newOrderItems),
+  });
 
   const generateOrderItems = (): JSX.Element[] => {
     const data: JSX.Element[] = [];
@@ -24,12 +36,31 @@ export const ShoppingCart = () => {
     return data;
   };
 
+  const handleOrderClick = async () => {
+    const orderItems: NewOrderItem[] = getOrderItems();
+    console.log(orderItems);
+    try {
+      const result = await newOrderMutation.mutateAsync(orderItems);
+      if (result.status === 201) {
+        window.alert("Thank you for your purrchase!");
+        resetStore();
+      }
+    } catch (err) {
+      console.log("Something went wrong.");
+    }
+  };
+
   return (
     <div className={styles.shoppingCart}>
       <div className={styles.orderItemsList}>{generateOrderItems()}</div>
       <div className={styles.infoSection}>
         <OrderInfo />
-        <Button label={"Order"} className={styles.orderBtn} />
+        <Button
+          label={"Order"}
+          className={`${styles.orderBtn}`}
+          disabled={!isAuthenticated}
+          onClick={handleOrderClick}
+        />
       </div>
     </div>
   );
