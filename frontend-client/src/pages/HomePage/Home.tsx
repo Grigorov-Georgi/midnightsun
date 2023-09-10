@@ -1,8 +1,8 @@
-import ImageCarousel from "../ImageCarousel/ImageCarousel";
 import style from "./Home.module.scss";
 import img1 from "../../assets/summer_sale.png";
 import img2 from "../../assets/syber_sale.png";
 import img3 from "../../assets/telescope_sale.png";
+import ImageCarousel from "../../shared_components/ImageCarousel/ImageCarousel";
 
 const Home = () => {
   return (
