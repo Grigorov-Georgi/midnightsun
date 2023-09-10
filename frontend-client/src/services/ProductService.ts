@@ -30,3 +30,10 @@ export const createProduct = (newProductData: NewProduct) => {
     })
     .catch((err) => err);
 };
+
+export const getTopProducts = () => {
+  return axios
+    .get(`${API_BASE_URL}/top?n=6`)
+    .then((response) => response.data)
+    .catch((err) => console.log(err));
+};
