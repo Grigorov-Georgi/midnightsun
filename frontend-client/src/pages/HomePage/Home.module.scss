@@ -8,7 +8,7 @@
     align-items: center;
 
     .carousel{
-        width: 702px;
+        width: 702px; // enough to properly fit 6 products in 2 pages of 3
 
         button{
             background-color: var(--ecart-btn-bg-color) !important;
