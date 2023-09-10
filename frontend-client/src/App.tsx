@@ -68,6 +68,7 @@ function App() {
   if (isAuthenticated) {
     axios.interceptors.request.use(
       (config) => {
+        if (!token) return config;
         config.headers["Authorization"] = `Bearer ${token}`;
         return config;
       },
