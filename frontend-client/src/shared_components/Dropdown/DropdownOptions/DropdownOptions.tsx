@@ -1,4 +1,4 @@
-import styles from "./DropdownOptions.module.css";
+import styles from "./DropdownOptions.module.scss";
 
 interface DropdownOptionsProps {
   options: { name: string; path: string }[];

@@ -4,14 +4,14 @@
   justify-content: space-between;
   color: var(--ecart-main-text-color);
   position: relative;
-}
 
-.dropdown:hover {
-  cursor: pointer;
-}
+  &:hover{
+    cursor: pointer;
+  }
 
-.icon {
-  top: 0;
-  margin-left: 0.5rem;
-  margin-top: 0.4rem;
+  .icon {
+    top: 0;
+    margin-left: 0.5rem;
+    margin-top: 0.4rem;
+  }
 }
