@@ -1,5 +1,5 @@
 import { BsChevronDown } from "react-icons/bs";
-import styles from "./Dropdown.module.css";
+import styles from "./Dropdown.module.scss";
 import { useState } from "react";
 import { DropdownOptions } from "./DropdownOptions/DropdownOptions";
 

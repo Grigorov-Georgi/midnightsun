@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useCartStore } from "../../../../stores/CartStore";
+import { useCartStore } from "../../../stores/CartStore";
 import styles from "./OrderInfo.module.scss";
 
 export const OrderInfo = () => {

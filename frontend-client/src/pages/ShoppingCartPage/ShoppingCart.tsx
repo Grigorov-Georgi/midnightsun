@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from "primereact/button";
-import OrderInfo from "./components/OrderInfo/OrderInfo";
-import OrderItem from "./components/OrderItem/OrderItem";
 import styles from "./ShoppingCart.module.scss";
 import { useCartStore } from "../../stores/CartStore";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useMutation } from "@tanstack/react-query";
 import { NewOrderItem } from "../../types/NewOrderItem";
 import { createNewOrder } from "../../services/OrderService";
+import OrderItem from "../../shared_components/ShoppingCart/OrderItem/OrderItem";
+import OrderInfo from "../../shared_components/ShoppingCart/OrderInfo/OrderInfo";
 
 export const ShoppingCart = () => {
   const itemsInCart = useCartStore((state) => state.orderItems);

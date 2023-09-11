@@ -1,4 +1,4 @@
-import styles from "./ErrorComponent.module.css";
+import styles from "./ErrorComponent.module.scss";
 
 export const ErrorComponent = (props: { isPathRelated: boolean }) => {
   const { isPathRelated = false } = props;

@@ -4,14 +4,14 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { FileUpload, FileUploadUploadEvent } from "primereact/fileupload";
-import styles from "./NewProductForm.module.css";
+import styles from "./NewProductForm.module.scss";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getAllCategories } from "../../../services/CategoryService";
-import { Category } from "../../../types/Category";
-import { NewProduct } from "../../../types/NewProduct";
-import { createProduct } from "../../../services/ProductService";
 import { useAuth0 } from "@auth0/auth0-react";
+import { getAllCategories } from "../../services/CategoryService";
+import { createProduct } from "../../services/ProductService";
+import { NewProduct } from "../../types/NewProduct";
+import { Category } from "../../types/Category";
 
 export const NewProductForm = () => {
   const [name, setName] = useState<string>("");

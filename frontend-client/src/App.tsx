@@ -2,17 +2,17 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Footer from "./shared_components/Fragments/Footer/Footer";
 import { Navbar } from "./shared_components/Fragments/Navbar/Navbar";
 import { ErrorComponent } from "./shared_components/ErrorComponent/ErrorComponent";
-import { NewProductForm } from "./shared_components/ProductComponents/NewProductForm/NewProductForm";
-import { AllProducts } from "./shared_components/ProductComponents/AllProductsComponent/AllProducts";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import ContactPage from "./shared_components/ContactPage/ContactPage";
-import ShoppingCart from "./shared_components/ShoppingCart/ShoppingCart";
-import Home from "./shared_components/Home/Home";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useAuthStore } from "./stores/AuthStore";
 import LoadingOverlay from "./shared_components/LoadingOverlay/LoadingOverlay";
 import axios from "axios";
+import ContactPage from "./pages/ContactPage/ContactPage";
+import Home from "./pages/HomePage/Home";
+import { AllProducts } from "./pages/ProductsPage/AllProducts";
+import { NewProductForm } from "./pages/NewProductPage/NewProductForm";
+import ShoppingCart from "./pages/ShoppingCartPage/ShoppingCart";
 
 const router = createBrowserRouter([
   {
@@ -68,6 +68,7 @@ function App() {
   if (isAuthenticated) {
     axios.interceptors.request.use(
       (config) => {
+        if (!token) return config;
         config.headers["Authorization"] = `Bearer ${token}`;
         return config;
       },

@@ -1,17 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { ProductCard } from "../Product/ProductCard";
 import { Paginator, PaginatorPageChangeEvent } from "primereact/paginator";
 import styles from "./AllProducts.module.scss";
-import { getProductsFromPage } from "../../../services/ProductService";
 import { useEffect, useState } from "react";
-
-export interface ProductFullInfo {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-  rating: number;
-}
+import { getProductsFromPage } from "../../services/ProductService";
+import { ProductCard } from "../../shared_components/ProductComponents/ProductCard/ProductCard";
+import { ProductFullInfo } from "../../types/FullProductInfo";
 
 export const AllProducts = () => {
   const [first, setFirst] = useState<number>(0);
