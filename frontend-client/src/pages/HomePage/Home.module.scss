@@ -7,36 +7,9 @@
     flex-direction: column;
     align-items: center;
 
-    .carousel{
-        width: 702px; // enough to properly fit 6 products in 2 pages of 3
-
-        button{
-            background-color: var(--ecart-btn-bg-color) !important;
-            color: var(--ecart-main-text-color) !important;
-
-            &:hover{
-                background-color: var(--ecart-btn-bg-hover) !important;
-            }
-
-            &:focus{
-                box-shadow: unset !important;
-            }
-        }
-
-        li{
-            &:global(.p-highlight){
-                button{
-                    background-color: var(--ecart-btn-bg-color) !important;
-                }
-            }
-    
-            button{
-                background-color: var(--ecart-empty-btn-color) !important;
-                &:hover{
-                    background-color: var(--ecart-btn-bg-hover) !important;
-                }
-            }
-        }
-        
+    .topGrid{
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        margin-bottom: 1rem;
     }
 }
