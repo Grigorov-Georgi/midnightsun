@@ -2,7 +2,6 @@ package com.midnightsun.revrateservice.service.cache;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.midnightsun.revrateservice.config.Constants;
 import com.midnightsun.revrateservice.model.Review;
 import com.midnightsun.revrateservice.repository.RatingRepository;
 import com.midnightsun.revrateservice.repository.ReviewRepository;
@@ -44,12 +43,16 @@ public class CacheService {
     public void updateAllProductAverageRatingZSet() {
         log.debug("Update rating zset with the average scores of all products");
         final var ratingProductIds = ratingRepository.findAllDistinctProductIds();
+
+        if (ratingProductIds == null || ratingProductIds.isEmpty()) return;
+
         Set<ZSetOperations.TypedTuple<String>> productAvgScoreTuples = new HashSet<>();
 
         for (UUID productId : ratingProductIds) {
             final var averageRating = ratingRepository.getAverageRatingByProductId(productId);
             productAvgScoreTuples.add(ZSetOperations.TypedTuple.of(productId.toString(), averageRating));
         }
+
         zSetOperations.add(ZSET_RATING, productAvgScoreTuples);
     }
 
@@ -71,6 +74,9 @@ public class CacheService {
     public void updateAllProductReviewsCache() {
         log.debug("Update Redis cache with the reviews of all products");
         final var reviewProductIds = reviewRepository.findAllDistinctProductIds();
+
+        if (reviewProductIds == null || reviewProductIds.isEmpty()) return;
+
         Map<String, String> productReviewsMap = new HashMap<>();
 
         for (UUID productId : reviewProductIds) {

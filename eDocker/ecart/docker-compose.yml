@@ -1,9 +1,9 @@
 version: '3.8'
 services:
 
-  ecart-traefik:
+  traefik:
     image: traefik:v2.1
-    container_name: ecart-traefik
+    container_name: traefik
     networks:
       - backend
     ports:
@@ -19,33 +19,163 @@ services:
       - "traefik.http.routers.dashboard.middlewares=dashboard-auth"
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$EdX8M5yY$$eempZrMtHiqAm56VpcXAP0"
 
-  ecart-mailhog:
-    image: mailhog/mailhog
-    container_name: ecart-mailhog
+  rabbitmq:
+    image: rabbitmq:3.12.0-management
+    container_name: rabbitmq
+    ports:
+      - 15672:15672
     networks:
       - backend
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.mailhog.rule=PathPrefix(`/mailhog`)"
-      - "traefik.http.routers.mailhog.middlewares=mailhog-stripprefix"
-      - "traefik.http.middlewares.mailhog-stripprefix.stripprefix.prefixes=/mailhog"
-      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+    volumes:
+      - ecart-rabbit:/var/lib/rabbitmq/
+      - ecart-rabbit:/var/log/rabbitmq
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    networks:
+      - backend
+    ports:
+      - "8025:8025"
 
-  ecart-notification-service:
-    image: docker.io/ggrigorov1/ecart-notification-service:local-georgi
-    container_name: ecart-notification-service
+  redis:
+    container_name: redis
+    image: redis:latest
+    restart: always
+    entrypoint: redis-server --appendonly yes --requirepass supersafepass! --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - backend
+    volumes:
+      - ecart-redis:/data
+
+  notification-service:
+    image: ${REGISTRY_HOST}/${REGISTRY_REPO}/ecart-notification-service:local-georgi
+    container_name: notification-service
     restart: always
     depends_on:
-      - ecart-mailhog
+      - rabbitmq
     networks:
       - backend
     environment:
-      - SPRING_MAIL_HOST=ecart-mailhog
+      - SPRING_MAIL_HOST=mailhog
       - SPRING_MAIL_PORT=1025
+      - SPRING_RABBITMQ_HOST=rabbitmq
+
+  order-service-posgresql:
+    image: postgres:14.1
+    container_name: order-service-posgresql
+    restart: always
+    networks:
+      - backend
+    volumes:
+      - ecart-os:/data/lib
+    environment:
+      - POSTGRES_DB=${OS_DATABASE_NAME}
+      - POSTGRES_USER=${OS_DATABASE_USER}
+      - POSTGRES_PASSWORD=${OS_DATABASE_PASS}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  order-service:
+    image: ${REGISTRY_HOST}/${REGISTRY_REPO}/ecart-order-service:local-georgi
+    container_name: order-service
+    restart: always
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - backend
+    environment:
+      - SPRING_DATASOURCE_URL=${OS_DATABASE_URL}
+      - SPRING_DATASOURCE_USERNAME=${OS_DATABASE_USER}
+      - SPRING_DATASOURCE_PASSWORD=${OS_DATABASE_PASS}
+      - SPRING_REDIS_HOST=redis
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.os.rule=PathPrefix(`/os`)"
+      - "traefik.http.routers.os.middlewares=os-stripprefix"
+      - "traefik.http.middlewares.os-stripprefix.stripprefix.prefixes=/os"
+      - "traefik.http.services.os.loadbalancer.server.port=8081"
+
+  product-service-posgresql:
+    image: postgres:14.1
+    container_name: product-service-posgresql
+    restart: always
+    networks:
+      - backend
+    volumes:
+      - ecart-ps:/data/lib
+    environment:
+      - POSTGRES_DB=${PS_DATABASE_NAME}
+      - POSTGRES_USER=${PS_DATABASE_USER}
+      - POSTGRES_PASSWORD=${PS_DATABASE_PASS}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  product-service:
+    image: ${REGISTRY_HOST}/${REGISTRY_REPO}/ecart-product-service:local-georgi
+    container_name: product-service
+    restart: always
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - backend
+    environment:
+      - SPRING_DATASOURCE_URL=${PS_DATABASE_URL}
+      - SPRING_DATASOURCE_USERNAME=${PS_DATABASE_USER}
+      - SPRING_DATASOURCE_PASSWORD=${PS_DATABASE_PASS}
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_REDIS_HOST=redis
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ps.rule=PathPrefix(`/ps`)"
+      - "traefik.http.routers.ps.middlewares=ps-stripprefix"
+      - "traefik.http.middlewares.ps-stripprefix.stripprefix.prefixes=/ps"
+      - "traefik.http.services.ps.loadbalancer.server.port=8082"
+
+  review-rating-service-posgresql:
+    image: postgres:14.1
+    container_name: review-rating-service-posgresql
+    restart: always
+    networks:
+      - backend
+    volumes:
+      - ecart-rrs:/data/lib
+    environment:
+      - POSTGRES_DB=${RRS_DATABASE_NAME}
+      - POSTGRES_USER=${RRS_DATABASE_USER}
+      - POSTGRES_PASSWORD=${RRS_DATABASE_PASS}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  review-rating-service:
+    image: ${REGISTRY_HOST}/${REGISTRY_REPO}/ecart-rev-rate-service:local-georgi
+    container_name: review-rating-service
+    restart: always
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - backend
+    environment:
+      - SPRING_DATASOURCE_URL=${RRS_DATABASE_URL}
+      - SPRING_DATASOURCE_USERNAME=${RRS_DATABASE_USER}
+      - SPRING_DATASOURCE_PASSWORD=${RRS_DATABASE_PASS}
+      - SPRING_REDIS_HOST=redis
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rrs.rule=PathPrefix(`/rrs`)"
+      - "traefik.http.routers.rrs.middlewares=rrs-stripprefix"
+      - "traefik.http.middlewares.rrs-stripprefix.stripprefix.prefixes=/rrs"
+      - "traefik.http.services.rrs.loadbalancer.server.port=8084"
 
 networks:
   backend:
 
 volumes:
-  marketing-automation-db:
+  ecart-os:
+  ecart-ps:
+  ecart-rrs:
+  ecart-rabbit:
+  ecart-redis:
+
