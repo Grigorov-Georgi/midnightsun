@@ -169,6 +169,30 @@ services:
       - "traefik.http.middlewares.rrs-stripprefix.stripprefix.prefixes=/rrs"
       - "traefik.http.services.rrs.loadbalancer.server.port=8084"
 
+  frontend:
+    container_name: frontend
+    build:
+      context: ../../frontend-client
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - backend
+    volumes:
+      - ecart-frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_ORDER_SERVICE_HOST=${SERVICE_HOST}
+      - VITE_PRODUCT_SERVICE_HOST=${SERVICE_HOST}
+      - VITE_REV_RATE_SERVICE_HOST=${SERVICE_HOST}
+      - VITE_ORDER_SERVICE_PREFIX=${ORDER_SERVICE_PREFIX}
+      - VITE_PRODUCT_SERVICE_PREFIX=${PRODUCT_SERVICE_PREFIX}
+      - VITE_REV_RATE_SERVICE_PREFIX=${REV_RATE_SERVICE_PREFIX}
+    labels:
+      - "traefik.enable=true"
+#      - "traefik.http.routers.frontend.rule=Host(`frontend.localhost`)"
+#      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+
 networks:
   backend:
 
@@ -178,4 +202,4 @@ volumes:
   ecart-rrs:
   ecart-rabbit:
   ecart-redis:
-
+  ecart-frontend:
