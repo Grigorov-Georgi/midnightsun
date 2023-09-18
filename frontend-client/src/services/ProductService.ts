@@ -9,8 +9,9 @@ const API_BASE_URL = API_HOST + API_SERVICE_PREFIX + "/api/products";
 export async function getProductsFromPage(
   pageIdx: number
 ): Promise<{ content: any; totalItems: number }> {
+  const bePageIdx = pageIdx - 1;
   return axios
-    .get(`${API_BASE_URL}?page=${pageIdx}&size=20`)
+    .get(`${API_BASE_URL}?page=${bePageIdx}&size=20`)
     .then((response) => {
       return {
         content: response.data.content,

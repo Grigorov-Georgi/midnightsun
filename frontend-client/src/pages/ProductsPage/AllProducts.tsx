@@ -5,21 +5,23 @@ import { useEffect, useState } from "react";
 import { getProductsFromPage } from "../../services/ProductService";
 import { ProductCard } from "../../shared_components/ProductComponents/ProductCard/ProductCard";
 import { ProductFullInfo } from "../../types/FullProductInfo";
+import { useSearchParams } from "react-router-dom";
 
 export const AllProducts = () => {
   const [first, setFirst] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalItems, setTotalItems] = useState<number>(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = searchParams.get("page");
 
   const productsQuery = useQuery({
     queryKey: ["pageProducts", currentPage],
-    queryFn: () => getProductsFromPage(currentPage),
+    queryFn: () => getProductsFromPage(Number(currentPage)),
   });
 
   useEffect(() => {
-    // TODO -> Native navigation does not work at all. Refactor!!!
-    window.history.replaceState(null, "", `/products?page=${currentPage + 1}`);
-  }, [currentPage]);
+    setSearchParams({ page: "1" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getProducts = (): JSX.Element[] => {
     let allProducts: ProductFullInfo[] = [];
@@ -47,7 +49,8 @@ export const AllProducts = () => {
 
   const handlePageChange = (ev: PaginatorPageChangeEvent) => {
     setFirst(ev.first);
-    setCurrentPage(ev.page);
+    const page = ev.page + 1;
+    setSearchParams({ page: page.toString() });
     window.scrollTo(0, 0); // go back to the top
   };
 
