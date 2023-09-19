@@ -36,9 +36,14 @@ export const createProduct = (newProductData: NewProduct) => {
     .catch((err) => err);
 };
 
-export const getTopProducts = () => {
+export const getTopProducts = (): Promise<ProductFullInfo[]> => {
   return axios
     .get(`${API_BASE_URL}/top?n=6`)
-    .then((response) => response.data)
-    .catch((err) => console.log(err));
+    .then((response) => {
+      return formatProductFullInfo(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+      return [];
+    });
 };
