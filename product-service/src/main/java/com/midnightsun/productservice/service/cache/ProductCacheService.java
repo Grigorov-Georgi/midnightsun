@@ -90,7 +90,7 @@ public class ProductCacheService {
         setOperations.add(PRODUCT_CACHE_DIRTY_SET, key);
     }
 
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/2 * * * *")
     public void synchronizeAndInvalidateProducts() {
         Set<String> dirtyProducts = setOperations.members(PRODUCT_CACHE_DIRTY_SET);
         List<Object> dirtyProductsAsObjects = dirtyProducts.stream().map(p -> (Object) p).collect(Collectors.toList());
