@@ -2,3 +2,4 @@ README.md
 build
 dist
 node_modules
+.env
