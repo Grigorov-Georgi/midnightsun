@@ -2,8 +2,6 @@ spring:
   mail:
     host: 127.0.0.1
     port: 1025
-    username:
-    password:
     smtp:
       auth: true
     properties:
@@ -33,3 +31,8 @@ info:
     name: Notification Service
     version: 0.0.1
     description: Service responsible for notification in eCart Application
+
+mail:
+  sender: system@mail.com
+
+
