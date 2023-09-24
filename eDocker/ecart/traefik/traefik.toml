@@ -4,9 +4,6 @@
     [entryPoints.traefik]
         address = ":8080"
 
-[entryPoints.http.forwardedHeaders]
-    insecure = true
-
 [api]
     dashboard = true
 
