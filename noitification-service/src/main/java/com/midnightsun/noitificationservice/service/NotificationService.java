@@ -1,73 +1,67 @@
 package com.midnightsun.noitificationservice.service;
 
-import com.midnightsun.noitificationservice.service.dto.OrderDTO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.UUID;
 
 @Slf4j
 @Service
 public class NotificationService {
 
-    private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine;
+    @Value("${mail.sender}")
+    private String sender;
 
-    public NotificationService(JavaMailSender mailSender, TemplateEngine templateEngine) {
+    private final JavaMailSender mailSender;
+
+    public NotificationService(JavaMailSender mailSender) {
         this.mailSender = mailSender;
-        this.templateEngine = templateEngine;
     }
 
-    public void sendEmail(OrderDTO order) {
-        log.debug("Sending email to {} for creation of ORDER {}", order.getCreatedBy(), order.getId());
+    public void sendEmail(UUID orderId, String receiver, String status, String htmlContent) {
+        log.debug("Sending email to {} for creation of ORDER {}", receiver, orderId);
 
         try {
-            mailSender.send(generateMessage(order));
+            mailSender.send(generateMessage(orderId, receiver, status, htmlContent));
         } catch (MessagingException e) {
-            log.error("Error during sending an email: {}", e);
+            log.error("Error during the process of sending an email: {}", e.getMessage());
         }
     }
 
-    private MimeMessage generateMessage(OrderDTO order) throws MessagingException {
+    private MimeMessage generateMessage(UUID orderId, String receiver, String status, String htmlContent) throws MessagingException {
 
         var mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-        mimeMessageHelper.setFrom("system@mail.com");
-
-        String receiver = order.getCustomerEmail();
+        mimeMessageHelper.setFrom(sender);
         mimeMessageHelper.setTo(receiver);
-
-        String subject;
-        switch (order.getStatus()) {
-            case APPROVED:
-                subject = String.format("Order [%s] was successfully created", order.getId());
-                break;
-            case PENDING:
-                subject = String.format("Order [%s] is registered", order.getId());
-                break;
-            case CANCELED:
-                subject = String.format("Order [%s] is canceled", order.getId());
-                break;
-            default:
-                subject = String.format("Order [%s] information", order.getId());
-        }
-        mimeMessageHelper.setSubject(subject);
-
-        String htmlContent = generateHtml(order);
+        mimeMessageHelper.setSubject(generateSubject(status, orderId));
         mimeMessageHelper.setText(htmlContent, true);
 
         return mimeMessage;
     }
 
-    private String generateHtml(OrderDTO orderDTO) {
-        Context context = new Context();
-        context.setVariable("order", orderDTO);
-        return templateEngine.process("created-order.html", context);
+    private String generateSubject(String status, UUID orderId) {
+        String subject;
+        switch (status) {
+            case "APPROVED":
+                subject = String.format("Order [%s] was successfully created", orderId);
+                break;
+            case "PENDING":
+                subject = String.format("Order [%s] is registered", orderId);
+                break;
+            case "CANCELED":
+                subject = String.format("Order [%s] is canceled", orderId);
+                break;
+            default:
+                subject = String.format("Order [%s] information", orderId);
+        }
+
+        return subject;
     }
 }
