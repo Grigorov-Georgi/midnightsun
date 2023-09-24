@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./DropdownOptions.module.scss";
 
 interface DropdownOptionsProps {
@@ -11,9 +12,9 @@ export const DropdownOptions = (props: DropdownOptionsProps) => {
       <ul className={styles.optionsList}>
         {options.map((option) => (
           <li key={`dpd-${option.name}`} className={styles.option}>
-            <a className={styles.optionLink} href={option.path}>
+            <Link className={styles.optionLink} to={option.path}>
               {option.name}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
