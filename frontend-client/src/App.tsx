@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import LoadingOverlay from "./shared_components/LoadingOverlay/LoadingOverlay";
-import axios from "axios";
 import ContactPage from "./pages/ContactPage/ContactPage";
 import Home from "./pages/HomePage/Home";
 import { AllProducts } from "./pages/ProductsPage/AllProducts";
@@ -65,19 +64,6 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated]);
 
-  if (isAuthenticated) {
-    const token = sessionStorage.getItem("accessToken");
-    axios.interceptors.request.use(
-      (config) => {
-        if (!token) return config;
-        config.headers["Authorization"] = `Bearer ${token}`;
-        return config;
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  }
   return (
     <div>
       <QueryClientProvider client={queryClient}>

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from "axios";
 import { NewProduct } from "../types/NewProduct";
 import { formatProductFullInfo } from "../helpers/helper";
 import { ProductFullInfo } from "../types/FullProductInfo";
+import customAxios from "./axiosInstance";
 
 const API_HOST = import.meta.env.VITE_PRODUCT_SERVICE_HOST;
 const API_SERVICE_PREFIX = import.meta.env.VITE_PRODUCT_SERVICE_PREFIX;
@@ -12,7 +12,7 @@ export async function getProductsFromPage(
   pageIdx: number
 ): Promise<{ content: ProductFullInfo[]; totalItems: number }> {
   const bePageIdx = pageIdx - 1; // handle BE indexing
-  return axios
+  return customAxios
     .get(`${API_BASE_URL}?page=${bePageIdx}&size=20`)
     .then((response) => {
       return {
@@ -27,7 +27,7 @@ export async function getProductsFromPage(
 }
 
 export const createProduct = (newProductData: NewProduct) => {
-  return axios
+  return customAxios
     .post(`${API_BASE_URL}`, newProductData)
     .then((response) => {
       console.log(response);
@@ -37,7 +37,7 @@ export const createProduct = (newProductData: NewProduct) => {
 };
 
 export const getTopProducts = (): Promise<ProductFullInfo[]> => {
-  return axios
+  return customAxios
     .get(`${API_BASE_URL}/top?n=6`)
     .then((response) => {
       return formatProductFullInfo(response.data);
