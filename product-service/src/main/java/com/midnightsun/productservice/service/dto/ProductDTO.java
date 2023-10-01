@@ -34,5 +34,5 @@ public class ProductDTO extends AbstractAuditingDTO {
 
     private Double ratingScore;
 
-    private List<String> reviews;
+    private List<ReviewDTO> reviews;
 }

@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -38,4 +39,10 @@ public class Product extends AbstractAuditingEntity {
 
     @ManyToOne
     private Category category;
+
+    @OneToMany
+    private List<Review> reviews;
+
+    @OneToMany
+    private List<Rating> ratings;
 }

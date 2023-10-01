@@ -1,14 +1,11 @@
-package com.midnightsun.revrateservice.model;
+package com.midnightsun.productservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -17,13 +14,14 @@ import java.util.UUID;
 @Entity
 @Table(name = "review")
 public class Review extends AbstractAuditingEntity {
+
     @Id
     @GeneratedValue(generator = "review_sequence_generator", strategy = GenerationType.SEQUENCE)
     @SequenceGenerator(name = "review_sequence_generator", initialValue = 1000, allocationSize = 1)
     private Long id;
 
-    @Type(type = "uuid-char")
-    private UUID productId;
-
     private String text;
+
+    @ManyToOne
+    private Product product;
 }

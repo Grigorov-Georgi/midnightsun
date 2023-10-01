@@ -1,6 +1,6 @@
 package com.midnightsun.productservice.service.rabbitmq.saga;
 
-import com.midnightsun.productservice.service.ProductService;
+import com.midnightsun.productservice.service.deprecated.ProductService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.midnightsun.productservice.service.cache;
+package com.midnightsun.productservice.service.deprecated;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -16,6 +16,7 @@ import static com.midnightsun.productservice.config.Constants.ZSET_RATING;
 
 @Slf4j
 @Service
+@Deprecated(since = "24.09.2023")
 public class PrecomputedCacheService {
 
     private final RedisTemplate<String, String> redisTemplate;

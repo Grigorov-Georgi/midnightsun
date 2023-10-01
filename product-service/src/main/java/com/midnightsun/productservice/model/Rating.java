@@ -1,14 +1,11 @@
-package com.midnightsun.revrateservice.model;
+package com.midnightsun.productservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -23,8 +20,8 @@ public class Rating extends AbstractAuditingEntity {
     @SequenceGenerator(name = "rating_sequence_generator", initialValue = 1000, allocationSize = 1)
     private Long id;
 
-    @Type(type = "uuid-char")
-    private UUID productId;
-
     private Double score;
+
+    @ManyToOne
+    private Product product;
 }

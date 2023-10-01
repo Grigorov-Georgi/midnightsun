@@ -1,4 +1,4 @@
-package com.midnightsun.revrateservice.service.dto;
+package com.midnightsun.productservice.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,11 +12,11 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReviewDTO extends AbstractAuditingDTO {
+public class RatingDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    private UUID productId;
+    private Double score;
 
-    private String text;
+    private ProductDTO product;
 }

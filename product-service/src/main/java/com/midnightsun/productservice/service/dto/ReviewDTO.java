@@ -1,4 +1,4 @@
-package com.midnightsun.revrateservice.service.dto;
+package com.midnightsun.productservice.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public class ReviewDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    private UUID productId;
-
     private String text;
+
+    private ProductDTO product;
 }

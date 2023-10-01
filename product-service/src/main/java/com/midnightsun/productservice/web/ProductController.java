@@ -1,6 +1,6 @@
 package com.midnightsun.productservice.web;
 
-import com.midnightsun.productservice.service.ProductService;
+import com.midnightsun.productservice.service.deprecated.ProductService;
 import com.midnightsun.productservice.service.dto.ProductDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

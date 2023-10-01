@@ -2,7 +2,7 @@ package com.midnightsun.productservice.service.rabbitmq.rpc;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.midnightsun.productservice.service.ProductService;
+import com.midnightsun.productservice.service.deprecated.ProductService;
 import com.midnightsun.productservice.service.dto.external.OrderItemExtendedInfoDTO;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;

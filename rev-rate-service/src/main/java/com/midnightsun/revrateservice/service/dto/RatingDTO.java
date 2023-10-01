@@ -12,7 +12,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RatingDTO extends AbstractAuditingDTO implements Serializable {
+public class RatingDTO extends AbstractAuditingDTO {
 
     private Long id;
 

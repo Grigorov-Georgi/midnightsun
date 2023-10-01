@@ -6,7 +6,7 @@ import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = CategoryMapper.class)
+@Mapper(componentModel = "spring", uses = { CategoryMapper.class, ReviewMapper.class })
 @DecoratedWith(ProductMapperDecorator.class)
 public interface ProductMapper {
 

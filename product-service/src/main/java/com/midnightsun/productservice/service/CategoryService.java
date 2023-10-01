@@ -34,18 +34,14 @@ public class CategoryService {
 
     public CategoryDTO save(CategoryDTO categoryDTO) {
         log.debug("Request to save CATEGORY: {}", categoryDTO);
-        if (categoryDTO.getId() != null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
-        }
+        if (categoryDTO.getId() != null) throw new HttpBadRequestException(HttpBadRequestException.ID_NON_NULL);
         final var category = categoryMapper.toEntity(categoryDTO);
         return save(category);
     }
 
     public CategoryDTO update(CategoryDTO categoryDTO) {
         log.debug("Request to update CATEGORY: {}", categoryDTO);
-        if (categoryDTO.getId() == null) {
-            throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
-        }
+        if (categoryDTO.getId() == null) throw new HttpBadRequestException(HttpBadRequestException.ID_NULL);
         final var category = categoryMapper.toEntity(categoryDTO);
         return save(category);
     }
