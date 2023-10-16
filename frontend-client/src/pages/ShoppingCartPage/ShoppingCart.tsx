@@ -20,22 +20,6 @@ export const ShoppingCart = () => {
       createNewOrder(newOrderItems),
   });
 
-  const generateOrderItems = (): JSX.Element[] => {
-    const data: JSX.Element[] = [];
-    itemsInCart.forEach((product) =>
-      data.push(
-        <OrderItem
-          key={`order-item-${product.info.id}`}
-          id={product.info.id}
-          name={product.info.name}
-          price={product.info.price}
-          quantity={product.quantity}
-        />
-      )
-    );
-    return data;
-  };
-
   const handleOrderClick = async () => {
     const orderItems: NewOrderItem[] = getOrderItems();
     console.log(orderItems);
@@ -52,7 +36,17 @@ export const ShoppingCart = () => {
 
   return (
     <div className={styles.shoppingCart}>
-      <div className={styles.orderItemsList}>{generateOrderItems()}</div>
+      <div className={styles.orderItemsList}>
+        {itemsInCart.map((item) => (
+          <OrderItem
+            key={`order-item-${item.info.id}`}
+            id={item.info.id}
+            name={item.info.name}
+            price={item.info.price}
+            quantity={item.quantity}
+          />
+        ))}
+      </div>
       <div className={styles.infoSection}>
         <OrderInfo />
         <Button

@@ -9,7 +9,7 @@ export const OrderInfo = () => {
   );
   const hasMounted = useRef(false);
 
-  // Keep as a work around, refactor later
+  // Keep as a work around, refactor later -> TODO: Implement computed in store
   useEffect(() => {
     if (!hasMounted.current) {
       hasMounted.current = true;
