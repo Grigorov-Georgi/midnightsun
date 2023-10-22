@@ -9,6 +9,11 @@ import { Link } from "react-router-dom";
 export const Navbar = () => {
   const { isAuthenticated, logout, loginWithRedirect } = useAuth0();
 
+  const handleLogOut = () => {
+    logout({logoutParams: { returnTo: window.location.origin}});
+    sessionStorage.clear();
+  }
+
   return (
     <div className={styles.nav}>
       <Link to="/" className={styles.link}>
@@ -35,11 +40,7 @@ export const Navbar = () => {
         onClick={() =>
           !isAuthenticated
             ? loginWithRedirect()
-            : logout({
-                logoutParams: {
-                  returnTo: window.location.origin,
-                },
-              })
+            : handleLogOut()
         }
       >
         {`${isAuthenticated ? "Log out" : "Log in"}`}

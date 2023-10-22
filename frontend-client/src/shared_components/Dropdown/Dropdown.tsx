@@ -21,13 +21,23 @@ export const Dropdown = (props: DropdownProps) => {
       <div
         className={styles.dropdown}
         onClick={() => setShowOptions(!showOptions)}
+        tabIndex={0}
       >
         {title}
-        <div className={styles.icon}>
+        <i
+          className={`${
+            showOptions ? styles.icon__iconTransform : styles.icon
+          }`}
+        >
           <BsChevronDown />
-        </div>
+        </i>
       </div>
-      {showOptions && <DropdownOptions options={dpdOptions} />}
+      {showOptions && (
+        <DropdownOptions
+          options={dpdOptions}
+          handleDropdownClose={() => setShowOptions(false)}
+        />
+      )}
     </>
   );
 };

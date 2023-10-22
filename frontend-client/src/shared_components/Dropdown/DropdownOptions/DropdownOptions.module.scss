@@ -1,33 +1,44 @@
 .dpdMenu {
   position: absolute;
-  min-width: 5rem;
+  min-width: 9rem;
   max-height: fit-content;
   padding: 5px 5px;
   background-color: var(--ecart-secondary-bg-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
+  z-index: 1;
 
-.optionsList {
-  list-style-type: none;
-  padding: 0px;
-}
+  &:focus-within {
+    outline: none;
+  }
 
-.option {
-  padding: 3px 3px;
-}
+  .optionsList {
+    list-style-type: none;
+    padding: 0px;
 
-.optionLink {
-  color: var(--ecart-main-text-color);
-  text-decoration: none;
-}
+    .option {
+      padding: 3px 3px;
 
-.option:hover {
-  cursor: pointer;
-  border: 1px solid var(--ecart-main-text-color);
-}
+      &:focus-within {
+        a {
+          outline: none;
+        }
+      }
 
-.option:visited {
-  color: unset;
+      &:hover {
+        cursor: pointer;
+        border: 1px solid var(--ecart-main-text-color);
+      }
+
+      &:visited {
+        color: unset;
+      }
+
+      .optionLink {
+        color: var(--ecart-main-text-color);
+        text-decoration: none;
+      }
+    }
+  }
 }
