@@ -24,9 +24,13 @@ export const Dropdown = (props: DropdownProps) => {
         tabIndex={0}
       >
         {title}
-        <div className={styles.icon}>
+        <i
+          className={`${
+            showOptions ? styles.icon__iconTransform : styles.icon
+          }`}
+        >
           <BsChevronDown />
-        </div>
+        </i>
       </div>
       {showOptions && (
         <DropdownOptions
